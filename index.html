@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TRENVIKO | Day 30 Flagship Edition</title>
+<title>TRENVIKO | Smart Shopping Demo</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
@@ -697,6 +697,25 @@ footer{background:#061113;border-top:1px solid #ffffff19}
 @media(max-width:650px){.hero.d27-hero{border-radius:22px;padding:38px 7%}.d27-hero h1{font-size:clamp(45px,11vw,70px)}.d27-hero-art{min-height:245px}.d27-art-card{width:185px;height:230px}.d30-feature{padding:24px;min-height:270px}.d30-find{padding:22px}.section{padding:45px 4%}.day21-editorial{margin:15px 3%}.editorial-tile{min-height:260px}}
 @media(prefers-reduced-motion:reduce){.d27-orbit{animation:none}.d27-art-card,.d30-feature img{transition:none}}
 
+
+/* DAY 32 — TRENVIKO Smart Shopping Assistant (local demo) */
+.tv-chat-launch{position:fixed;right:22px;bottom:22px;z-index:65;background:#c1ffe0;color:#08231b;border:0;border-radius:999px;padding:15px 20px;font-weight:800;box-shadow:0 12px 45px #0009;display:flex;align-items:center;gap:9px}
+.tv-chat-panel{position:fixed;right:22px;bottom:88px;width:min(410px,calc(100vw - 24px));height:min(580px,calc(100dvh - 115px));z-index:66;display:none;flex-direction:column;background:#10252b;border:1px solid #78bc9e;border-radius:22px;overflow:hidden;box-shadow:0 22px 80px #000b;color:#f0fff6}
+.tv-chat-panel.open{display:flex}
+.tv-chat-head{padding:17px 19px;background:linear-gradient(115deg,#19463d,#12313a);display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #426c60}
+.tv-chat-head strong{display:block;font-size:16px}.tv-chat-head small{display:block;color:#c2d9ce;margin-top:3px;font-size:11px}
+.tv-chat-close{border:1px solid #8cbdab;background:#1d3b38;color:white;border-radius:9px;padding:6px 10px;font-size:20px}
+.tv-chat-messages{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;overscroll-behavior:contain}
+.tv-chat-msg{padding:12px 14px;border-radius:15px;max-width:92%;font-size:13px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.tv-chat-msg.bot{background:#213b3b;align-self:flex-start;border-bottom-left-radius:4px}
+.tv-chat-msg.user{background:#c1ffe0;color:#10251d;align-self:flex-end;border-bottom-right-radius:4px}
+.tv-chat-products{display:grid;gap:8px;margin-top:11px}
+.tv-chat-product{display:flex;gap:10px;align-items:center;background:#0d282d;border:1px solid #3b6156;border-radius:12px;padding:8px;color:white;text-align:left;width:100%}
+.tv-chat-product:hover{border-color:#c1ffe0}.tv-chat-product img{width:54px;height:54px;object-fit:cover;border-radius:8px}.tv-chat-product strong{display:block;font-size:12px}.tv-chat-product small{color:#c1ffe0}
+.tv-chat-chips{display:flex;gap:7px;flex-wrap:wrap;padding:0 15px 12px}.tv-chat-chips button{border:1px solid #608c7a;background:#1b3d38;color:#e2fff0;padding:8px 10px;border-radius:999px;font-size:11px}
+.tv-chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid #34564e}.tv-chat-form input{flex:1;min-width:0;background:#0a2026;border:1px solid #537c70;border-radius:11px;color:white;padding:12px}.tv-chat-form button{border:0;background:#c1ffe0;color:#0b231b;border-radius:11px;padding:0 16px;font-weight:800}
+.tv-chat-disclaimer{padding:0 14px 12px;color:#b7cfc5;font-size:10px;text-align:center}
+@media(max-width:650px){.tv-chat-launch{bottom:85px;right:12px;padding:13px 15px}.tv-chat-panel{bottom:145px;right:12px;height:min(560px,calc(100dvh - 160px))}}
 </style>
 </head>
 
@@ -3174,6 +3193,83 @@ function d29Export(){const blob=new Blob([JSON.stringify({version:29,exportedAt:
 function d29BriefView(){return `<div class="d29-layout"><div class="panel"><h2>Build a product launch brief</h2><label>Product name<input class="field" id="d29-brief-name" maxlength="120" placeholder="e.g. Grip Socks"></label><label>Customer problem<textarea class="field" id="d29-brief-problem" rows="3" placeholder="What problem does this product solve?"></textarea></label><label>Verified product features<textarea class="field" id="d29-brief-features" rows="3" placeholder="Only features you can confirm"></textarea></label><label>Why choose this product?<textarea class="field" id="d29-brief-reason" rows="3" placeholder="Your honest product advantage"></textarea></label><div class="d29-actions"><button class="btn" onclick="d29GenerateBrief()">Generate brief</button><button class="btn secondary" onclick="d29CopyBrief()">Copy brief</button></div></div><div class="panel"><h2>Your launch outline</h2><div class="d29-brief" id="d29-brief-output">Fill in the form and generate your brief.</div></div></div>`;}
 function d29GenerateBrief(){const get=id=>document.getElementById(id)?.value.trim()||'';const name=get('d29-brief-name');if(!name){notify('Enter a product name.');return;}const problem=get('d29-brief-problem'),features=get('d29-brief-features'),reason=get('d29-brief-reason');document.getElementById('d29-brief-output').textContent=`TRENVIKO — PRODUCT LAUNCH BRIEF\n\nPRODUCT: ${name}\n\nCUSTOMER PROBLEM\n${problem||'Research the customer problem.'}\n\nVERIFIED FEATURES\n${features||'Confirm product specifications with a sample.'}\n\nHONEST VALUE PROPOSITION\n${reason||'Describe the real benefit without exaggeration.'}\n\nBEFORE LAUNCH\n1. Compare suppliers and independently verify business details.\n2. Order and inspect a sample.\n3. Confirm delivery times, returns and product safety.\n4. Calculate realistic landed costs and break-even pricing.\n5. Have a parent/guardian handle accounts and contracts requiring an adult.\n6. Test the full checkout and fulfilment flow before accepting orders.\n\nMARKETING IDEA\nShow the product in a real-life use case. Use your own footage and only verified claims.\n\nNOTE: This brief is a template, not live AI-generated research.`;}
 async function d29CopyBrief(){const t=document.getElementById('d29-brief-output')?.textContent||'';try{await navigator.clipboard.writeText(t);notify('Brief copied');}catch{notify('Select and copy the brief manually');}}
+
+// DAY 32 — local product recommendation demo. NOT connected to a generative AI model.
+const tvChatHTML=`<button type="button" class="tv-chat-launch" id="tv-chat-launch" onclick="tvToggleChat()" aria-label="Open shopping assistant" aria-expanded="false">✦ Ask TRENVIKO</button>
+<section class="tv-chat-panel" id="tv-chat-panel" aria-label="TRENVIKO shopping assistant" aria-hidden="true">
+ <div class="tv-chat-head"><div><strong>✦ TRENVIKO Shopping Assistant</strong><small>Smart product finder · Demo mode</small></div><button class="tv-chat-close" type="button" onclick="tvToggleChat(false)" aria-label="Close assistant">×</button></div>
+ <div class="tv-chat-messages" id="tv-chat-messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+ <div class="tv-chat-chips" id="tv-chat-chips"><button type="button" onclick="tvAsk('Show me sports products')">🏈 Sports</button><button type="button" onclick="tvAsk('Show me tech products')">⚡ Tech</button><button type="button" onclick="tvAsk('What can I get under $30?')">Under $30</button><button type="button" onclick="tvAsk('How does checkout work?')">Checkout help</button></div>
+ <form class="tv-chat-form" id="tv-chat-form"><input id="tv-chat-input" type="text" maxlength="240" autocomplete="off" placeholder="Try: sports gear under $30" aria-label="Your shopping question" required><button type="submit">Send</button></form>
+ <div class="tv-chat-disclaimer">Product matching is rule-based, not generative AI. Demo listings only; no real orders or payments.</div>
+</section>`;
+document.body.insertAdjacentHTML('beforeend',tvChatHTML);
+let tvChatStarted=false;
+function tvToggleChat(force){
+ const panel=document.getElementById('tv-chat-panel');
+ const opening=typeof force==='boolean'?force:!panel.classList.contains('open');
+ panel.classList.toggle('open',opening);panel.setAttribute('aria-hidden',String(!opening));
+ document.getElementById('tv-chat-launch').setAttribute('aria-expanded',String(opening));
+ if(opening){
+  if(!tvChatStarted){tvChatStarted=true;tvBot('Hey! I can help you browse TRENVIKO products, find items within a budget, and answer demo-store questions. What are you shopping for?');}
+  document.getElementById('tv-chat-input').focus();
+ }else document.getElementById('tv-chat-launch').focus();
+}
+function tvMessage(text,who='bot'){
+ const box=document.getElementById('tv-chat-messages');
+ const bubble=document.createElement('div');bubble.className='tv-chat-msg '+who;
+ bubble.textContent=text;box.appendChild(bubble);box.scrollTop=box.scrollHeight;
+ return bubble;
+}
+function tvBot(text,found=[]){
+ const bubble=tvMessage(text,'bot');
+ if(found.length){
+  const list=document.createElement('div');list.className='tv-chat-products';
+  found.forEach(p=>{
+   const button=document.createElement('button');button.type='button';button.className='tv-chat-product';
+   const url=safeURL(p.image||'');
+   if(url){const img=document.createElement('img');img.src=url;img.alt='';img.loading='lazy';button.appendChild(img);}
+   const label=document.createElement('span');const name=document.createElement('strong');name.textContent=p.name;
+   const price=document.createElement('small');price.textContent=money(p.price)+' · View product →';
+   label.append(name,price);button.appendChild(label);
+   button.addEventListener('click',()=>{tvToggleChat(false);showProduct(p.id);});list.appendChild(button);
+  });
+  bubble.appendChild(list);
+ }
+ document.getElementById('tv-chat-messages').scrollTop=999999;
+}
+function tvAsk(question){
+ const text=String(question||'').trim().slice(0,240);if(!text)return;
+ tvMessage(text,'user');
+ const q=text.toLowerCase();
+ if(/(checkout|buy|pay|payment|order|shipping|delivery|return|refund)/.test(q)){
+  tvBot('TRENVIKO is currently a demonstration store. The cart is a demo, and there is no real checkout, payment, shipping, or order fulfillment yet. Please do not enter payment information.');return;
+ }
+ if(/(human|agent|contact|support|real ai|are you ai)/.test(q)){
+  tvBot('I am a rule-based product finder, not a live human or generative AI. I can match products from this demo catalog. Try asking for a category or budget.');return;
+ }
+ const maxMatch=q.match(/(?:under|below|less than|up to|budget(?: of)?|maximum|max)\s*(?:cad\s*)?\$?\s*(\d+(?:\.\d{1,2})?)/);
+ const max=maxMatch?Number(maxMatch[1]):null;
+ const categories=[['Sports',/sport|football|basketball|gym|fitness|workout|training|soccer|hockey|yoga/],['Tech',/tech|phone|charging|charger|bluetooth|electronic|wireless|gadget/],['Lifestyle',/lifestyle|travel|bag|organizer|everyday/],['Trending',/trend|popular|new|best|gift/]];
+ const matchedCategory=categories.find(([,re])=>re.test(q));
+ const words=q.replace(/\$?\d+(?:\.\d+)?/g,' ').split(/\W+/).filter(w=>w.length>=4&&!['show','find','want','need','have','something','please','products','product','recommend','looking','what','some','under','below','with','about','best','good','cheap','price'].includes(w));
+ const ranked=products.map(p=>{
+  const hay=(p.name+' '+p.category+' '+p.description).toLowerCase();
+  let score=0;
+  if(matchedCategory&&p.category.toLowerCase()===matchedCategory[0].toLowerCase())score+=12;
+  for(const w of words)if(hay.includes(w))score+=3;
+  if(/cheap|affordable|budget/.test(q))score+=Math.max(0,5-p.price/20);
+  return {p,score};
+ }).filter(x=>max===null||x.p.price<=max).sort((a,b)=>b.score-a.score||a.p.price-b.p.price);
+ const relevant=ranked.filter(x=>x.score>0);
+ const selected=(relevant.length?relevant:ranked).slice(0,3).map(x=>x.p);
+ if(!selected.length){tvBot('I could not find demo products within that budget. Try a higher price or ask for Sports, Tech, or Lifestyle.');return;}
+ const intro=matchedCategory?'Here are some '+matchedCategory[0].toLowerCase()+' picks':max!==null?'Here are products within your budget':'Here are some products to explore';
+ tvBot(intro+(max!==null?' (up to '+money(max)+')':'')+'. These are demo listings; availability and specifications are not verified.',selected);
+}
+document.getElementById('tv-chat-form').addEventListener('submit',e=>{
+ e.preventDefault();const input=document.getElementById('tv-chat-input');const text=input.value;input.value='';tvAsk(text);input.focus();
+});
 </script>
 </body>
 </html>
