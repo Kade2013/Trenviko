@@ -1,0 +1,3179 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TRENVIKO | Day 30 Flagship Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+ --bg:#0b131a;
+ --panel:#17252f;
+ --panel2:#20333e;
+ --green:#6ee7b7;
+ --muted:#cbd5e1;
+ --line:#304457;
+ --red:#ff9b9b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;background:var(--bg);color:white;
+ font-family:"DM Sans",Arial,sans-serif;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,
+select:focus-visible,textarea:focus-visible{
+ outline:2px solid var(--green);outline-offset:3px;
+}
+button:disabled{opacity:.5;cursor:not-allowed}
+header{
+ position:sticky;top:0;z-index:20;
+ background:#0b131af5;border-bottom:1px solid var(--line);
+ padding:15px 5%;display:flex;
+ align-items:center;justify-content:space-between;
+ gap:14px;flex-wrap:wrap;
+}
+.logo{
+ border:0;background:none;color:var(--green);
+ font-size:25px;font-weight:800;letter-spacing:2px;
+}
+nav{display:flex;gap:7px;flex-wrap:wrap}
+nav button,.menu-toggle{
+ background:#243542;color:white;border:0;
+ padding:10px;border-radius:8px;
+}
+nav button:hover{color:var(--green)}
+.menu-toggle{display:none}
+main{min-height:65vh}
+.hero{
+ margin:22px 5%;padding:85px 7%;
+ background:linear-gradient(120deg,#14242c,#1e4140);
+ border:1px solid #38554e;border-radius:20px;
+}
+.hero h1{
+ font-size:clamp(38px,6vw,72px);
+ letter-spacing:-2px;line-height:1.08;
+ margin:18px 0;
+}
+.hero p{max-width:540px}
+.eyebrow,.category{
+ color:var(--green);font-size:12px;
+ letter-spacing:1.5px;font-weight:800;
+ text-transform:uppercase;
+}
+.description,p.muted{color:var(--muted);line-height:1.65}
+.btn{
+ background:var(--green);color:var(--bg);
+ border:0;border-radius:9px;
+ padding:12px 19px;font-weight:800;
+}
+.btn:hover{filter:brightness(1.08)}
+.secondary{background:var(--line);color:white}
+.danger{background:#71343e;color:white}
+.section{padding:42px 5% 65px}
+.section-title{
+ display:flex;justify-content:space-between;
+ align-items:center;gap:12px;flex-wrap:wrap;
+ margin-bottom:22px;
+}
+.section-title h2{margin:6px 0;font-size:30px}
+.banner{
+ margin:0 5%;padding:28px;text-align:center;
+ background:#152c2c;border:1px solid #34574b;
+ border-radius:14px;
+}
+.banner h2{color:var(--green)}
+.shop-toolbar{
+ display:flex;gap:12px;flex-wrap:wrap;
+ margin:22px 0;
+}
+.field,.search-box,.sort-select{
+ background:var(--panel);color:white;
+ border:1px solid #405162;
+ border-radius:9px;padding:12px;
+ min-width:0;
+}
+.search-box{flex:1;min-width:180px}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filter-btn{
+ background:var(--panel);color:white;
+ border:1px solid #405162;
+ border-radius:25px;padding:9px 14px;
+}
+.filter-btn.active{
+ background:var(--green);color:var(--bg);
+}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:20px;
+}
+.card{
+ background:var(--panel);
+ border:1px solid #2c4048;
+ border-radius:14px;padding:15px;
+ display:flex;flex-direction:column;
+}
+.card:hover{border-color:var(--green)}
+.image-wrap{position:relative}
+.product-image{
+ width:100%;aspect-ratio:4/3;
+ object-fit:cover;border-radius:10px;
+ background:#253942;
+}
+.image-placeholder{
+ display:grid;place-items:center;
+ color:var(--muted);
+}
+.badge-stack{
+ position:absolute;top:10px;left:10px;
+ display:flex;flex-direction:column;gap:6px;
+ align-items:flex-start;
+}
+.product-badge{
+ background:var(--green);color:#081711;
+ padding:6px 10px;border-radius:5px;
+ font-size:11px;font-weight:800;
+}
+.product-badge.trending{
+ background:#f9c86d;color:#211a08;
+}
+.product-badge.bestseller{
+ background:#d6c5ff;color:#211337;
+}
+.heart-btn{
+ position:absolute;right:10px;top:10px;
+ width:42px;height:42px;border-radius:50%;
+ border:1px solid #60727c;
+ background:#0b131a;color:white;font-size:25px;
+}
+.heart-btn.active{color:#ff8fa3}
+.card h3{margin:14px 0 6px}
+.card .description{font-size:14px;flex:1}
+.price{
+ color:var(--green);font-size:25px;
+ font-weight:800;margin:10px 0;
+}
+.price-row{
+ display:flex;gap:10px;align-items:center;
+ flex-wrap:wrap;margin:10px 0;
+}
+.price-row .price{margin:0}
+.old-price{
+ text-decoration:line-through;
+ color:#a7b3bd;font-size:15px;
+}
+.discount{
+ color:#ffd4a1;background:#583b22;
+ border-radius:5px;padding:5px 8px;
+ font-size:12px;font-weight:800;
+}
+.card .btn{width:100%;margin-top:auto}
+.collection-links{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:16px;margin-top:24px;
+}
+.collection-tile{
+ background:linear-gradient(145deg,#203c40,#15232e);
+ border:1px solid #38554e;border-radius:13px;
+ padding:30px;text-align:left;color:white;
+}
+.collection-tile h3{font-size:23px}
+.collection-tile:hover{border-color:var(--green)}
+.brand-values{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:20px;padding:15px 5% 60px;
+}
+.value-card{
+ background:#14232d;border:1px solid #2c4048;
+ padding:23px;border-radius:12px;text-align:center;
+}
+.value-card h3{color:var(--green)}
+.value-card p{color:var(--muted)}
+.detail-layout{
+ display:grid;grid-template-columns:1fr 1fr;
+ gap:36px;margin-top:25px;
+}
+.detail-image{
+ width:100%;aspect-ratio:4/3;
+ object-fit:cover;border-radius:14px;
+ background:#253942;
+}
+.thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.thumb{
+ width:85px;height:70px;object-fit:cover;
+ border:2px solid transparent;
+ border-radius:8px;cursor:pointer;
+}
+.thumb.active{border-color:var(--green)}
+.detail-info p{color:var(--muted);line-height:1.7}
+.quantity{margin:20px 0}
+.quantity input{
+ width:78px;background:var(--panel);
+ color:white;border:1px solid #64748b;
+ padding:10px;border-radius:6px;
+}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.benefits{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:10px;margin:25px 0;
+}
+.benefit{
+ background:#14232d;border:1px solid #2c4048;
+ border-radius:9px;padding:14px;text-align:center;
+}
+.benefit strong{color:var(--green)}
+.benefit p{font-size:12px}
+details{
+ background:var(--panel);
+ border:1px solid var(--line);
+ padding:17px;border-radius:9px;margin:10px 0;
+}
+summary{cursor:pointer;font-weight:700}
+.notice{
+ background:var(--panel);color:var(--muted);
+ padding:18px;border-radius:10px;margin:20px 0;
+ line-height:1.6;
+}
+.panel,.info-panel{
+ background:var(--panel);
+ border:1px solid var(--line);
+ border-radius:14px;padding:24px;margin:18px 0;
+}
+.info-panel{max-width:850px}
+.panel p,.info-panel p{
+ color:var(--muted);line-height:1.7;
+}
+.two-col{
+ display:grid;grid-template-columns:1fr 1fr;gap:22px;
+}
+.form-grid{
+ display:grid;grid-template-columns:1fr 1fr;gap:14px;
+}
+.form-grid label,.contact-form label{
+ display:grid;gap:7px;color:var(--muted);
+ font-size:13px;
+}
+.form-grid .wide{grid-column:1/-1}
+.form-grid .field{width:100%}
+.contact-form{
+ display:grid;gap:14px;max-width:560px;
+}
+textarea{resize:vertical}
+.profit-results{
+ display:grid;grid-template-columns:1fr 1fr;
+ gap:12px;margin-top:20px;
+}
+.result-box,.stat{
+ background:#10272a;border:1px solid #315b50;
+ border-radius:10px;padding:18px;
+}
+.result-box span,.stat span{
+ display:block;color:var(--muted);font-size:13px;
+}
+.result-box strong,.stat strong{
+ display:block;color:var(--green);
+ font-size:26px;margin-top:7px;
+}
+.result-box strong.negative{color:var(--red)}
+.stat-row{
+ display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+}
+.saved-item{
+ background:#14232d;border:1px solid var(--line);
+ border-radius:12px;padding:20px;margin:14px 0;
+ overflow-wrap:anywhere;
+}
+.saved-item a{color:var(--green)}
+.small-note{color:var(--muted);font-size:12px}
+.tag{
+ display:inline-block;background:#25433d;
+ color:var(--green);border-radius:20px;
+ padding:5px 10px;font-size:12px;
+}
+.empty-state{
+ background:var(--panel);padding:25px;
+ border-radius:12px;color:var(--muted);
+}
+.cart-item{
+ display:flex;justify-content:space-between;
+ align-items:center;gap:20px;
+ border-bottom:1px solid #405162;padding:20px 0;
+}
+.cart-controls{
+ display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.small-btn{
+ background:var(--line);color:white;
+ border:0;border-radius:6px;padding:9px 13px;
+}
+.subtotal{text-align:right;font-size:25px;margin:25px 0}
+.demo-review{
+ background:#14232d;border:1px solid var(--line);
+ border-radius:12px;padding:20px;
+}
+.demo-review .stars{color:#f9c86d;letter-spacing:2px}
+.demo-label{
+ color:#ffd4a1;font-size:12px;font-weight:800;
+ text-transform:uppercase;
+}
+.toast{
+ display:none;position:fixed;bottom:24px;right:24px;
+ background:var(--green);color:var(--bg);
+ padding:15px 20px;border-radius:9px;
+ font-weight:800;z-index:30;
+}
+footer{
+ text-align:center;padding:40px;
+ color:#94a3b8;background:#090f14;
+}
+footer button{
+ background:none;border:0;color:var(--green);
+ text-decoration:underline;margin:5px;
+}
+@media(max-width:850px){
+ .grid{grid-template-columns:repeat(2,1fr)}
+ .detail-layout,.two-col{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+ header{padding:14px 5%}
+ .menu-toggle{display:block}
+ nav{display:none;flex-direction:column;width:100%}
+ nav.open{display:flex}
+ nav button{width:100%;text-align:left}
+ .hero{margin:15px 4%;padding:55px 7%}
+ .section{padding:30px 4%}
+ .banner{margin:0 4%}
+ .brand-values,.benefits,.collection-links{
+  grid-template-columns:1fr;
+ }
+ .search-box,.sort-select{width:100%}
+ .cart-item{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:440px){
+ .grid,.form-grid,.profit-results,.stat-row{
+  grid-template-columns:1fr;
+ }
+ .form-grid .wide{grid-column:auto}
+}
+
+/* Day 16 additions */
+.announcement{background:#6ee7b7;color:#0b131a;text-align:center;padding:10px 5%;font-weight:800;font-size:13px}
+.flash-box{margin:18px 5%;padding:24px;border:1px solid #497968;border-radius:14px;background:#15332e;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.flash-box h2{margin:5px 0}
+.flash-clock{font-size:27px;font-weight:800;color:#6ee7b7;font-variant-numeric:tabular-nums}
+.cart-summary{max-width:440px;margin:25px 0 25px auto;padding:22px;background:#17252f;border:1px solid #304457;border-radius:14px}
+.cart-summary-line{display:flex;justify-content:space-between;gap:15px;margin:12px 0}
+.cart-summary-line.total{font-size:23px;font-weight:800;color:#6ee7b7;border-top:1px solid #304457;padding-top:15px}
+
+
+/* DAY 17 */
+.stock-pill{display:inline-block;color:#bcead4;background:#21443b;border-radius:7px;padding:5px 9px;font-size:12px;font-weight:700;margin:4px 0 10px}
+.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto}
+.card-actions .btn{padding:11px 7px;font-size:13px}
+.overlay{position:fixed;inset:0;background:#0009;z-index:45;display:none}
+.overlay.open{display:block}
+.drawer{position:fixed;right:0;top:0;bottom:0;width:min(440px,100%);background:#13232d;z-index:46;transform:translateX(105%);transition:transform .2s ease;padding:24px;overflow:auto;box-shadow:-8px 0 35px #0007}
+.drawer.open{transform:translateX(0)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.drawer-item{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.drawer-item img{width:62px;height:62px;object-fit:cover;border-radius:7px}
+.drawer-item .small-btn{padding:5px 9px}
+.progress-track{height:12px;border-radius:20px;background:#344854;overflow:hidden;margin:10px 0}
+.progress-fill{height:100%;background:var(--green);width:0%;transition:width .2s}
+.quick-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:48;background:#17252f;border:1px solid #507468;border-radius:16px;padding:24px;width:min(760px,94vw);max-height:90vh;overflow:auto;display:none}
+.quick-modal.open{display:block}
+.quick-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.quick-layout img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px}
+@media(max-width:650px){.quick-layout{grid-template-columns:1fr}.card-actions{grid-template-columns:1fr}.drawer{padding:17px}.quick-modal{padding:15px}header{gap:8px}.hero h1{font-size:clamp(32px,8vw,54px)}}
+
+/* DAY 18 */
+.demo-rating{color:#f9c86d;font-size:13px;margin:7px 0}.variant-picker{margin:15px 0;display:grid;gap:7px}.variant-picker select{max-width:260px}.promo-form{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}.promo-form input{flex:1;min-width:130px}.suggestions{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.suggestions button{border:1px solid #4a6b65;background:#203b39;color:#e3fff1;border-radius:20px;padding:7px 12px}.analytics-list{display:grid;gap:9px}.analytics-line{display:flex;justify-content:space-between;gap:15px;padding:10px;border-bottom:1px solid var(--line)}
+
+/* DAY 19 — visual refresh, comparison, responsive improvements */
+:root{--bg:#09141b;--panel:#142630;--panel2:#203c43;--line:#35505a}
+body{background:radial-gradient(ellipse 70% 20% at 80% 0%,#153c37 0%,transparent 75%),var(--bg)}
+header{backdrop-filter:blur(14px);box-shadow:0 8px 30px #0003}
+.logo{font-size:27px;letter-spacing:3px}
+nav button{font-size:12px;padding:10px 9px;border:1px solid #34505a}
+.hero{position:relative;overflow:hidden;min-height:410px;display:flex;flex-direction:column;justify-content:center;background:radial-gradient(circle at 85% 25%,#3b7b65 0%,transparent 31%),linear-gradient(115deg,#10222d,#153a38 65%,#13232d);border:1px solid #4d7668;box-shadow:0 22px 60px #0004}
+.hero:after{content:"T";position:absolute;right:7%;top:-65px;font-size:clamp(260px,37vw,560px);font-weight:800;color:#b6ffe00c;pointer-events:none;line-height:1}
+.hero>*{position:relative;z-index:1}
+.hero h1{max-width:780px;font-size:clamp(45px,6vw,80px)}
+.hero .btn{align-self:flex-start;margin-top:14px}
+.section-title h2,.section h2{letter-spacing:-.7px}
+.card{transition:transform .18s,border-color .18s,box-shadow .18s;overflow:hidden;background:linear-gradient(150deg,#182e36,#11232d)}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 30px #0004}
+.product-image{aspect-ratio:1/1;object-fit:cover;background:#29404a}
+.card h3{font-size:18px;line-height:1.3}
+.card .description{font-size:13px}
+.compare-btn{border:1px solid #4c766c;background:#18352f;color:#c9ffe5;padding:9px;border-radius:8px;margin:9px 0 5px;font-weight:700;width:100%}
+.compare-btn.selected{background:var(--green);color:#10231b}
+.compare-table{width:100%;border-collapse:collapse;min-width:570px}
+.compare-table th,.compare-table td{border-bottom:1px solid var(--line);padding:15px;text-align:left;vertical-align:top}
+.compare-table th{color:var(--green)}
+.compare-scroll{overflow-x:auto}
+.compare-table img{width:120px;height:120px;object-fit:cover;border-radius:10px}
+.account-preview{max-width:700px}
+.account-preview label{display:grid;gap:8px;margin:15px 0}
+.account-preview input{width:100%;max-width:360px}
+.store-strip{display:flex;flex-wrap:wrap;gap:12px;margin:0 5%;justify-content:space-between;color:#b6e6d6;font-size:13px}
+.store-strip span{padding:10px 0}
+@media(max-width:850px){header{gap:10px}.hero{min-height:340px}.grid{gap:13px}}
+@media(max-width:650px){header{padding:12px 4%}.logo{font-size:22px}.hero{padding:50px 7%;min-height:320px}.hero h1{font-size:clamp(36px,10vw,55px)}.card{padding:12px}.card h3{font-size:16px}.store-strip{gap:3px}.store-strip span{padding:6px}.shop-toolbar{display:grid;grid-template-columns:1fr}.search-box{min-width:0}.card-actions{grid-template-columns:1fr}}
+@media(max-width:440px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.card{padding:9px}.card h3{font-size:14px}.card .description{font-size:12px}.card .price{font-size:19px}.card-actions .btn{font-size:12px}.stock-pill{font-size:10px}.hero{margin:12px 3%}.section{padding:28px 3%}.heart-btn{width:34px;height:34px;font-size:20px}}
+@media(prefers-reduced-motion:reduce){.card,.drawer{transition:none}}
+
+/* DAY 20 — store readiness */
+.launch-checks{display:grid;gap:10px;margin:20px 0}.launch-check{display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:10px}.launch-check input{width:20px;height:20px;accent-color:var(--green)}.launch-check span{color:var(--muted);font-size:13px;display:block;margin-top:5px}.launch-tools{display:flex;gap:10px;flex-wrap:wrap}.launch-meter{height:12px;border-radius:30px;background:var(--line);overflow:hidden}.launch-meter div{height:100%;background:var(--green)}
+
+/* DAY 21 — premium storefront experience */
+:root{--green:#83f3c7;--muted:#b9c9ce;--line:#28434b}
+body{background:#09151b}
+.announcement{background:#baf8df;color:#09241b;font-size:11px;letter-spacing:.08em;padding:9px}
+header{padding:14px 4%;gap:18px;background:#09171beF}
+.logo{font-size:25px;letter-spacing:4px}
+nav{align-items:center;gap:5px}
+nav button{background:transparent;border:0;border-radius:30px;padding:11px 13px;font-weight:700;font-size:13px}
+nav button:hover{background:#1c3437;color:#baf8df}
+.store-strip{margin:0;padding:9px 5%;background:#10272b;justify-content:center;gap:clamp(14px,4vw,65px);font-size:12px}
+.store-strip span{padding:2px 0}
+.hero{margin:20px 4% 0;min-height:560px;padding:65px 7%;background:radial-gradient(ellipse at 81% 47%,#5b99755c 0%,transparent 36%),linear-gradient(120deg,#0b2028 0%,#153c3b 65%,#112a2c 100%);border-color:#365d55;border-radius:26px}
+.hero:after{content:'✦';top:10%;right:10%;font-size:clamp(190px,30vw,420px);color:#b4f7d71c;transform:rotate(-15deg)}
+.hero h1{font-size:clamp(46px,6.5vw,91px);letter-spacing:-.06em;line-height:1.02;max-width:750px}
+.hero h1 em{font-style:normal;color:#a8f4d3}
+.hero .description{font-size:17px;max-width:490px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.hero-actions .btn{margin:0;padding:15px 23px}
+.hero-outline{border:1px solid #85cbb1;background:#ffffff0b;color:#f2fff8}
+.hero-meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:28px;color:#b7d6cb;font-size:12px}
+.section{padding:55px 5%}
+.section-title h2,.section h2{font-size:clamp(27px,3vw,40px)}
+.card{padding:12px;border:1px solid #2a464b;border-radius:18px;background:#12262e}
+.card:hover{transform:translateY(-5px);border-color:#82eac1}
+.image-wrap{overflow:hidden;border-radius:12px;background:#223c41}
+.product-image{transition:transform .35s;aspect-ratio:1/1}
+.card:hover .product-image{transform:scale(1.045)}
+.card .category{margin-top:13px}
+.card h3{margin:7px 0;font-size:17px}
+.card .description{margin:4px 0 8px;line-height:1.45}
+.card .price{font-size:22px}
+.card .stock-pill{background:transparent;color:#9fbdba;padding:0;font-size:11px}
+.card-actions .btn{border-radius:9px}
+.collection-tile{min-height:185px;position:relative;overflow:hidden;transition:transform .2s,background .2s}
+.collection-tile:hover{transform:translateY(-4px);background:#224840}
+.collection-tile h3{font-size:30px;margin:12px 0}
+.collection-tile:after{content:'↗';position:absolute;right:23px;top:20px;font-size:26px;color:#a4e7cc}
+.day21-editorial{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;margin:20px 5% 0}
+.editorial-tile{border-radius:22px;padding:35px;min-height:250px;background:linear-gradient(130deg,#244c46,#142a33);border:1px solid #42675c;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.editorial-tile:nth-child(2){background:linear-gradient(130deg,#1b3547,#25453c)}
+.editorial-tile h2{font-size:clamp(27px,3vw,42px);margin:12px 0;letter-spacing:-1px}
+.editorial-tile p{color:#c8d9d4;max-width:390px}
+.editorial-tile .btn{margin-top:14px}
+.day21-heading{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.day21-heading p{color:var(--muted)}
+.builder-tools{max-width:1100px;margin:0 auto;padding:25px 5%;border-top:1px solid #2a4549}
+.builder-tools summary{color:#c0d4ce}
+.builder-tools button{margin:5px}
+.btn{transition:transform .15s,filter .15s}
+.btn:hover{transform:translateY(-1px)}
+@media(max-width:850px){.day21-editorial{grid-template-columns:1fr}.hero{min-height:440px}}
+@media(max-width:650px){header{padding:12px 4%}nav{align-items:stretch}nav button{text-align:left}.hero{min-height:440px;padding:42px 7%;border-radius:18px}.hero:after{right:-8%;top:23%;font-size:260px}.hero h1{font-size:clamp(40px,10vw,64px)}.hero .description{font-size:15px}.day21-editorial{margin:15px 4%}.editorial-tile{min-height:210px;padding:26px}.store-strip span:last-child{display:none}}
+@media(max-width:440px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:8px}.card .description{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.card-actions .btn{font-size:11px}.compare-btn{font-size:11px}.hero-meta{gap:12px}}
+
+/* DAY 22 — mobile-first shopping polish */
+.mobile-shop-nav{display:none}
+.card .card-actions{grid-template-columns:1fr 1fr}
+.card .quick-add{width:100%;margin-top:8px;padding:11px 10px}
+.card .image-wrap{min-height:0}
+.product-image.image-placeholder{min-height:150px}
+.product-image:focus-visible{outline:3px solid var(--green)}
+.product-image.clickable{cursor:pointer}
+.day22-detail-sticky{display:none}
+.day22-breadcrumb{display:flex;align-items:center;gap:9px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-bottom:14px}
+.day22-breadcrumb button{background:none;border:0;color:var(--green);padding:4px 0}
+.day22-note{padding:12px 15px;border:1px solid var(--line);border-radius:10px;background:#10272b;color:#c5d9d3;font-size:13px;margin:16px 0}
+@media(max-width:650px){
+ body{padding-bottom:73px}
+ .mobile-shop-nav{position:fixed;bottom:0;left:0;right:0;z-index:35;display:grid;grid-template-columns:repeat(4,1fr);background:#0c2026f5;backdrop-filter:blur(16px);border-top:1px solid #345a54;padding:7px 6px max(7px,env(safe-area-inset-bottom))}
+ .mobile-shop-nav button{border:0;background:transparent;color:#cce4da;min-height:49px;display:grid;place-items:center;gap:2px;font-size:11px;font-weight:700}
+ .mobile-shop-nav button span{font-size:20px;line-height:1}
+ .mobile-shop-nav button:focus-visible{outline:2px solid var(--green)}
+ .card .card-actions{grid-template-columns:1fr}
+ .card .quick-add{min-height:43px}
+ .detail-layout{gap:20px}
+ .day22-detail-sticky.active{display:flex;position:fixed;bottom:72px;left:0;right:0;z-index:32;background:#10282cf5;backdrop-filter:blur(12px);border-top:1px solid #426e60;padding:10px 4%;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -8px 30px #0005}
+ .day22-detail-sticky .btn{white-space:nowrap}
+ .day22-detail-sticky strong{color:var(--green);font-size:15px}
+ .toast{bottom:150px;left:15px;right:15px;text-align:center}
+ .drawer{padding-bottom:100px}
+}
+@media(max-width:440px){.card .card-actions .btn{font-size:12px}.card .quick-add{font-size:12px}.card .compare-btn{margin-top:7px}}
+
+/* DAY 23 — product decision workspace */
+.d23-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}.d23-score{font-size:38px;font-weight:800;color:var(--green)}.d23-note{font-size:13px;color:var(--muted);line-height:1.6}.d23-results{display:grid;gap:12px}.d23-result{background:#102a30;border:1px solid #34555a;padding:17px;border-radius:12px}.d23-result h3{margin:5px 0}.d23-result p{color:var(--muted)}.d23-result strong{color:var(--green)}@media(max-width:760px){.d23-layout{grid-template-columns:1fr}}
+
+/* DAY 24 — copy studio */
+.d24-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}.d24-layout label{display:grid;gap:7px;margin:12px 0;color:var(--muted);font-size:13px}.d24-layout .field{width:100%}.d24-output{min-height:270px;width:100%;line-height:1.6}.d24-buttons{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0}.d24-draft{border:1px solid var(--line);border-radius:10px;padding:16px;margin:10px 0;background:#10252b}.d24-draft p{white-space:pre-wrap;overflow-wrap:anywhere}@media(max-width:800px){.d24-layout{grid-template-columns:1fr}}
+
+/* DAY 25 — business toolkit */
+.d25-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.d25-grid label{display:grid;gap:7px;margin:12px 0;color:var(--muted)}.d25-grid .field{width:100%}.d25-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.d25-kpis .panel{margin:0}.d25-kpis strong{display:block;font-size:25px;color:var(--green)}.d25-record{border:1px solid var(--line);border-radius:13px;padding:18px;margin:12px 0;background:var(--panel)}.d25-record p{overflow-wrap:anywhere}.d25-actions{display:flex;gap:9px;flex-wrap:wrap}.d25-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.d25-tabs button{border:1px solid var(--line);background:var(--panel);color:white;padding:11px 15px;border-radius:10px}.d25-tabs button.active{background:var(--green);color:#09151b}.d25-progress{height:12px;background:var(--line);border-radius:20px;overflow:hidden}.d25-progress div{height:100%;background:var(--green)}@media(max-width:700px){.d25-grid,.d25-kpis{grid-template-columns:1fr}}
+
+/* DAY 26 — refined storefront + owner growth workspace */
+:root{--green:#9cf4cf}
+.hero{background:radial-gradient(ellipse at 85% 35%,#387c6880,transparent 43%),linear-gradient(125deg,#091a24,#133f3d 65%,#0a222d);border-radius:28px}
+.hero .eyebrow{letter-spacing:.22em}.hero h1{max-width:840px;text-wrap:balance}
+.card{box-shadow:0 6px 25px #0002}.card:hover{box-shadow:0 22px 45px #0006}
+.card .price{letter-spacing:-.04em}.btn{min-height:42px}.btn:active{transform:scale(.98)}
+.section-title{border-bottom:1px solid #29474b;padding-bottom:15px}
+.collection-tile{background:radial-gradient(circle at 90% 85%,#40766588,transparent 55%),linear-gradient(135deg,#1b3b42,#10252d)}
+.d26-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin:22px 0}
+.d26-metric{padding:23px;background:linear-gradient(150deg,#1b3b3d,#102630);border:1px solid #345a55;border-radius:17px}
+.d26-metric span{display:block;color:#c2d8d1;font-size:13px}.d26-metric strong{display:block;font-size:30px;color:var(--green);margin-top:9px}
+.d26-tabs{display:flex;flex-wrap:wrap;gap:9px;margin:22px 0}.d26-tabs button{padding:11px 15px;border:1px solid #45675f;border-radius:25px;background:#173137;color:#e5f8ef;font-weight:700}.d26-tabs button.active{background:var(--green);color:#10251e}
+.d26-columns{display:grid;grid-template-columns:1fr 1fr;gap:18px}.d26-columns label{display:grid;gap:7px;margin:13px 0;color:#d0dfdc}
+.d26-columns .field{width:100%}.d26-record{padding:18px;margin:12px 0;background:#132b33;border:1px solid #365650;border-radius:13px;overflow-wrap:anywhere}
+.d26-record p{white-space:pre-wrap}.d26-steps{display:grid;gap:10px}.d26-step{display:flex;gap:14px;padding:14px;border-radius:12px;background:#152f34;border:1px solid #34524e}.d26-step b{color:var(--green)}
+.d26-output{white-space:pre-wrap;line-height:1.65;color:#e2f7ee;min-height:150px}
+@media(max-width:760px){.d26-grid{grid-template-columns:1fr 1fr}.d26-columns{grid-template-columns:1fr}.hero{border-radius:18px}}
+@media(max-width:440px){.d26-grid{grid-template-columns:1fr}.d26-metric strong{font-size:25px}.d26-tabs button{font-size:12px;padding:10px}.hero{min-height:390px}.card-actions{gap:6px}}
+@media(prefers-reduced-motion:reduce){.product-image,.btn,.collection-tile{transition:none}}
+
+/* DAY 27 — editorial commerce redesign, accessible interactions */
+:root{--green:#b4ffdb;--bg:#081319;--panel:#10252c;--muted:#b9d0cb;--line:#29474a}
+body{background:linear-gradient(180deg,#071116,#0b1d22 55%,#071217);letter-spacing:-.01em}
+header{background:#07171aeF;border-bottom:1px solid #31504a;box-shadow:0 8px 35px #0005}
+.logo{font-weight:800;letter-spacing:.19em;text-shadow:0 0 30px #8cf6c840}
+nav button{transition:background .2s,color .2s}
+.announcement{background:#c0f9dc;color:#10271c;font-weight:800;letter-spacing:.13em}
+.hero.d27-hero{margin:18px 3.5% 0;min-height:590px;padding:clamp(36px,6vw,85px);border:1px solid #568d7c;border-radius:28px;display:grid;grid-template-columns:1.12fr .88fr;align-items:center;gap:20px;background:radial-gradient(circle at 73% 38%,#407f70aa,transparent 37%),linear-gradient(120deg,#07191f,#153a37 70%,#0c202a);box-shadow:0 28px 70px #0007}
+.d27-hero:after{display:none}.d27-hero .eyebrow{color:#c4ffe4;font-size:12px;letter-spacing:.23em}
+.d27-hero h1{font-size:clamp(49px,6.5vw,100px);max-width:760px;line-height:.99;letter-spacing:-.075em;margin:24px 0}
+.d27-hero h1 em{color:#c0ffe1}.d27-hero .description{font-size:clamp(15px,1.6vw,19px);line-height:1.7;max-width:530px}
+.d27-hero-art{position:relative;min-height:420px;display:grid;place-items:center}
+.d27-orbit{position:absolute;inset:5%;border:1px solid #a5f8d449;border-radius:50%;transform:rotate(-22deg)}
+.d27-orbit:before{content:'';position:absolute;inset:13%;border:1px solid #a5f8d436;border-radius:50%}
+.d27-art-card{width:min(350px,85%);aspect-ratio:4/5;transform:rotate(8deg);border-radius:30px;border:1px solid #c7ffe96b;box-shadow:0 32px 90px #0009;background:linear-gradient(140deg,#b4ffdb22,#173e40 75%);padding:13px;overflow:hidden;position:relative}
+.d27-art-card img{width:100%;height:100%;object-fit:cover;border-radius:22px;filter:saturate(.9)}
+.d27-art-caption{position:absolute;bottom:26px;left:27px;right:27px;background:#09191ce8;backdrop-filter:blur(12px);border:1px solid #b4ffdb65;border-radius:14px;padding:14px;font-size:13px;color:#e7fff1}
+.d27-art-caption strong{display:block;color:var(--green);font-size:17px;margin-top:4px}
+.d27-kicker{display:inline-flex;align-items:center;gap:8px;border:1px solid #93e4bf66;background:#b4ffdb12;border-radius:100px;padding:9px 14px;color:#e5fff0;font-size:12px;font-weight:800}
+.hero-actions .btn{border-radius:50px;padding:15px 24px;box-shadow:0 9px 25px #0003}
+.d27-ticker{display:flex;gap:25px;justify-content:space-around;flex-wrap:wrap;margin:0 3.5%;padding:19px 22px;border-bottom:1px solid #3c6158;color:#c4ded3;font-size:12px;font-weight:700;letter-spacing:.04em}
+.d27-ticker span:before{content:'✦';color:var(--green);margin-right:9px}
+.d27-intro{text-align:center;max-width:750px;margin:0 auto 28px}.d27-intro h2{font-size:clamp(32px,4.2vw,54px);letter-spacing:-.055em;line-height:1.1;margin:12px 0}.d27-intro p{color:var(--muted);line-height:1.6}
+.section{padding:65px 5%}.section-title h2{font-size:clamp(30px,3.5vw,48px);letter-spacing:-.05em}
+.card{background:linear-gradient(160deg,#163039,#0c1e26);border:1px solid #34534f;border-radius:20px;padding:12px;box-shadow:0 10px 35px #0003;transition:transform .25s,border-color .25s,box-shadow .25s}
+.card:hover{transform:translateY(-7px);border-color:#a7f7d0;box-shadow:0 24px 55px #0008}
+.image-wrap{border-radius:14px;background:#1c3b3e}.product-image{aspect-ratio:1/1;transition:transform .4s ease}
+.card:hover .product-image{transform:scale(1.07)}.card h3{font-size:19px;letter-spacing:-.025em}.card .category{font-size:10px}
+.card .price{font-size:23px}.card-actions .btn,.quick-add{border-radius:10px;min-height:43px}
+.btn{border-radius:11px}.btn:hover{filter:brightness(1.1)}.filter-btn{transition:background .2s,border-color .2s}.filter-btn:hover{border-color:var(--green)}
+.day21-editorial{gap:18px;margin:22px 3.5%}.editorial-tile{min-height:320px;border-radius:24px;padding:clamp(26px,4vw,54px);position:relative;overflow:hidden;box-shadow:0 18px 40px #0004}
+.editorial-tile:after{content:'↗';position:absolute;right:25px;top:20px;color:#c2ffdf;font-size:38px;opacity:.75}
+.editorial-tile:first-child{background:radial-gradient(circle at 85% 70%,#558f6877,transparent 55%),linear-gradient(135deg,#15382f,#10262f)}
+.editorial-tile:nth-child(2){background:radial-gradient(circle at 85% 70%,#6a8c9d55,transparent 55%),linear-gradient(135deg,#173447,#10252c)}
+.editorial-tile h2{font-size:clamp(32px,3.8vw,53px);line-height:1.05;letter-spacing:-.06em;max-width:450px}
+.collection-links{gap:16px}.collection-tile{min-height:220px;border-radius:20px;box-shadow:0 12px 35px #0003;transition:transform .2s,box-shadow .2s}.collection-tile:hover{box-shadow:0 20px 50px #0006}
+.collection-tile:nth-child(2){background:radial-gradient(circle at 90% 90%,#3d6b91a8,transparent 60%),linear-gradient(140deg,#17313d,#10212a)}
+.collection-tile:nth-child(3){background:radial-gradient(circle at 90% 90%,#816f4f99,transparent 60%),linear-gradient(140deg,#253b38,#10242b)}
+.collection-tile h3{font-size:clamp(27px,3vw,38px);letter-spacing:-.05em}
+.d27-discovery{margin:10px 5% 25px;padding:30px 34px;border:1px solid #456b61;border-radius:22px;background:linear-gradient(100deg,#173e37,#0f2b32);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.d27-discovery h2{font-size:clamp(26px,3vw,38px);letter-spacing:-.05em;margin:6px 0}.d27-discovery p{color:#c8e2d7;margin:5px 0}
+.d27-discovery .btn{white-space:nowrap}
+.brand-values .value-card{border-radius:18px;background:#122b2f;padding:30px}.brand-values .value-card h3{font-size:21px}
+@media(max-width:900px){.hero.d27-hero{grid-template-columns:1fr;min-height:0}.d27-hero-art{min-height:310px}.d27-art-card{width:230px;height:290px}.d27-hero h1{font-size:clamp(45px,9vw,76px)}}
+@media(max-width:650px){.hero.d27-hero{margin:12px 3%;padding:37px 7%;border-radius:20px}.d27-hero-art{min-height:240px}.d27-art-card{width:170px;height:215px}.d27-art-caption{font-size:10px;padding:8px;bottom:14px;left:16px;right:16px}.d27-art-caption strong{font-size:12px}.d27-hero h1{font-size:clamp(44px,11vw,65px)}.d27-ticker{gap:9px;justify-content:center;text-align:center}.d27-ticker span{font-size:10px}.editorial-tile{min-height:240px}.section{padding:45px 4%}.d27-discovery{margin:12px 4%;padding:24px}.card h3{font-size:15px}}
+@media(max-width:440px){.d27-hero-art{min-height:210px}.d27-art-card{width:155px;height:190px}.d27-hero .hero-actions{gap:8px}.d27-hero .hero-actions .btn{font-size:12px;padding:13px 15px}.card{padding:9px}.card .price{font-size:19px}}
+@media(prefers-reduced-motion:reduce){.card,.product-image,.collection-tile{transition:none}}
+
+
+/* DAY 28 — launch operations center */
+.d28-hero{padding:30px;border:1px solid #477969;border-radius:22px;background:linear-gradient(115deg,#173c39,#10252e);margin:20px 0}
+.d28-hero h1{font-size:clamp(30px,4vw,48px);letter-spacing:-.05em;margin:9px 0}
+.d28-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.d28-grid label{display:grid;gap:7px;color:#d2e6de;font-size:13px;margin:11px 0}
+.d28-grid .field{width:100%}
+.d28-statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.d28-stat{padding:19px;border:1px solid #385e54;border-radius:15px;background:#142e30}
+.d28-stat span{display:block;color:#c3d8d1;font-size:12px}.d28-stat strong{display:block;font-size:27px;color:var(--green);margin-top:7px}
+.d28-tabs{display:flex;flex-wrap:wrap;gap:9px;margin:20px 0}
+.d28-tabs button{border:1px solid #466b60;border-radius:30px;padding:11px 16px;background:#153037;color:white;font-weight:700}
+.d28-tabs button.active{background:var(--green);color:#09231c}
+.d28-record{border:1px solid #3a5d55;border-radius:14px;background:#102a30;padding:17px;margin:12px 0;overflow-wrap:anywhere}
+.d28-record h3{margin:0 0 8px}.d28-record p{color:#c3d8d1}
+.d28-actions{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
+.d28-score{font-size:32px;font-weight:800;color:var(--green)}
+.d28-check{display:flex;align-items:flex-start;gap:12px;padding:13px;border:1px solid #35564f;border-radius:10px;margin:9px 0;background:#102a30}
+.d28-check input{accent-color:var(--green);width:20px;height:20px;flex:none}
+.d28-check small{display:block;color:#b7cfc5;margin-top:5px}
+@media(max-width:760px){.d28-grid{grid-template-columns:1fr}.d28-statgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:450px){.d28-statgrid{grid-template-columns:1fr}}
+
+
+/* DAY 29 — Profit Guard Mega Lab */
+.d29-head{padding:clamp(25px,5vw,55px);border:1px solid #568e7b;border-radius:25px;background:radial-gradient(circle at 95% 15%,#4d957a80,transparent 43%),linear-gradient(120deg,#103c37,#0d222d);margin-bottom:20px}
+.d29-head h1{font-size:clamp(35px,5vw,65px);letter-spacing:-.06em;line-height:1.02;margin:12px 0}.d29-head p{max-width:680px;color:#cce6d9;line-height:1.65}
+.d29-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}.d29-layout label{display:grid;gap:6px;color:#c8e3d8;font-size:13px;margin:12px 0}.d29-layout .field{width:100%}
+.d29-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.d29-metric{padding:19px;border:1px solid #416b60;border-radius:14px;background:#122f32}.d29-metric span{font-size:12px;color:#bfd5cd;display:block}.d29-metric strong{font-size:clamp(21px,2.5vw,30px);color:var(--green);display:block;margin-top:8px}
+.d29-table{width:100%;border-collapse:collapse}.d29-table td,.d29-table th{padding:11px;border-bottom:1px solid #31564d;text-align:left}.d29-table td:last-child,.d29-table th:last-child{text-align:right}
+.d29-actions{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}.d29-record{padding:17px;background:#112e32;border:1px solid #3d635a;border-radius:13px;margin:12px 0;overflow-wrap:anywhere}.d29-record h3{margin:0 0 8px}.d29-record p{color:#c4dbd0}
+.d29-warning{border-left:4px solid #f6bf75;background:#392e25;padding:12px 15px;border-radius:7px;color:#ffe2b7}.d29-tabs{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}.d29-tabs button{background:#16343a;color:#fff;border:1px solid #4a7164;border-radius:25px;padding:11px 16px;font-weight:700}.d29-tabs button.active{background:var(--green);color:#10251e}
+.d29-brief{white-space:pre-wrap;background:#0c252a;border:1px solid #3c5e54;border-radius:12px;padding:20px;color:#e5fff1;line-height:1.6;overflow-wrap:anywhere}
+@media(max-width:850px){.d29-layout{grid-template-columns:1fr}}@media(max-width:520px){.d29-metrics{grid-template-columns:1fr}}
+/* DAY 30 — flagship visual system */
+:root{--bg:#071317;--panel:#10272d;--line:#34514d;--green:#c1ffe0;--muted:#c0d3ce}
+body{background:radial-gradient(ellipse 70% 12% at 65% 0%,#1d4b3f 0%,transparent 80%),#071317;color:#f3fff9;-webkit-font-smoothing:antialiased}
+header{padding:13px clamp(16px,4vw,70px);background:#081a1ceF;border-bottom:1px solid #ffffff1d}
+.logo{font-size:clamp(21px,2.4vw,29px);letter-spacing:.24em}
+nav button{font-size:13px;letter-spacing:.01em;padding:12px 14px}
+nav button:hover{background:#d0ffe61b}
+.announcement{background:#c7ffe3;color:#10241a;font-size:11px;padding:10px;letter-spacing:.15em}
+.store-strip{background:#102622;border-bottom:1px solid #ffffff13}
+.hero.d27-hero{margin:18px clamp(12px,3vw,60px) 0;min-height:650px;gap:30px;padding:clamp(30px,5.8vw,90px);background:radial-gradient(ellipse at 72% 50%,#42816a80,transparent 44%),linear-gradient(125deg,#0a2426 0%,#163d35 60%,#10252c 100%);border:1px solid #87c5a452;border-radius:32px;box-shadow:0 30px 95px #0009;isolation:isolate}
+.d27-hero h1{font-size:clamp(49px,6.9vw,108px);letter-spacing:-.085em;line-height:.98}
+.d27-hero h1 em{background:linear-gradient(90deg,#caffdf,#85dfbc);color:transparent;background-clip:text}
+.d27-hero .description{color:#d3e6dc;font-size:clamp(16px,1.5vw,19px)}
+.d27-kicker{border-color:#b4ffe17d;background:#c6ffe316;letter-spacing:.12em}
+.d27-hero-art{min-height:490px;filter:drop-shadow(0 30px 38px #0006)}
+.d27-orbit{border-color:#c5ffe363;animation:d30Orbit 22s linear infinite}
+.d27-art-card{width:min(410px,89%);border-radius:34px;transform:rotate(7deg);background:#1b4a43;padding:12px;box-shadow:0 42px 100px #000a;transition:transform .4s}
+.d27-art-card:hover{transform:rotate(2deg) translateY(-7px)}
+.d27-art-card img{border-radius:25px}
+.d27-art-caption{background:#091d1feF}
+@keyframes d30Orbit{to{transform:rotate(338deg)}}
+.btn{border-radius:999px;padding:12px 21px;box-shadow:0 4px 14px #0002;transition:transform .2s,background .2s,filter .2s}
+.btn:hover{transform:translateY(-2px)}
+.hero-actions .btn{padding:17px 28px}
+.section{padding:clamp(45px,5.8vw,95px) clamp(16px,5vw,95px)}
+.section-title{border-bottom:1px solid #ffffff2a;padding-bottom:22px}
+.section-title h2,.section h2{letter-spacing:-.065em}
+.card{border:1px solid #ffffff22;background:linear-gradient(160deg,#173a3a,#0d242a 80%);padding:13px;border-radius:23px;box-shadow:0 12px 35px #0004}
+.card:hover{transform:translateY(-8px);border-color:#baffd2;box-shadow:0 30px 65px #0008}
+.image-wrap{border-radius:17px;background:#24443f}
+.product-image{aspect-ratio:1/1}
+.card h3{font-size:clamp(16px,1.5vw,21px);letter-spacing:-.035em}
+.card .price{font-size:clamp(20px,2vw,26px)}
+.card .description{color:#bcd1c8}
+.card .category{letter-spacing:.15em}
+.heart-btn{background:#102726eE;border:1px solid #ffffff55;backdrop-filter:blur(8px)}
+.collection-tile{border:1px solid #ffffff3a;min-height:250px;padding:35px;border-radius:25px}
+.collection-tile:hover{transform:translateY(-7px)}
+.collection-tile h3{font-size:clamp(30px,3.6vw,48px)}
+.day21-editorial{margin:24px clamp(12px,3vw,60px);gap:20px}
+.editorial-tile{min-height:390px;border:1px solid #ffffff38;border-radius:28px;box-shadow:0 22px 50px #0005}
+.editorial-tile h2{font-size:clamp(36px,4vw,60px)}
+.d27-discovery{border-radius:25px;padding:40px;background:linear-gradient(105deg,#214b3b,#102d34)}
+.shop-toolbar{padding:16px;border:1px solid #ffffff1c;border-radius:18px;background:#10292c}
+.search-box,.sort-select{background:#0b2228;border-color:#456b60;border-radius:13px}
+.filter-btn{border-radius:100px}
+.brand-values{gap:16px}
+.value-card{background:#112b2a;border-radius:20px!important}
+footer{background:#061113;border-top:1px solid #ffffff19}
+.d30-collection-intro{text-align:center;margin:0 auto 30px;max-width:760px}
+.d30-collection-intro h2{font-size:clamp(36px,4.5vw,62px);letter-spacing:-.07em;line-height:1.04;margin:10px 0}
+.d30-collection-intro p{color:#c3d8cf;line-height:1.7}
+.d30-featured-strip{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin:0 clamp(12px,3vw,60px) 24px}
+.d30-feature{position:relative;min-height:340px;border-radius:26px;overflow:hidden;display:flex;align-items:end;padding:35px;border:1px solid #ffffff40;background:#183c3b}
+.d30-feature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;transition:transform .6s}
+.d30-feature:hover img{transform:scale(1.06)}
+.d30-feature:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#07171bed 0%,#07171b1a 95%)}
+.d30-feature>div{position:relative;z-index:1;max-width:390px}
+.d30-feature h2{font-size:clamp(31px,3vw,46px);letter-spacing:-.06em;line-height:1.07;margin:12px 0}
+.d30-feature p{color:#e0eee8}
+.d30-feature .btn{margin-top:9px}
+.d30-find{margin:20px clamp(12px,3vw,60px) 0;padding:25px 30px;border:1px solid #b8ffdb42;border-radius:20px;background:#c1ffe00c;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.d30-find h2{margin:5px 0;font-size:clamp(24px,3vw,36px);letter-spacing:-.05em}
+.d30-find p{color:#bed6cb;margin:0}
+.d30-find-actions{display:flex;gap:9px;flex-wrap:wrap}
+.d30-find-actions button{border:1px solid #8fd5b3;background:#1a3b35;color:#e7fff0;padding:12px 18px;border-radius:100px;font-weight:700}
+.d30-find-actions button:hover{background:#b8ffdc;color:#09251b}
+.d30-section-divider{height:1px;background:linear-gradient(90deg,transparent,#a9e7c46b,transparent);margin:0 5%}
+@media(max-width:900px){.hero.d27-hero{min-height:0}.d27-hero-art{min-height:330px}.d30-featured-strip{grid-template-columns:1fr}.d30-feature{min-height:310px}}
+@media(max-width:650px){.hero.d27-hero{border-radius:22px;padding:38px 7%}.d27-hero h1{font-size:clamp(45px,11vw,70px)}.d27-hero-art{min-height:245px}.d27-art-card{width:185px;height:230px}.d30-feature{padding:24px;min-height:270px}.d30-find{padding:22px}.section{padding:45px 4%}.day21-editorial{margin:15px 3%}.editorial-tile{min-height:260px}}
+@media(prefers-reduced-motion:reduce){.d27-orbit{animation:none}.d27-art-card,.d30-feature img{transition:none}}
+
+</style>
+</head>
+
+<body>
+
+<div class="announcement">TRENVIKO • Discover what’s next • Demo store — no purchases or payments</div>
+<header>
+ <button class="logo" onclick="showHome()">TRENVIKO</button>
+ <button class="menu-toggle" id="menu-toggle"
+  aria-expanded="false" onclick="toggleMenu()">☰ Menu</button>
+ <nav id="nav">
+  <button onclick="showHome()">Home</button>
+  <button onclick="openShop()">Shop</button>
+  <button onclick="showWishlist()">
+   Wishlist (<span id="wishlist-count">0</span>)
+  </button>
+  <button onclick="showCart()">
+   Cart (<span id="cart-count">0</span>)
+  </button>
+   <button onclick="showCompare()">Compare (<span id="compare-count">0</span>)</button>
+   <button onclick="showAccount()">Account</button>
+  <button onclick="showFAQ()">Help</button>
+ </nav>
+</header>
+
+<div class="store-strip"><span>✦ Curated product concepts</span><span>✦ Prices shown in CAD</span><span>✦ Demo store · no payments</span></div>
+<main id="app"></main>
+<nav class="mobile-shop-nav" aria-label="Quick mobile navigation"><button onclick="showHome()"><span>⌂</span>Home</button><button onclick="openShop()"><span>⌕</span>Shop</button><button onclick="showWishlist()"><span>♡</span>Saved</button><button onclick="openCartDrawer()"><span>▣</span>Cart <b id="mobile-cart-count">0</b></button></nav>
+<div id="day22-detail-sticky" class="day22-detail-sticky" aria-label="Product quick action"></div>
+
+<footer>
+ <p>TRENVIKO | Discover What's Next</p>
+ <p>Practice store. No real purchases available.</p>
+ <button onclick="showAbout()">About</button>
+ <button onclick="showContact()">Contact</button>
+ <button onclick="showFAQ()">FAQ</button>
+ <details class="builder-tools"><summary>Store builder tools (demo)</summary><button onclick="showManager()">Manage Products</button><button onclick="showResearch()">Research</button><button onclick="showDay23Lab()">Product Idea Lab</button><button onclick="showDay24Studio()">Product Copy Studio</button><button onclick="showDay25Hub()">Day 25 Business Toolkit</button><button onclick="showDay26HQ()">Day 26 Growth HQ</button><button onclick="showDay28HQ()">Day 28 Launch Center</button><button onclick="showDay29Mega()">Day 29 Profit Guard</button><button onclick="showAnalytics()">Analytics</button><button onclick="showLaunchHub()">Launch Prep & Backups</button></details>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+<div id="day17-overlay" class="overlay" onclick="closePanels()"></div>
+<aside id="cart-drawer" class="drawer" aria-label="Shopping cart" aria-hidden="true">
+ <div class="drawer-head"><h2>Your Cart</h2><button class="small-btn" onclick="closePanels()">✕ Close</button></div>
+ <div id="drawer-content"></div>
+</aside>
+<div id="quick-modal" class="quick-modal" role="dialog" aria-modal="true" aria-label="Quick product view"></div>
+
+<script>
+// =======================================
+// STORAGE AND DATA
+// =======================================
+
+const starterProducts=[
+ {
+  id:1,name:"Pro Athletic Grip Socks",
+  category:"Sports",price:19.99,
+  image:"https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?auto=format&fit=crop&w=800&q=80",
+  description:"Comfortable athletic socks for training and games. Demo product.",
+  badge:"NEW"
+ },
+ {
+  id:2,name:"Wireless Headphones",
+  category:"Tech",price:39.99,
+  image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
+  description:"Wireless headphones for music and everyday listening. Demo product.",
+  badge:"TRENDING"
+ },
+ {
+  id:3,name:"Training Accessories",
+  category:"Sports",price:24.99,
+  image:"https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+  description:"Useful accessories for workouts. Demo product.",
+  badge:""
+ },
+ {
+  id:4,name:"Bluetooth Winter Earmuffs",
+  category:"Trending",price:19.99,
+  image:"https://images.unsplash.com/photo-1578681994506-b8f463449011?auto=format&fit=crop&w=800&q=80",
+  description:"Winter earmuffs with wireless audio. Demo product; specifications not verified.",
+  badge:"NEW"
+ },
+ {
+  id:5,name:"Insulated Sports Water Bottle",category:"Sports",price:22.99,
+  image:"https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=800&q=80",
+  description:"Reusable bottle concept for workouts and school. Demo listing; specifications unverified.",badge:"NEW"
+ },
+ {
+  id:6,name:"Minimal Desk Lamp",category:"Tech",price:34.99,
+  image:"https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=80",
+  description:"Simple desk lighting concept. Demo listing; specifications unverified.",badge:""
+ },
+ {
+  id:7,name:"Everyday Canvas Backpack",category:"Trending",price:44.99,
+  image:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
+  description:"Everyday carry backpack concept. Demo listing; specifications unverified.",badge:"TRENDING"
+ },
+ {
+  id:8,name:"Training Yoga Mat",category:"Sports",price:29.99,
+  image:"https://images.unsplash.com/photo-1599447421416-3414500d18a5?auto=format&fit=crop&w=800&q=80",
+  description:"Exercise mat concept for home workouts. Demo listing; specifications unverified.",badge:""
+ }
+,{
+ id:9,name:"Portable Phone Stand",category:"Tech",price:16.99,
+ image:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80",
+ description:"Adjustable phone stand concept for a desk. Demo listing; supplier details unverified.",badge:"NEW"
+},{
+ id:10,name:"Resistance Band Set",category:"Sports",price:27.99,
+ image:"https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80",
+ description:"Resistance training band set concept. Demo listing; supplier details unverified.",badge:""
+},{
+ id:11,name:"Travel Organizer Pouch",category:"Lifestyle",price:18.99,
+ image:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
+ description:"Travel organization pouch concept. Demo listing; supplier details unverified.",badge:"TRENDING"
+},{
+ id:12,name:"Wireless Charging Pad",category:"Tech",price:28.99,
+ image:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80",
+ description:"Wireless charging pad concept. Demo listing; compatibility unverified.",badge:""
+}
+];
+
+const app=document.getElementById("app");
+
+function load(key,fallback){
+ try{
+  return JSON.parse(localStorage.getItem(key))??fallback;
+ }catch{return fallback}
+}
+
+function save(key,value){
+ try{
+  localStorage.setItem(key,JSON.stringify(value));
+  return true;
+ }catch{
+  notify("Browser storage unavailable.");
+  return false;
+ }
+}
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",
+  '"':"&quot;","'":"&#39;"
+ })[c]);
+}
+
+function safeURL(value){
+ try{
+  const u=new URL(value);
+  return ["http:","https:"].includes(u.protocol)?u.href:"";
+ }catch{return ""}
+}
+
+function money(n){
+ return "$"+Number(n).toFixed(2)+" CAD";
+}
+
+function validNumber(n){
+ return typeof n==="number"&&Number.isFinite(n)&&
+  n>=0&&n<=100000;
+}
+
+function validProduct(p){
+ return p&&
+  (typeof p.id==="number"||typeof p.id==="string")&&
+  typeof p.name==="string"&&p.name.trim()&&
+  typeof p.category==="string"&&
+  validNumber(p.price)&&
+  typeof p.description==="string";
+}
+
+let products=load("trenviko-products",null);
+if(!Array.isArray(products)){
+ products=starterProducts.map(p=>({...p}));
+}
+products=products.filter(validProduct);
+// Day 17: Add new demo products once without replacing existing saved products.
+const originalStarterIds=[1,2,3,4];
+if(!load("trenviko-day17-migrated",false) && originalStarterIds.every(id=>products.some(p=>String(p.id)===String(id)))){
+ let added=false;
+ for(const demo of starterProducts.filter(p=>p.id>=5)){
+  if(!products.some(p=>String(p.id)===String(demo.id))){products.push({...demo});added=true;}
+ }
+ if(added)save("trenviko-products",products);
+ save("trenviko-day17-migrated",true);
+}
+
+// Day 18 migration: add only missing demo IDs; never replace user-created products.
+if(!load("trenviko-day18-migrated",false)){
+ let changed=false;
+ for(const demo of starterProducts.filter(p=>p.id>=9)){
+  if(!products.some(p=>String(p.id)===String(demo.id))){products.push({...demo});changed=true;}
+ }
+ if(!changed||save("trenviko-products",products))save("trenviko-day18-migrated",true);
+}
+
+let cart=load("trenviko-cart",[]);
+let wishlist=load("trenviko-wishlist",[]);
+let recentlyViewed=load("trenviko-recent",[]);
+let researchItems=load("trenviko-research",[]);
+
+if(!Array.isArray(cart))cart=[];
+if(!Array.isArray(wishlist))wishlist=[];
+if(!Array.isArray(recentlyViewed))recentlyViewed=[];
+if(!Array.isArray(researchItems))researchItems=[];
+
+researchItems=researchItems.filter(item=>
+ item&&typeof item.name==="string"&&
+ ["cost","shipping","price","fees"].every(k=>
+  validNumber(item[k])
+ )
+);
+
+// Local-only demo analytics: no server, no customer tracking.
+let analytics=load("trenviko-analytics",{views:{},adds:{}});
+if(!analytics||typeof analytics!=="object")analytics={views:{},adds:{}};
+if(!analytics.views||typeof analytics.views!=="object")analytics.views={};
+if(!analytics.adds||typeof analytics.adds!=="object")analytics.adds={};
+function recordEvent(kind,id){
+ const key=String(id);analytics[kind][key]=(Number(analytics[kind][key])||0)+1;
+ save("trenviko-analytics",analytics);
+}
+let promoCode=load("trenviko-promo","");
+if(promoCode!=="DEMO10")promoCode="";
+function promoDiscount(subtotal){return promoCode==="DEMO10"?Math.round(subtotal*10)/100:0;}
+function promoHTML(subtotal){
+ const discount=promoDiscount(subtotal);
+ return `<div class="panel"><strong>Demo Discount Code</strong>
+ <div class="promo-form"><input class="field" id="promo-input" placeholder="Try DEMO10" value="${escapeHTML(promoCode)}" aria-label="Promo code">
+ <button class="btn secondary" onclick="applyPromo()">Apply</button></div>
+ <p class="small-note">DEMO10 gives 10% off the displayed demo subtotal. No real checkout.</p>
+ ${discount?`<p>Demo discount: −${money(discount)}</p><strong>Demo total before shipping and tax: ${money(subtotal-discount)}</strong>`:""}</div>`;
+}
+function applyPromo(){
+ const code=(document.getElementById("promo-input")?.value||"").trim().toUpperCase();
+ if(code&&code!=="DEMO10"){notify("Invalid demo code. Try DEMO10.");return;}
+ promoCode=code;save("trenviko-promo",promoCode);
+ if(document.getElementById("cart-drawer").classList.contains("open"))renderCartDrawer();
+ else showCart();
+ notify(code?"Demo discount applied":"Demo discount removed");
+}
+function variantOptions(p){
+ const name=p.name.toLowerCase();
+ if(/sock|shirt|hoodie|apparel/.test(name))return {label:"Size",values:["Small","Medium","Large"]};
+ if(/bottle|backpack|pouch|earmuff/.test(name))return {label:"Colour",values:["Black","Grey","Blue"]};
+ return null;
+}
+function variantHTML(p){
+ const v=variantOptions(p);if(!v)return "";
+ return `<label class="variant-picker">${v.label} (demo options, availability unverified)
+ <select id="product-variant" class="field">${v.values.map(x=>`<option value="${x}">${x}</option>`).join("")}</select></label>`;
+}
+function showAnalytics(){
+ currentPage="analytics";
+ const total=obj=>Object.values(obj).reduce((sum,n)=>sum+(Number(n)||0),0);
+ const rows=products.map(p=>({p,views:analytics.views[String(p.id)]||0,adds:analytics.adds[String(p.id)]||0}))
+ .sort((a,b)=>b.views-a.views||b.adds-a.adds);
+ app.innerHTML=`<section class="section"><div class="eyebrow">DAY 18 · LOCAL DEMO</div><h1>Store Analytics</h1>
+ <p class="notice">Counts are saved only in this browser. They are not real visitor or sales analytics.</p>
+ <div class="stat-row"><div class="stat"><span>Product views</span><strong>${total(analytics.views)}</strong></div>
+ <div class="stat"><span>Cart additions</span><strong>${total(analytics.adds)}</strong></div>
+ <div class="stat"><span>Products</span><strong>${products.length}</strong></div></div>
+ <div class="panel"><h2>Popular Products (this browser)</h2><div class="analytics-list">${rows.map(x=>`<div class="analytics-line"><span>${escapeHTML(x.p.name)}</span><span>${x.views} views · ${x.adds} adds</span></div>`).join("")}</div></div>
+ <button class="btn secondary" onclick="if(confirm('Clear local demo analytics?')){analytics={views:{},adds:{}};save('trenviko-analytics',analytics);showAnalytics();}">Reset Demo Analytics</button>
+ </section>`;navigate();
+}
+function findProduct(id){
+ return products.find(p=>String(p.id)===String(id));
+}
+
+// Encode IDs safely for inline event handlers.
+function idArg(id){
+ return JSON.stringify(String(id)).replace(/'/g,"\\u0027");
+}
+
+function cleanReferences(){
+ const ids=new Set(products.map(p=>String(p.id)));
+
+ cart=cart.filter(item=>
+  item&&ids.has(String(item.id))&&
+  Number.isInteger(item.quantity)&&
+  item.quantity>=1&&item.quantity<=99
+ );
+
+ wishlist=[...new Set(wishlist.filter(id=>
+  ids.has(String(id))
+ ))];
+
+ recentlyViewed=[...new Set(recentlyViewed.filter(id=>
+  ids.has(String(id))
+ ))].slice(0,4);
+}
+cleanReferences();
+
+let currentPage="home";
+let currentProductId=null;
+let activeCategory="All";
+let searchTerm="";
+let sortMode="featured";
+let editingProductId=null;
+let toastTimer;
+
+function notify(message){
+ const el=document.getElementById("toast");
+ el.textContent=message;
+ el.style.display="block";
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>el.style.display="none",2200);
+}
+
+function updateCounts(){
+ document.getElementById("cart-count").textContent=
+  cart.reduce((sum,item)=>sum+item.quantity,0);
+ document.getElementById("wishlist-count").textContent=
+  wishlist.length;
+  const cc=document.getElementById("compare-count");if(cc)cc.textContent=compareIds.length;
+}
+
+function saveCart(){
+ save("trenviko-cart",cart);
+ updateCounts();
+}
+
+function saveProducts(){
+ return save("trenviko-products",products);
+}
+
+function toggleMenu(){
+ const nav=document.getElementById("nav");
+ nav.classList.toggle("open");
+ document.getElementById("menu-toggle")
+  .setAttribute("aria-expanded",String(nav.classList.contains("open")));
+}
+
+function closeMenu(){
+ document.getElementById("nav").classList.remove("open");
+ document.getElementById("menu-toggle")
+  .setAttribute("aria-expanded","false");
+}
+
+function navigate(){
+ refreshDay22Sticky();
+ closeMenu();
+ window.scrollTo(0,0);
+}
+
+// =======================================
+// DAY 15: BADGES AND SALE PRICES
+// =======================================
+
+const allowedBadges=["","NEW","TRENDING","BEST SELLER"];
+
+function badgeHTML(product){
+ const badge=allowedBadges.includes(product.badge)
+  ?product.badge:"";
+
+ if(!badge)return "";
+
+ const className=badge==="TRENDING"?"trending":
+  badge==="BEST SELLER"?"bestseller":"";
+
+ return `<span class="product-badge ${className}">
+  ${badge}
+ </span>`;
+}
+
+function hasSale(product){
+ return validNumber(product.originalPrice)&&
+  product.originalPrice>product.price;
+}
+
+function discountPercent(product){
+ if(!hasSale(product))return 0;
+ return Math.round(
+  (product.originalPrice-product.price)/
+  product.originalPrice*100
+ );
+}
+
+function priceHTML(product){
+ return `
+  <div class="price-row">
+   <span class="price">${money(product.price)}</span>
+   ${hasSale(product)?`
+    <span class="old-price">${money(product.originalPrice)}</span>
+    <span class="discount">
+     SAVE ${discountPercent(product)}%
+    </span>
+   `:""}
+  </div>
+ `;
+}
+
+// =======================================
+// PRODUCT CARDS
+// =======================================
+
+function cardHTML(product){
+ const id=idArg(product.id);
+ const liked=wishlist.some(x=>String(x)===String(product.id));
+ const image=safeURL(product.image);
+
+ return `
+  <article class="card">
+   <div class="image-wrap">
+    ${image?`
+     <img class="product-image" src="${escapeHTML(image)}"
+      alt="${escapeHTML(product.name)}" loading="lazy" onerror="this.onerror=null;this.style.display='none';this.parentElement.classList.add('image-placeholder');this.parentElement.setAttribute('aria-label','Product image unavailable')">
+    `:`
+     <div class="product-image image-placeholder">
+      No image yet
+     </div>
+    `}
+
+    <div class="badge-stack">
+     ${badgeHTML(product)}
+    </div>
+
+    <button class="heart-btn ${liked?"active":""}"
+     aria-label="${liked?"Remove from":"Add to"} wishlist"
+     onclick='toggleWishlist(${id})'>
+     ${liked?"♥":"♡"}
+    </button>
+   </div>
+
+   <div class="category">${escapeHTML(product.category)}</div>
+   <h3>${escapeHTML(product.name)}</h3>
+   <p class="description">${escapeHTML(product.description)}</p>
+
+   ${priceHTML(product)}
+
+   <span class="stock-pill">Demo listing · Stock not verified</span>
+    <button class="compare-btn ${compareIds.includes(String(product.id))?"selected":""}" onclick='toggleCompare(${id})'>${compareIds.includes(String(product.id))?"✓ Selected for comparison":"＋ Compare product"}</button>
+    <div class="card-actions">
+     <button class="btn secondary" onclick='quickView(${id})'>Quick View</button>
+    <button class="btn" onclick='showProduct(${id})'>View Details</button>
+   </div>
+  </article>
+ `;
+}
+
+function featuredProducts(){
+ const featured=products.filter(p=>p.badge);
+ return (featured.length?featured:products).slice(0,3);
+}
+
+// =======================================
+// HOMEPAGE AND COLLECTIONS
+// =======================================
+
+function showHome(){
+ currentPage="home";
+ activeCategory="All";
+ searchTerm="";
+ sortMode="featured";
+
+ app.innerHTML=`
+  <section class="hero d27-hero">
+   <div class="d27-hero-copy">
+    <span class="d27-kicker">✦ THE NEXT GREAT FIND STARTS HERE</span>
+    <h1>Discover more.<br><em>Love what you find.</em></h1>
+    <p class="description">The little upgrades that make everyday better. Explore standout sports gear, clever tech and useful lifestyle finds—all in one place.</p>
+    <div class="hero-actions"><button class="btn" onclick="openShop()">Explore the shop ↗</button><button class="btn hero-outline" onclick="openCollection('Sports')">Shop sports</button></div>
+    <div class="hero-meta"><span>Curated product concepts</span><span>Sports / Tech / Lifestyle</span><span>Demo store</span></div>
+   </div>
+   <div class="d27-hero-art" aria-label="Featured product concept">
+    <div class="d27-orbit"></div>
+    <div class="d27-art-card"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=85" alt="Headphones featured in the TRENVIKO concept collection" loading="eager" onerror="this.onerror=null;this.style.display='none'"/><div class="d27-art-caption">THE DAILY EDIT <strong>Find your next favourite.</strong></div></div>
+   </div>
+  </section>
+  <div class="d30-find"><div><div class="eyebrow">THE TRENVIKO EDIT</div><h2>Find something worth discovering.</h2><p>Choose what interests you and explore without the clutter.</p></div><div class="d30-find-actions"><button onclick="openCollection('Sports')">Sports ↗</button><button onclick="openCollection('Tech')">Tech ↗</button><button onclick="openCollection('Trending')">Trending ↗</button><button onclick="openShop()">Shop all ↗</button></div></div>
+  <div class="d30-featured-strip">
+   <div class="d30-feature"><img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=85" alt="Workout equipment in a training space" loading="lazy"><div><div class="eyebrow">THE ACTIVE EDIT</div><h2>Made to move.</h2><p>Sports-inspired products for your daily routine.</p><button class="btn" onclick="openCollection('Sports')">Explore sports ↗</button></div></div>
+   <div class="d30-feature"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1100&q=85" alt="Headphones product photograph" loading="lazy"><div><div class="eyebrow">THE TECH EDIT</div><h2>Everyday, upgraded.</h2><p>Useful technology and thoughtful accessories.</p><button class="btn" onclick="openCollection('Tech')">Explore tech ↗</button></div></div>
+  </div>
+  <div class="d30-section-divider"></div>
+  <div class="d27-ticker"><span>Discover sports essentials</span><span>Explore useful tech</span><span>Find everyday upgrades</span><span>All prices in CAD · Demo</span></div>
+   <div class="day21-editorial">
+    <div class="editorial-tile"><div class="eyebrow">BUILT FOR YOUR ROUTINE</div><h2>Gear up. Get moving.</h2><p>Explore everyday training essentials and sport-inspired finds.</p><button class="btn" onclick="openCollection('Sports')">Shop sports ↗</button></div>
+    <div class="editorial-tile"><div class="eyebrow">SMARTER EVERYDAY</div><h2>Small tech. Big ideas.</h2><p>Useful gadgets and accessories to discover.</p><button class="btn secondary" onclick="openCollection('Tech')">Explore tech ↗</button></div>
+   </div>
+  <section class="section">
+   <div class="section-title">
+    <div>
+     <div class="eyebrow">START EXPLORING</div>
+     <h2>Worth a closer look.</h2>
+    </div>
+    <button class="btn secondary" onclick="openShop()">
+     Shop All
+    </button>
+   </div>
+   <div class="grid">
+    ${featuredProducts().length
+     ?featuredProducts().map(cardHTML).join("")
+     :"<p>No featured products yet.</p>"}
+   </div>
+  </section>
+
+  <section class="section">
+   <div class="eyebrow">EXPLORE</div>
+   <h2>Shop by Collection</h2>
+   <div class="collection-links">
+    <button class="collection-tile" onclick="openCollection('Sports')">
+     <div class="eyebrow">PERFORMANCE</div>
+     <h3>Sports</h3>
+     <p>Training and active lifestyle.</p>
+    </button>
+    <button class="collection-tile" onclick="openCollection('Tech')">
+     <div class="eyebrow">INNOVATION</div>
+     <h3>Tech</h3>
+     <p>Everyday gadgets and accessories.</p>
+    </button>
+    <button class="collection-tile" onclick="openCollection('Trending')">
+     <div class="eyebrow">DISCOVER</div>
+     <h3>Trending</h3>
+     <p>Interesting new product ideas.</p>
+    </button>
+   </div>
+  </section>
+
+  <div class="d27-discovery"><div><div class="eyebrow">YOUR NEXT DISCOVERY</div><h2>Good finds. Zero guesswork.</h2><p>Search, compare, save favourites and explore the full collection.</p></div><button class="btn" onclick="openShop()">Find something good ↗</button></div>
+  <section class="section" id="shop">
+   <div class="eyebrow">FIND SOMETHING GOOD</div>
+   <h2>All the good stuff</h2>
+
+   <div class="shop-toolbar">
+    <input class="search-box" id="shop-search"
+     placeholder="Search products..."
+     aria-label="Search products"
+     oninput="searchProducts(this.value)" list="search-suggestions">
+    <datalist id="search-suggestions"></datalist>
+    <div class="suggestions" id="search-chips"></div>
+
+    <select class="sort-select" id="shop-sort"
+     aria-label="Sort products"
+     onchange="changeSort(this.value)">
+     <option value="featured">Featured</option>
+     <option value="price-low">Price: Low to High</option>
+     <option value="price-high">Price: High to Low</option>
+     <option value="name">Name: A to Z</option>
+    </select>
+
+    <div class="filters" id="filters"></div>
+   </div>
+
+   <p id="results-count" class="description"></p>
+   <div class="grid" id="product-grid"></div>
+  </section>
+
+  <section class="section" id="recommended-section" hidden>
+   <div class="eyebrow">KEEP EXPLORING</div>
+   <h2>You might also like</h2>
+   <div class="grid" id="recommended-grid"></div>
+  </section>
+  <section class="section" id="recent-section" hidden>
+   <h2>Recently Viewed</h2>
+   <div class="grid" id="recent-grid"></div>
+  </section>
+
+  <section class="brand-values">
+   <div class="value-card">
+    <h3>Discover More</h3>
+    <p>Explore interesting products.</p>
+   </div>
+   <div class="value-card">
+    <h3>Everyday Essentials</h3>
+    <p>Sports, technology, and lifestyle.</p>
+   </div>
+   <div class="value-card">
+    <h3>What's Next</h3>
+    <p>We're building the TRENVIKO collection.</p>
+   </div>
+  </section>
+ `;
+
+ renderFilters();
+ renderProducts();
+ renderRecent();
+ renderRecommendations();
+ updateFlashClock();
+ navigate();
+}
+
+function openShop(){
+ showHome();
+ document.getElementById("shop")
+  .scrollIntoView({behavior:"smooth"});
+}
+
+function openCollection(category){
+ showHome();
+ filterCategory(category);
+ document.getElementById("shop")
+  .scrollIntoView({behavior:"smooth"});
+}
+
+function renderFilters(){
+ const categories=[
+  "All",
+  ...new Set([
+   "Sports","Tech","Trending",
+   ...products.map(p=>p.category)
+  ])
+ ];
+
+ document.getElementById("filters").innerHTML=
+  categories.map(category=>`
+   <button class="filter-btn
+    ${activeCategory===category?"active":""}"
+    data-category="${escapeHTML(category)}">
+    ${escapeHTML(category)}
+   </button>
+  `).join("");
+
+ document.querySelectorAll("#filters button").forEach(button=>{
+  button.addEventListener("click",()=>{
+   filterCategory(button.dataset.category);
+  });
+ });
+}
+
+function filterCategory(category){
+ activeCategory=category;
+ renderFilters();
+ renderProducts();
+}
+
+function searchProducts(value){
+ searchTerm=value.toLowerCase().trim();
+ renderProducts();updateSuggestions();
+}
+function updateSuggestions(){
+ const data=document.getElementById("search-suggestions"),chips=document.getElementById("search-chips");
+ if(!data||!chips)return;
+ const matches=searchTerm?products.filter(p=>p.name.toLowerCase().includes(searchTerm)).slice(0,5):[];
+ data.innerHTML=matches.map(p=>`<option value="${escapeHTML(p.name)}"></option>`).join("");
+ chips.innerHTML=matches.map(p=>`<button onclick='chooseSuggestion(${idArg(p.id)})'>${escapeHTML(p.name)}</button>`).join("");
+}
+function chooseSuggestion(id){const p=findProduct(id);if(!p)return;
+ const input=document.getElementById("shop-search");if(input)input.value=p.name;
+ searchProducts(p.name);
+}
+
+function changeSort(value){
+ sortMode=value;
+ renderProducts();
+}
+
+function renderProducts(){
+ let filtered=products.filter(p=>{
+  const matchCategory=
+   activeCategory==="All"||p.category===activeCategory;
+  const text=(p.name+" "+p.category+" "+p.description)
+   .toLowerCase();
+  return matchCategory&&text.includes(searchTerm);
+ });
+
+ if(sortMode==="price-low")
+  filtered.sort((a,b)=>a.price-b.price);
+ else if(sortMode==="price-high")
+  filtered.sort((a,b)=>b.price-a.price);
+ else if(sortMode==="name")
+  filtered.sort((a,b)=>a.name.localeCompare(b.name));
+
+ document.getElementById("results-count").textContent=
+  filtered.length+" product(s) found";
+
+ document.getElementById("product-grid").innerHTML=
+  filtered.length
+   ?filtered.map(cardHTML).join("")
+   :"<p>No products found.</p>";
+}
+
+// =======================================
+// WISHLIST AND RECENTLY VIEWED
+// =======================================
+
+function toggleWishlist(id){
+ const had=wishlist.some(x=>String(x)===String(id));
+
+ wishlist=had
+  ?wishlist.filter(x=>String(x)!==String(id))
+  :[...wishlist,id];
+
+ save("trenviko-wishlist",wishlist);
+ updateCounts();
+ notify(had?"Removed from wishlist":"Added to wishlist!");
+
+ if(currentPage==="home"){
+  renderProducts();
+  updateSuggestions();
+  renderRecent();
+  // Keep featured cards in sync.
+  const search=document.getElementById("shop-search");
+  const value=search?search.value:"";
+  const category=activeCategory;
+  const sort=sortMode;
+  showHome();
+  activeCategory=category;
+  sortMode=sort;
+  searchTerm=value.toLowerCase().trim();
+  document.getElementById("shop-search").value=value;
+  document.getElementById("shop-sort").value=sort;
+  renderFilters();
+  renderProducts();
+ }else if(currentPage==="wishlist"){
+  showWishlist(false);
+ }else if(currentPage==="product"){
+  const btn=document.getElementById("detail-wishlist");
+  if(btn)btn.textContent=had
+   ?"♡ Save to Wishlist":"♥ Saved to Wishlist";
+ }
+}
+
+function showWishlist(scroll=true){
+ currentPage="wishlist";
+
+ const items=products.filter(p=>
+  wishlist.some(id=>String(id)===String(p.id))
+ );
+
+ app.innerHTML=`
+  <section class="section">
+   <h1>My Wishlist ♥</h1>
+   <p class="description">Products saved for later.</p>
+   <div class="grid">
+    ${items.length
+     ?items.map(cardHTML).join("")
+     :"<p>No saved products yet.</p>"}
+   </div>
+   <p><button class="btn" onclick="openShop()">
+    Explore Products
+   </button></p>
+  </section>
+ `;
+
+ closeMenu();
+ if(scroll)window.scrollTo(0,0);
+}
+
+// Day 16: Recommendations use your existing products, not replacement data.
+function renderRecommendations(){
+ const section=document.getElementById("recommended-section");
+ if(!section)return;
+ const latest=recentlyViewed.map(findProduct).filter(Boolean)[0];
+ const selected=products.filter(p=>!latest||String(p.id)!==String(latest.id))
+  .sort((a,b)=>Number(!!latest&&b.category===latest.category)-Number(!!latest&&a.category===latest.category))
+  .slice(0,3);
+ section.hidden=selected.length===0;
+ document.getElementById("recommended-grid").innerHTML=selected.map(cardHTML).join("");
+}
+
+// This is explicitly a demonstration countdown, not a real sale deadline.
+const demoSaleStart=Date.now();
+function updateFlashClock(){
+ const el=document.getElementById("flash-clock");
+ if(!el)return;
+ const remaining=Math.max(0,86400-Math.floor((Date.now()-demoSaleStart)/1000));
+ const h=String(Math.floor(remaining/3600)).padStart(2,"0");
+ const m=String(Math.floor(remaining%3600/60)).padStart(2,"0");
+ const sec=String(remaining%60).padStart(2,"0");
+ el.textContent=`${h}:${m}:${sec}`;
+}
+setInterval(updateFlashClock,1000);
+
+function renderRecent(){
+ const section=document.getElementById("recent-section");
+ if(!section)return;
+
+ const items=recentlyViewed.map(findProduct).filter(Boolean);
+ section.hidden=items.length===0;
+
+ document.getElementById("recent-grid").innerHTML=
+  items.map(cardHTML).join("");
+}
+
+// =======================================
+// PRODUCT GALLERY
+// =======================================
+
+function gallery(product){
+ const extras=Array.isArray(product.images)
+  ?product.images.map(safeURL).filter(Boolean)
+  :[];
+
+ const main=safeURL(product.image);
+
+ if(extras.length){
+  return [...new Set([main,...extras].filter(Boolean))];
+ }
+
+ if(!main)return [];
+
+ return [
+  main,
+  main.replace("w=800","w=1000")
+   .replace("fit=crop","fit=crop&crop=left"),
+  main.replace("w=800","w=1000")
+   .replace("fit=crop","fit=crop&crop=right")
+ ];
+}
+
+function selectGallery(index){
+ const product=findProduct(currentProductId);
+ if(!product)return;
+
+ const photo=gallery(product)[index];
+ if(!photo)return;
+
+ document.getElementById("detail-main-image").src=photo;
+
+ document.querySelectorAll(".thumb").forEach((thumb,i)=>{
+  thumb.classList.toggle("active",i===index);
+  thumb.setAttribute("aria-pressed",String(i===index));
+ });
+}
+
+// =======================================
+// IMPROVED PRODUCT PAGES
+// =======================================
+
+function showProduct(id){
+ const product=findProduct(id);
+ if(!product)return;
+
+ currentPage="product";
+ currentProductId=id;
+ recordEvent("views",id);
+
+ recentlyViewed=[
+  id,
+  ...recentlyViewed.filter(x=>String(x)!==String(id))
+ ].slice(0,4);
+
+ save("trenviko-recent",recentlyViewed);
+
+ const photos=gallery(product);
+ const liked=wishlist.some(x=>String(x)===String(id));
+ const arg=idArg(id);
+
+ app.innerHTML=`
+  <section class="section">
+   <button class="btn secondary" onclick="openShop()">
+    ← Back to Shop
+   </button>
+
+   <div class="detail-layout">
+    <div>
+     <div class="image-wrap">
+      ${photos.length?`
+       <img class="detail-image" id="detail-main-image"
+        src="${escapeHTML(photos[0])}"
+        alt="${escapeHTML(product.name)}">
+      `:`
+       <div class="detail-image image-placeholder">
+        No image yet
+       </div>
+      `}
+
+      <div class="badge-stack">
+       ${badgeHTML(product)}
+      </div>
+     </div>
+
+     <div class="thumbs">
+      ${photos.map((url,i)=>`
+       <img class="thumb ${i===0?"active":""}"
+        src="${escapeHTML(url)}"
+        alt="Product image ${i+1}"
+        role="button" tabindex="0"
+        aria-pressed="${i===0}"
+        onclick="selectGallery(${i})"
+        onkeydown="if(event.key==='Enter')selectGallery(${i})">
+      `).join("")}
+     </div>
+
+     <p class="description">
+      Product images may be placeholders.
+      Verify supplier photographs before selling.
+     </p>
+    </div>
+
+    <div class="detail-info">
+     <div class="category">
+      ${escapeHTML(product.category)} Collection
+     </div>
+     <h1>${escapeHTML(product.name)}</h1>
+
+     ${priceHTML(product)}
+
+     <p>${escapeHTML(product.description)}</p>
+
+     ${variantHTML(product)}
+     <div class="quantity">
+      <label for="quantity">Quantity: </label>
+      <input id="quantity" type="number"
+       min="1" max="99" value="1">
+     </div>
+
+     <div class="actions">
+      <button class="btn" onclick='addToCart(${arg})'>
+       Add to Cart
+      </button>
+
+      <button class="btn secondary" id="detail-wishlist"
+       onclick='toggleWishlist(${arg})'>
+       ${liked?"♥ Saved to Wishlist":"♡ Save to Wishlist"}
+      </button>
+     </div>
+
+     <div class="benefits">
+      <div class="benefit">
+       <strong>Details</strong>
+       <p>Product information</p>
+      </div>
+      <div class="benefit">
+       <strong>Shipping</strong>
+       <p>Not confirmed</p>
+      </div>
+      <div class="benefit">
+       <strong>Returns</strong>
+       <p>Policy pending</p>
+      </div>
+     </div>
+
+     <details>
+      <summary>Product Description</summary>
+      <p>${escapeHTML(product.description)}</p>
+     </details>
+
+     <details>
+      <summary>Shipping Information</summary>
+      <p>Shipping prices and delivery times
+       have not been confirmed.</p>
+     </details>
+
+     <details>
+      <summary>Returns & Refunds</summary>
+      <p>A returns policy must be established
+       before accepting real orders.</p>
+     </details>
+
+     <p class="notice">
+      Practice store only. No real purchases available.
+     </p>
+    </div>
+   </div>
+  </section>
+
+  <section class="section">
+   <div class="eyebrow">DESIGN PREVIEW</div>
+   <h2>Customer Review Layout</h2>
+   <p class="description">
+    The examples below demonstrate how reviews could
+    appear in a future store. They are fictional,
+    not verified customer feedback.
+   </p>
+
+   <div class="grid">
+    <div class="demo-review">
+     <div class="demo-label">Fictional example — not a real review</div>
+     <p class="stars">★★★★★</p>
+     <h3>Example Review Layout</h3>
+     <p class="description">
+      This space could display a verified buyer's
+      experience after real sales begin.
+     </p>
+    </div>
+
+    <div class="demo-review">
+     <div class="demo-label">Fictional example — not a real review</div>
+     <p class="stars">★★★★☆</p>
+     <h3>Example Feedback Layout</h3>
+     <p class="description">
+      A future customer could share thoughts
+      about quality, fit, or usefulness.
+     </p>
+    </div>
+
+    <div class="demo-review">
+     <div class="demo-label">Fictional example — not a real review</div>
+     <p class="stars">★★★★★</p>
+     <h3>Example Rating Layout</h3>
+     <p class="description">
+      Ratings must come from genuine customers
+      before being shown as real reviews.
+     </p>
+    </div>
+   </div>
+  </section>
+
+  <section class="section">
+   <h2>You Might Also Like</h2>
+   <div class="grid">
+    ${products.filter(p=>String(p.id)!==String(id))
+      .slice(0,3).map(cardHTML).join("")}
+   </div>
+  </section>
+ `;
+
+ navigate();
+}
+
+// =======================================
+// DAY 17: QUICK VIEW + CART DRAWER
+// =======================================
+function closePanels(){
+ document.getElementById("day17-overlay").classList.remove("open");
+ document.getElementById("cart-drawer").classList.remove("open");
+ document.getElementById("quick-modal").classList.remove("open");
+ document.getElementById("cart-drawer").setAttribute("aria-hidden","true");
+ document.body.style.overflow="";
+}
+function showPanel(id){
+ closePanels();
+ document.getElementById("day17-overlay").classList.add("open");
+ document.getElementById(id).classList.add("open");
+ document.body.style.overflow="hidden";
+ if(id==="cart-drawer")document.getElementById(id).setAttribute("aria-hidden","false");
+}
+document.addEventListener("keydown",event=>{if(event.key==="Escape")closePanels();});
+function quickView(id){
+ const p=findProduct(id);if(!p)return;
+ const img=safeURL(p.image);
+ document.getElementById("quick-modal").innerHTML=`
+  <div class="drawer-head"><h2>Quick View</h2><button class="small-btn" onclick="closePanels()">✕ Close</button></div>
+  <div class="quick-layout">
+   <div>${img?`<img src="${escapeHTML(img)}" alt="${escapeHTML(p.name)}">`:'<div class="empty-state">No image yet</div>'}</div>
+   <div><div class="category">${escapeHTML(p.category)}</div>
+    <h2>${escapeHTML(p.name)}</h2>${priceHTML(p)}
+    <p class="description">${escapeHTML(p.description)}</p>
+         ${variantHTML(p)}
+     <p class="stock-pill">Demo listing · Stock not verified</p>
+    <label>Quantity <input id="quantity" class="field" type="number" min="1" max="99" value="1" style="width:80px"></label>
+    <p><button class="btn" onclick='addToCart(${idArg(p.id)})'>Add to Cart</button></p>
+    <button class="btn secondary" onclick='closePanels();showProduct(${idArg(p.id)})'>Full Details</button>
+   </div>
+  </div>`;
+ showPanel("quick-modal");
+}
+function shippingProgress(subtotal){
+ const target=75,remaining=Math.max(0,target-subtotal);
+ const pct=Math.min(100,subtotal/target*100);
+ return `<div class="panel"><strong>${remaining>0?`${money(remaining)} away from the $75 demo threshold`:'Demo threshold reached!'}</strong>
+ <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+ <p class="small-note">Visual demo only. Free shipping is not offered or confirmed.</p></div>`;
+}
+function openCartDrawer(){
+ renderCartDrawer();showPanel("cart-drawer");
+}
+function renderCartDrawer(){
+ const content=document.getElementById("drawer-content");
+ const subtotal=cart.reduce((sum,item)=>sum+(findProduct(item.id)?.price||0)*item.quantity,0);
+ content.innerHTML=cart.length?`${cart.map((item,index)=>{
+ const p=findProduct(item.id);if(!p)return '';
+ const img=safeURL(p.image);
+ return `<div class="drawer-item"><div style="display:flex;gap:10px;align-items:start">
+ ${img?`<img src="${escapeHTML(img)}" alt="">`:''}
+ <div><strong>${escapeHTML(p.name)}</strong><p class="small-note">${item.variant?`Option: ${escapeHTML(item.variant)} · `:""}${money(p.price)} each</p>
+ <button class="small-btn" onclick='drawerChange(${index},-1)'>−</button> ${item.quantity}
+ <button class="small-btn" onclick='drawerChange(${index},1)'>+</button></div></div>
+ <button class="small-btn" onclick='drawerRemove(${index})'>✕</button></div>`;
+ }).join('')}${shippingProgress(subtotal)}
+ <h3>Subtotal: ${money(subtotal)}</h3>${promoHTML(subtotal)}
+ <p class="small-note">Taxes and shipping are not calculated. Demo only.</p>
+ <button class="btn" onclick="closePanels();showCart()">View Full Cart</button>`:
+ `<p class="description">Your cart is empty.</p><button class="btn" onclick="closePanels();openShop()">Browse Products</button>`;
+}
+function drawerChange(index,delta){
+ const item=cart[index];if(!item)return;
+ const next=item.quantity+delta;
+ if(next>99){notify("Maximum 99 per option.");return;}
+ if(next<=0)cart.splice(index,1);else item.quantity=next;
+ saveCart();renderCartDrawer();
+}
+function drawerRemove(index){if(!cart[index])return;cart.splice(index,1);saveCart();renderCartDrawer();}
+
+// =======================================
+// CART
+// =======================================
+
+function addToCart(id){
+ const product=findProduct(id);
+ if(!product)return;
+
+ const context=document.getElementById("quick-modal").classList.contains("open")?document.getElementById("quick-modal"):app;
+ const quantity=Number(context.querySelector("#quantity")?.value ?? 1);
+ const variant=variantOptions(product)?(context.querySelector("#product-variant")?.value||""):"";
+
+ if(!Number.isInteger(quantity)||quantity<1||quantity>99){
+  notify("Choose a quantity from 1 to 99.");
+  return;
+ }
+
+ const existing=cart.find(item=>
+  String(item.id)===String(id)&&String(item.variant||"")===variant
+ );
+
+ if(existing){
+  if(existing.quantity+quantity>99){
+   notify("Maximum 99 per product.");
+   return;
+  }
+  existing.quantity+=quantity;
+ }else{
+  cart.push({id,quantity,variant});
+ }
+
+ saveCart();
+ recordEvent("adds",id);
+ notify(product.name+" added to cart!");
+ closePanels();
+ openCartDrawer();
+}
+
+function showCart(){
+ currentPage="cart";
+
+ if(!cart.length){
+  app.innerHTML=`
+   <section class="section">
+    <h1>Your Cart</h1>
+    <p>Your cart is empty.</p>
+    <button class="btn" onclick="openShop()">
+     Continue Shopping
+    </button>
+   </section>
+  `;
+  navigate();
+  return;
+ }
+
+ let subtotal=0;
+
+ const rows=cart.map((item,index)=>{
+  const p=findProduct(item.id);
+  if(!p)return "";
+
+  const total=p.price*item.quantity;
+  subtotal+=total;
+  const arg=idArg(item.id);
+
+  return `
+   <div class="cart-item">
+    <div>
+     <h3>${escapeHTML(p.name)}</h3>
+     ${item.variant?`<p class="small-note">Selected option: ${escapeHTML(item.variant)}</p>`:""}
+     <p>${money(p.price)} each</p>
+     <strong>${money(total)}</strong>
+    </div>
+
+    <div class="cart-controls">
+     <button class="small-btn"
+      onclick='changeQuantity(${index},-1)'>−</button>
+     <strong>${item.quantity}</strong>
+     <button class="small-btn"
+      onclick='changeQuantity(${index},1)'>+</button>
+     <button class="small-btn"
+      onclick='removeItem(${index})'>Remove</button>
+    </div>
+   </div>
+  `;
+ }).join("");
+
+ app.innerHTML=`
+  <section class="section">
+   <h1>Your Cart</h1>
+   ${rows}
+
+    ${shippingProgress(subtotal)}
+     ${promoHTML(subtotal)}
+    <div class="cart-summary">
+     <h2>Order Summary</h2>
+     <div class="cart-summary-line"><span>Items</span><strong>${cart.reduce((n,item)=>n+item.quantity,0)}</strong></div>
+     <div class="cart-summary-line"><span>Subtotal</span><strong>${money(subtotal)}</strong></div>
+     <div class="cart-summary-line"><span>Shipping</span><span>Not calculated</span></div>
+     <div class="cart-summary-line"><span>Taxes</span><span>Not calculated</span></div>
+     <div class="cart-summary-line total"><span>Demo total before shipping and tax</span><span>${money(subtotal-promoDiscount(subtotal))}</span></div>
+     <p class="small-note">Demo only. Final shipping, taxes, and checkout are unavailable.</p>
+    </div>
+
+   <div class="actions">
+    <button class="btn secondary" onclick="openShop()">
+     Continue Shopping
+    </button>
+    <button class="btn" onclick="clearCart()">
+     Clear Cart
+    </button>
+   </div>
+  </section>
+ `;
+
+ navigate();
+}
+
+function changeQuantity(index,change){
+ const item=cart[index];if(!item)return;
+ const next=item.quantity+change;
+ if(next>99){notify("Maximum 99 per option.");return;}
+ if(next<=0){removeItem(index);return;}
+ item.quantity=next;saveCart();showCart();
+}
+function removeItem(index){if(!cart[index])return;cart.splice(index,1);saveCart();showCart();}
+
+function clearCart(){
+ cart=[];
+ saveCart();
+ showCart();
+}
+
+// =======================================
+// ABOUT, CONTACT, FAQ
+// =======================================
+
+function showAbout(){
+ currentPage="about";
+
+ app.innerHTML=`
+  <section class="section">
+   <div class="eyebrow">OUR STORY</div>
+   <h1>About TRENVIKO</h1>
+
+   <div class="info-panel">
+    <h2>Better finds. Better everyday.</h2>
+    <p>
+     TRENVIKO is a developing online-store concept
+     focused on sports, technology, and lifestyle products.
+    </p>
+    <p>
+     We're learning about product research,
+     website design, and ecommerce.
+    </p>
+    <p>
+     This is currently a practice store.
+     No real purchases are available.
+    </p>
+   </div>
+
+   <button class="btn" onclick="openShop()">
+    Explore Collection
+   </button>
+  </section>
+ `;
+
+ navigate();
+}
+
+function showContact(){
+ currentPage="contact";
+
+ app.innerHTML=`
+  <section class="section">
+   <h1>Contact TRENVIKO</h1>
+
+   <div class="info-panel">
+    <p>This is a demonstration contact form.
+     Customer support is not active.</p>
+
+    <form class="contact-form"
+     onsubmit="event.preventDefault();notify('Demo only — message not sent.')">
+
+     <label>Name
+      <input class="field" required maxlength="80">
+     </label>
+
+     <label>Email
+      <input class="field" type="email" required maxlength="150">
+     </label>
+
+     <label>Message
+      <textarea class="field" rows="5"
+       maxlength="1000" required></textarea>
+     </label>
+
+     <button class="btn" type="submit">
+      Test Contact Form
+     </button>
+    </form>
+
+    <p>No messages are sent or stored.</p>
+   </div>
+  </section>
+ `;
+
+ navigate();
+}
+
+function showFAQ(){
+ currentPage="faq";
+
+ app.innerHTML=`
+  <section class="section">
+   <h1>Frequently Asked Questions</h1>
+
+   <div class="info-panel">
+    <details>
+     <summary>Can I buy products?</summary>
+     <p>Not yet. TRENVIKO is a practice store.</p>
+    </details>
+
+    <details>
+     <summary>How long does shipping take?</summary>
+     <p>Delivery times have not been confirmed.</p>
+    </details>
+
+    <details>
+     <summary>What is the return policy?</summary>
+     <p>A policy has not been established yet.</p>
+    </details>
+
+    <details>
+     <summary>Are the product photos final?</summary>
+     <p>No. Some images are placeholders.</p>
+    </details>
+
+    <details>
+     <summary>Are the reviews real?</summary>
+     <p>No. All displayed example reviews
+      are fictional layout demonstrations.</p>
+    </details>
+
+    <details>
+     <summary>Is customer support available?</summary>
+     <p>Not yet. The contact form is a demo.</p>
+    </details>
+   </div>
+  </section>
+ `;
+
+ navigate();
+}
+
+// =======================================
+// DAY 13: RESEARCH DASHBOARD
+// =======================================
+
+function researchProfit(item){
+ return item.price-item.cost-item.shipping-item.fees;
+}
+
+function researchMargin(item){
+ return item.price>0
+  ?researchProfit(item)/item.price*100:0;
+}
+
+function showResearch(){
+ currentPage="research";
+
+ app.innerHTML=`
+  <section class="section">
+   <div class="eyebrow">PRODUCT RESEARCH</div>
+   <h1>Research Dashboard</h1>
+
+   <p class="notice">
+    Local research tool only. Not password-protected.
+    Do not publish this version online.
+   </p>
+
+   <div class="two-col">
+    <div class="panel">
+     <h2>Research a Product</h2>
+
+     <form id="research-form"
+      onsubmit="addResearchItem(event)">
+
+      <div class="form-grid">
+       <label class="wide">Product Name
+        <input class="field" id="r-name"
+         maxlength="100" required>
+       </label>
+
+       <label class="wide">Supplier Link
+        <input class="field" id="r-link"
+         type="url" maxlength="1000"
+         placeholder="https://...">
+       </label>
+
+       <label>Supplier Cost (CAD)
+        <input class="field" id="r-cost"
+         type="number" min="0" max="100000"
+         step="0.01" value="7" required
+         oninput="calculateResearch()">
+       </label>
+
+       <label>Shipping Cost (CAD)
+        <input class="field" id="r-shipping"
+         type="number" min="0" max="100000"
+         step="0.01" value="3" required
+         oninput="calculateResearch()">
+       </label>
+
+       <label>Selling Price (CAD)
+        <input class="field" id="r-price"
+         type="number" min="0.01" max="100000"
+         step="0.01" value="24.99" required
+         oninput="calculateResearch()">
+       </label>
+
+       <label>Estimated Fees (CAD)
+        <input class="field" id="r-fees"
+         type="number" min="0" max="100000"
+         step="0.01" value="1.50" required
+         oninput="calculateResearch()">
+       </label>
+
+       <label class="wide">Research Notes
+        <textarea class="field" id="r-notes"
+         maxlength="500" rows="3"></textarea>
+       </label>
+      </div>
+
+      <div class="profit-results">
+       <div class="result-box">
+        <span>Estimated Profit / Sale</span>
+        <strong id="r-profit">$0.00</strong>
+       </div>
+       <div class="result-box">
+        <span>Estimated Profit Margin</span>
+        <strong id="r-margin">0.0%</strong>
+       </div>
+      </div>
+
+      <p class="small-note">
+       Excludes advertising, refunds, taxes,
+       and other business expenses.
+      </p>
+
+      <button class="btn" type="submit">
+       Save to Shortlist
+      </button>
+     </form>
+    </div>
+
+    <div class="panel">
+     <h2>Product Research Checklist</h2>
+     <p>1. Check demand and competition.</p>
+     <p>2. Check supplier reviews and order history.</p>
+     <p>3. Check shipping to Canada.</p>
+     <p>4. Use normal repeat-order supplier prices.</p>
+     <p>5. Estimate profit after expenses.</p>
+     <p>6. Verify product specifications and images.</p>
+
+     <button class="btn secondary" onclick="showManager()">
+      Open Product Manager
+     </button>
+    </div>
+   </div>
+
+   <div class="panel">
+    <h2>Saved Product Shortlist</h2>
+    <div id="shortlist"></div>
+   </div>
+  </section>
+ `;
+
+ calculateResearch();
+ renderShortlist();
+ navigate();
+}
+
+function getResearchNumbers(){
+ return {
+  cost:Number(document.getElementById("r-cost").value),
+  shipping:Number(document.getElementById("r-shipping").value),
+  price:Number(document.getElementById("r-price").value),
+  fees:Number(document.getElementById("r-fees").value)
+ };
+}
+
+function calculateResearch(){
+ const item=getResearchNumbers();
+ const profit=researchProfit(item);
+ const margin=researchMargin(item);
+
+ const profitEl=document.getElementById("r-profit");
+ const marginEl=document.getElementById("r-margin");
+
+ profitEl.textContent=money(profit);
+ marginEl.textContent=margin.toFixed(1)+"%";
+
+ profitEl.classList.toggle("negative",profit<0);
+ marginEl.classList.toggle("negative",margin<0);
+}
+
+function addResearchItem(event){
+ event.preventDefault();
+
+ const numbers=getResearchNumbers();
+ const name=document.getElementById("r-name").value.trim();
+ const link=document.getElementById("r-link").value.trim();
+ const notes=document.getElementById("r-notes").value.trim();
+
+ if(!name||!Object.values(numbers).every(validNumber)||
+    numbers.price<=0){
+  notify("Enter valid product information.");
+  return;
+ }
+
+ if(link&&!safeURL(link)){
+  notify("Enter a valid supplier URL.");
+  return;
+ }
+
+ const item={
+  id:"r-"+Date.now()+"-"+Math.random().toString(36).slice(2),
+  name,link,notes,...numbers
+ };
+
+ researchItems.unshift(item);
+
+ if(!save("trenviko-research",researchItems)){
+  researchItems.shift();
+  return;
+ }
+
+ renderShortlist();
+ document.getElementById("r-name").value="";
+ document.getElementById("r-link").value="";
+ document.getElementById("r-notes").value="";
+ notify("Product saved to shortlist!");
+}
+
+function renderShortlist(){
+ const el=document.getElementById("shortlist");
+ if(!el)return;
+
+ if(!researchItems.length){
+  el.innerHTML=`
+   <div class="empty-state">No products saved yet.</div>
+  `;
+  return;
+ }
+
+ el.innerHTML=researchItems.map((item,index)=>{
+  const profit=researchProfit(item);
+  const margin=researchMargin(item);
+  const link=safeURL(item.link);
+
+  return `
+   <div class="saved-item">
+    <h3>${escapeHTML(item.name)}</h3>
+
+    <p>
+     Supplier: ${money(item.cost)}
+     | Shipping: ${money(item.shipping)}
+    </p>
+
+    <p>
+     Selling Price: ${money(item.price)}
+     | Fees: ${money(item.fees)}
+    </p>
+
+    <p>
+     <strong style="color:${profit>=0?"#6ee7b7":"#ff9b9b"}">
+      Estimated Profit: ${money(profit)}
+      (${margin.toFixed(1)}%)
+     </strong>
+    </p>
+
+    ${link?`
+     <p><a href="${escapeHTML(link)}"
+      target="_blank" rel="noopener noreferrer">
+      View Supplier
+     </a></p>
+    `:""}
+
+    ${item.notes?`
+     <p>Notes: ${escapeHTML(item.notes)}</p>
+    `:""}
+
+    <div class="actions">
+     <button class="btn secondary"
+      onclick="loadResearchItem(${index})">
+      Compare Again
+     </button>
+
+     <button class="btn"
+      onclick="publishResearchItem(${index})">
+      Publish to Store
+     </button>
+
+     <button class="btn danger"
+      onclick="deleteResearchItem(${index})">
+      Delete
+     </button>
+    </div>
+   </div>
+  `;
+ }).join("");
+}
+
+function loadResearchItem(index){
+ const item=researchItems[index];
+ if(!item)return;
+
+ document.getElementById("r-name").value=item.name;
+ document.getElementById("r-link").value=item.link||"";
+ document.getElementById("r-cost").value=item.cost;
+ document.getElementById("r-shipping").value=item.shipping;
+ document.getElementById("r-price").value=item.price;
+ document.getElementById("r-fees").value=item.fees;
+ document.getElementById("r-notes").value=item.notes||"";
+
+ calculateResearch();
+
+ document.getElementById("research-form")
+  .scrollIntoView({behavior:"smooth"});
+ notify("Loaded into calculator.");
+}
+
+function deleteResearchItem(index){
+ if(!confirm("Delete this research item?"))return;
+
+ researchItems.splice(index,1);
+ save("trenviko-research",researchItems);
+ renderShortlist();
+ notify("Research item deleted.");
+}
+
+// =======================================
+// DAY 14 + DAY 15: PRODUCT MANAGER
+// =======================================
+
+function newProductId(){
+ return "p-"+Date.now()+"-"+Math.random().toString(36).slice(2);
+}
+
+function showManager(){
+ currentPage="manager";
+ editingProductId=null;
+
+ app.innerHTML=`
+  <section class="section">
+   <div class="eyebrow">STORE MANAGEMENT</div>
+   <h1>TRENVIKO Product Manager</h1>
+
+   <p class="description">
+    Add, edit, delete, and customize your demo products.
+   </p>
+
+   <p class="notice">
+    Not a secure admin page. Keep this version local.
+    Product data is saved only in this browser.
+   </p>
+
+   <div class="stat-row">
+    <div class="stat">
+     <strong id="stat-products">0</strong>
+     <span>Store Products</span>
+    </div>
+    <div class="stat">
+     <strong id="stat-research">0</strong>
+     <span>Research Items</span>
+    </div>
+    <div class="stat">
+     <strong id="stat-categories">0</strong>
+     <span>Categories</span>
+    </div>
+   </div>
+
+   <div class="two-col">
+    <div class="panel" id="manager-form-panel">
+     <h2 id="manager-form-title">Add New Product</h2>
+
+     <form id="manager-form"
+      onsubmit="saveManagedProduct(event)">
+
+      <div class="form-grid">
+       <label class="wide">Product Name
+        <input class="field" id="m-name"
+         maxlength="100" required>
+       </label>
+
+       <label>Category
+        <select class="field" id="m-category">
+         <option value="Sports">Sports</option>
+         <option value="Tech">Tech</option>
+         <option value="Trending">Trending</option>
+         <option value="Lifestyle">Lifestyle</option>
+        </select>
+       </label>
+
+       <label>Selling Price (CAD)
+        <input class="field" id="m-price"
+         type="number" min="0.01" max="100000"
+         step="0.01" required>
+       </label>
+
+       <label>Original Price (CAD)
+        <input class="field" id="m-original"
+         type="number" min="0" max="100000"
+         step="0.01"
+         placeholder="Optional">
+       </label>
+
+       <label>Product Badge
+        <select class="field" id="m-badge">
+         <option value="">No Badge</option>
+         <option value="NEW">NEW</option>
+         <option value="TRENDING">TRENDING</option>
+         <option value="BEST SELLER">BEST SELLER</option>
+        </select>
+       </label>
+
+       <label class="wide">Main Image URL
+        <input class="field" id="m-image"
+         type="url" maxlength="2000"
+         placeholder="https://...">
+       </label>
+
+       <label class="wide">Additional Image URLs
+        <textarea class="field" id="m-images"
+         rows="3" maxlength="6000"
+         placeholder="One image URL per line"></textarea>
+       </label>
+
+       <label class="wide">Product Description
+        <textarea class="field" id="m-description"
+         rows="4" maxlength="1000" required></textarea>
+       </label>
+      </div>
+
+      <p class="small-note">
+       Sale prices must be genuine if you later
+       sell products. Don't use fake discounts
+       or unsupported bestseller claims.
+      </p>
+
+      <div class="actions">
+       <button class="btn" id="manager-save-button"
+        type="submit">
+        Add Product
+       </button>
+
+       <button class="btn secondary" type="button"
+        onclick="resetManagerForm()">
+        Clear Form
+       </button>
+      </div>
+     </form>
+    </div>
+
+    <div class="panel">
+     <h2>Day 15 Features</h2>
+
+     <p><strong>Product Badges:</strong>
+      Choose NEW, TRENDING, or BEST SELLER.</p>
+
+     <p><strong>Sale Prices:</strong>
+      Enter a selling price and a higher original price.
+      The website calculates the percentage saved.</p>
+
+     <p><strong>Images:</strong>
+      Paste a main image URL and optional additional
+      image URLs.</p>
+
+     <p><strong>Collections:</strong>
+      Products appear in their selected category.</p>
+
+     <p><strong>Editing:</strong>
+      Click Edit on an existing product to change
+      its information.</p>
+
+     <button class="btn secondary" onclick="showResearch()">
+      Open Research Dashboard
+     </button>
+    </div>
+   </div>
+
+   <div class="panel">
+    <h2>Current Store Products</h2>
+    <div id="managed-products"></div>
+   </div>
+  </section>
+ `;
+
+ renderManagedProducts();
+ navigate();
+}
+
+function resetManagerForm(){
+ editingProductId=null;
+ const form=document.getElementById("manager-form");
+ if(!form)return;
+
+ form.reset();
+ document.getElementById("manager-form-title").textContent=
+  "Add New Product";
+ document.getElementById("manager-save-button").textContent=
+  "Add Product";
+}
+
+function getManagerProduct(){
+ const originalInput=document.getElementById("m-original").value;
+
+ return {
+  name:document.getElementById("m-name").value.trim(),
+  category:document.getElementById("m-category").value,
+  price:Number(document.getElementById("m-price").value),
+  originalPrice:originalInput===""
+   ?null:Number(originalInput),
+  badge:document.getElementById("m-badge").value,
+  image:document.getElementById("m-image").value.trim(),
+  images:document.getElementById("m-images").value
+   .split("\n").map(x=>x.trim()).filter(Boolean),
+  description:document.getElementById("m-description").value.trim()
+ };
+}
+
+function saveManagedProduct(event){
+ event.preventDefault();
+
+ const data=getManagerProduct();
+
+ if(!data.name||!data.description||
+    !validNumber(data.price)||data.price<=0){
+  notify("Enter valid product information.");
+  return;
+ }
+
+ if(data.originalPrice!==null&&
+    (!validNumber(data.originalPrice)||
+     data.originalPrice<=data.price)){
+  notify("Original price must be higher than selling price.");
+  return;
+ }
+
+ if(!allowedBadges.includes(data.badge)){
+  notify("Choose a valid badge.");
+  return;
+ }
+
+ if(data.image&&!safeURL(data.image)){
+  notify("Enter a valid main image URL.");
+  return;
+ }
+
+ if(data.images.some(url=>!safeURL(url))||
+    data.images.length>8){
+  notify("Check additional image URLs. Maximum 8.");
+  return;
+ }
+
+ if(editingProductId!==null){
+  const product=findProduct(editingProductId);
+  if(!product)return;
+
+  const old={...product};
+  Object.assign(product,data);
+
+  if(!saveProducts()){
+   Object.assign(product,old);
+   return;
+  }
+
+  notify("Product updated!");
+ }else{
+  const product={id:newProductId(),...data};
+  products.push(product);
+
+  if(!saveProducts()){
+   products.pop();
+   return;
+  }
+
+  notify("Product added!");
+ }
+
+ resetManagerForm();
+ renderManagedProducts();
+}
+
+function editManagedProduct(id){
+ const p=findProduct(id);
+ if(!p)return;
+
+ editingProductId=id;
+
+ document.getElementById("m-name").value=p.name;
+ document.getElementById("m-category").value=
+  ["Sports","Tech","Trending","Lifestyle"].includes(p.category)
+   ?p.category:"Trending";
+ document.getElementById("m-price").value=p.price;
+ document.getElementById("m-original").value=
+  p.originalPrice??"";
+ document.getElementById("m-badge").value=
+  allowedBadges.includes(p.badge)?p.badge:"";
+ document.getElementById("m-image").value=p.image||"";
+ document.getElementById("m-images").value=
+  Array.isArray(p.images)?p.images.join("\n"):"";
+ document.getElementById("m-description").value=p.description;
+
+ document.getElementById("manager-form-title").textContent=
+  "Edit Product";
+ document.getElementById("manager-save-button").textContent=
+  "Save Changes";
+
+ document.getElementById("manager-form-panel")
+  .scrollIntoView({behavior:"smooth"});
+ notify("Product loaded for editing.");
+}
+
+function deleteManagedProduct(id){
+ const p=findProduct(id);
+ if(!p)return;
+
+ if(!confirm("Delete "+p.name+" from your store?"))return;
+
+ const previous=[...products];
+
+ products=products.filter(x=>String(x.id)!==String(id));
+
+ if(!saveProducts()){
+  products=previous;
+  return;
+ }
+
+ cleanReferences();
+ save("trenviko-cart",cart);
+ save("trenviko-wishlist",wishlist);
+ save("trenviko-recent",recentlyViewed);
+ updateCounts();
+
+ if(String(editingProductId)===String(id)){
+  resetManagerForm();
+ }
+
+ renderManagedProducts();
+ notify("Product deleted.");
+}
+
+function renderManagedProducts(){
+ const el=document.getElementById("managed-products");
+ if(!el)return;
+
+ document.getElementById("stat-products").textContent=
+  products.length;
+ document.getElementById("stat-research").textContent=
+  researchItems.length;
+ document.getElementById("stat-categories").textContent=
+  new Set(products.map(p=>p.category)).size;
+
+ if(!products.length){
+  el.innerHTML=`
+   <div class="empty-state">
+    No products yet. Add one above.
+   </div>
+  `;
+  return;
+ }
+
+ el.innerHTML=products.map(p=>{
+  const arg=idArg(p.id);
+  const image=safeURL(p.image);
+
+  return `
+   <div class="saved-item">
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+     ${image?`
+      <img src="${escapeHTML(image)}"
+       alt="${escapeHTML(p.name)}"
+       style="width:115px;height:100px;
+       object-fit:cover;border-radius:8px">
+     `:""}
+
+     <div style="flex:1;min-width:180px">
+      <span class="tag">${escapeHTML(p.category)}</span>
+      <h3>${escapeHTML(p.name)}</h3>
+      ${badgeHTML(p)}
+      ${priceHTML(p)}
+      <p>${escapeHTML(p.description)}</p>
+     </div>
+    </div>
+
+    <div class="actions">
+     <button class="btn secondary"
+      onclick='editManagedProduct(${arg})'>
+      Edit
+     </button>
+
+     <button class="btn secondary"
+      onclick='showProduct(${arg})'>
+      View
+     </button>
+
+     <button class="btn danger"
+      onclick='deleteManagedProduct(${arg})'>
+      Delete
+     </button>
+    </div>
+   </div>
+  `;
+ }).join("");
+}
+
+// =======================================
+// PUBLISH FROM RESEARCH
+// =======================================
+
+function publishResearchItem(index){
+ const item=researchItems[index];
+ if(!item)return;
+
+ if(!confirm(
+  "Add "+item.name+" as a demo store listing?"
+ ))return;
+
+ const product={
+  id:newProductId(),
+  name:item.name,
+  category:"Trending",
+  price:item.price,
+  originalPrice:null,
+  badge:"NEW",
+  image:"",
+  images:[],
+  description:
+   "Demo listing. Product details and supplier "+
+   "specifications have not been verified."
+ };
+
+ products.push(product);
+
+ if(!saveProducts()){
+  products.pop();
+  return;
+ }
+
+ showManager();
+ notify("Demo listing added. Edit its photos and details.");
+}
+
+
+// =======================================
+// DAY 19: PRODUCT COMPARISON + DEMO ACCOUNT
+// =======================================
+let compareIds=load("trenviko-compare",[]);
+if(!Array.isArray(compareIds))compareIds=[];
+compareIds=[...new Set(compareIds.map(String))].filter(id=>findProduct(id)).slice(0,3);
+let demoNickname=load("trenviko-demo-nickname","");
+if(typeof demoNickname!=="string")demoNickname="";
+function toggleCompare(id){
+ const key=String(id);
+ if(compareIds.includes(key))compareIds=compareIds.filter(x=>x!==key);
+ else if(compareIds.length>=3){notify("Compare up to 3 products.");return;}
+ else compareIds.push(key);
+ save("trenviko-compare",compareIds);updateCounts();
+ if(currentPage==="home"){
+  renderProducts();renderRecent();renderRecommendations();
+  const featured=document.querySelector(".section .grid");
+  if(featured)featured.innerHTML=featuredProducts().map(cardHTML).join("");
+ }else if(currentPage==="wishlist")showWishlist(false);
+ else if(currentPage==="compare")showCompare();
+ notify(compareIds.includes(key)?"Added to comparison":"Removed from comparison");
+}
+function showCompare(){
+ currentPage="compare";
+ const selected=compareIds.map(findProduct).filter(Boolean);
+ app.innerHTML=`<section class="section"><div class="eyebrow">DAY 19 · SHOP SMARTER</div><h1>Compare Products</h1>
+ <p class="description">Select up to three products using the Compare button on any product card.</p>
+ ${selected.length?`<div class="compare-scroll"><table class="compare-table"><thead><tr><th>Feature</th>${selected.map(p=>`<th>${escapeHTML(p.name)}</th>`).join("")}</tr></thead><tbody>
+ <tr><td>Image</td>${selected.map(p=>`<td>${safeURL(p.image)?`<img src="${escapeHTML(safeURL(p.image))}" alt="${escapeHTML(p.name)}">`:"No image"}</td>`).join("")}</tr>
+ <tr><td>Price</td>${selected.map(p=>`<td><strong>${money(p.price)}</strong></td>`).join("")}</tr>
+ <tr><td>Category</td>${selected.map(p=>`<td>${escapeHTML(p.category)}</td>`).join("")}</tr>
+ <tr><td>Description</td>${selected.map(p=>`<td>${escapeHTML(p.description)}</td>`).join("")}</tr>
+ <tr><td>Availability</td>${selected.map(()=>`<td>Demo · not verified</td>`).join("")}</tr>
+ <tr><td>Actions</td>${selected.map(p=>`<td><button class="btn secondary" onclick='showProduct(${idArg(p.id)})'>View details</button><p><button class="small-btn" onclick='toggleCompare(${idArg(p.id)})'>Remove</button></p></td>`).join("")}</tr>
+ </tbody></table></div><p><button class="btn secondary" onclick="clearComparison()">Clear Comparison</button></p>`:
+ `<div class="empty-state">No products selected yet.</div>`}
+ <p><button class="btn" onclick="openShop()">Browse Products</button></p></section>`;
+ navigate();
+}
+function clearComparison(){compareIds=[];save("trenviko-compare",compareIds);updateCounts();showCompare();}
+function showAccount(){
+ currentPage="account";
+ app.innerHTML=`<section class="section"><div class="eyebrow">DAY 19 · DEMO PROFILE</div><h1>My TRENVIKO Account</h1>
+ <div class="panel account-preview"><h2>${demoNickname?`Welcome, ${escapeHTML(demoNickname)}!`:"Create a demo profile"}</h2>
+ <p class="description">This is not a real login. No password, email address, or personal information is needed. Your nickname is stored only in this browser.</p>
+ <label>Nickname (optional)<input class="field" id="demo-nickname" maxlength="30" autocomplete="off" placeholder="Your nickname" value="${escapeHTML(demoNickname)}"></label>
+ <div class="actions"><button class="btn" onclick="saveDemoAccount()">Save Demo Profile</button><button class="btn secondary" onclick="clearDemoAccount()">Clear Profile</button></div>
+ <div class="stat-row" style="margin-top:22px"><div class="stat"><span>Wishlist items</span><strong>${wishlist.length}</strong></div><div class="stat"><span>Cart items</span><strong>${cart.reduce((n,x)=>n+x.quantity,0)}</strong></div><div class="stat"><span>Compared</span><strong>${compareIds.length}</strong></div></div>
+ <p class="small-note">Practice features only. No real customer accounts or order history.</p></div></section>`;
+ navigate();
+}
+function saveDemoAccount(){
+ const value=(document.getElementById("demo-nickname")?.value||"").trim().slice(0,30);
+ demoNickname=value;save("trenviko-demo-nickname",value);showAccount();notify("Demo profile saved locally");
+}
+function clearDemoAccount(){demoNickname="";save("trenviko-demo-nickname","");showAccount();notify("Demo profile cleared");}
+
+
+// =======================================
+// DAY 20: LAUNCH READINESS + LOCAL BACKUPS
+// =======================================
+const launchTasks=[
+ ["Choose a real supplier","Confirm supplier identity, product quality and permission to use photos."],
+ ["Verify product claims","Check specifications, pricing, stock and product safety."],
+ ["Calculate real costs","Include product, delivery, taxes, payment fees and returns."],
+ ["Create store policies","Write accurate shipping, returns, privacy and contact policies."],
+ ["Set up a supported store platform","Real checkout, payments, order handling and security need a hosted platform."],
+ ["Arrange adult help","Have a parent or guardian handle accounts, contracts and payments as required."],
+ ["Test on phones and computers","Review every page, image, search, cart and comparison."],
+ ["Replace all demo material","Remove fictional reviews, sample offers and unverified stock claims before launch."]
+];
+let launchDone=load("trenviko-launch-checks",[]);
+if(!Array.isArray(launchDone))launchDone=[];
+function toggleLaunchTask(i,checked){
+ launchDone=checked?[...new Set([...launchDone,i])]:launchDone.filter(x=>x!==i);
+ save("trenviko-launch-checks",launchDone);showLaunchHub(false);
+}
+function showLaunchHub(scroll=true){
+ currentPage="launch";
+ const count=launchTasks.filter((_,i)=>launchDone.includes(i)).length;
+ app.innerHTML=`<section class="section"><div class="eyebrow">DAY 20 · STORE BUILDER</div><h1>Launch Preparation</h1>
+ <p class="description">Track what is needed before TRENVIKO can become a real store. Completing this checklist does not activate payments.</p>
+ <div class="panel"><strong>${count} of ${launchTasks.length} preparation tasks checked</strong><div class="launch-meter" style="margin-top:12px"><div style="width:${count/launchTasks.length*100}%"></div></div></div>
+ <div class="launch-checks">${launchTasks.map(([name,detail],i)=>`<label class="launch-check"><input type="checkbox" ${launchDone.includes(i)?"checked":""} onchange="toggleLaunchTask(${i},this.checked)"><div><strong>${escapeHTML(name)}</strong><span>${escapeHTML(detail)}</span></div></label>`).join("")}</div>
+ <div class="panel"><h2>Back up your work</h2><p>Export your demo products, cart, wishlist, research and preferences to a JSON file. Import it later in this browser. Keep the HTML file separately — the backup does not contain website code.</p>
+ <div class="launch-tools"><button class="btn" onclick="exportStoreBackup()">Export Data Backup</button><label class="btn secondary" style="cursor:pointer">Import Data Backup <input type="file" accept=".json,application/json" onchange="importStoreBackup(this.files[0]);this.value=''" style="display:none"></label></div>
+ <p class="small-note">Import replaces existing TRENVIKO browser data. Never import files from strangers.</p></div>
+ <div class="notice">TRENVIKO is still a local practice storefront. It cannot securely accept payments, create real customer accounts or process orders.</div></section>`;
+ closeMenu();if(scroll)window.scrollTo(0,0);
+}
+const backupKeys=["trenviko-products","trenviko-cart","trenviko-wishlist","trenviko-recent","trenviko-research","trenviko-analytics","trenviko-promo","trenviko-compare","trenviko-demo-nickname","trenviko-launch-checks","trenviko-day23-ideas","trenviko-day24-drafts","trenviko-d28-suppliers","trenviko-d28-checks","trenviko-day29-scenarios","trenviko-day17-migrated","trenviko-day18-migrated"];
+function exportStoreBackup(){
+ const data={format:"TRENVIKO-local-backup",version:1,created:new Date().toISOString(),values:{}};
+ for(const key of backupKeys){try{const value=localStorage.getItem(key);if(value!==null)data.values[key]=JSON.parse(value);}catch{}}
+ // Current product edits may exist only in memory if storage was blocked.
+ data.values["trenviko-products"]=products;
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="TRENVIKO_Day20_Data_Backup.json";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ notify("Backup exported");
+}
+async function importStoreBackup(file){
+ if(!file)return;
+ if(file.size>2000000){notify("Backup file is too large.");return;}
+ try{
+  const data=JSON.parse(await file.text());
+  if(data.format!=="TRENVIKO-local-backup"||data.version!==1||!data.values||typeof data.values!=="object"||Array.isArray(data.values))throw Error("Wrong format");
+  if(!Array.isArray(data.values["trenviko-products"])||!data.values["trenviko-products"].every(validProduct))throw Error("Invalid products");
+  if(!confirm("Replace your current TRENVIKO browser data with this backup?"))return;
+  const previous={};for(const key of backupKeys)previous[key]=localStorage.getItem(key);
+  try{
+   for(const key of backupKeys){if(Object.prototype.hasOwnProperty.call(data.values,key))localStorage.setItem(key,JSON.stringify(data.values[key]));else localStorage.removeItem(key);}
+  }catch(e){for(const key of backupKeys){try{if(previous[key]===null)localStorage.removeItem(key);else localStorage.setItem(key,previous[key]);}catch{}}throw e;}
+  alert("Backup imported. The page will reload now.");location.reload();
+ }catch(e){notify("Import failed: invalid backup or storage unavailable.");}
+}
+
+
+// DAY 22 — shopping shortcuts and mobile product action
+function quickAddDay22(id){
+ const p=findProduct(id);if(!p)return;
+ if(variantOptions(p)){quickView(id);return;}
+ addToCart(id);
+}
+function refreshDay22Sticky(){
+ const bar=document.getElementById('day22-detail-sticky');
+ if(!bar)return;
+ const p=currentPage==='product'?findProduct(currentProductId):null;
+ if(!p){bar.classList.remove('active');bar.innerHTML='';return;}
+ bar.innerHTML=`<div><span class="small-note">${escapeHTML(p.name)}</span><br><strong>${money(p.price)}</strong></div><button class="btn" onclick="day22AddFromSticky()">Add to cart ＋</button>`;
+ bar.classList.add('active');
+}
+function day22AddFromSticky(){
+ const target=document.querySelector('.detail-info .actions .btn');
+ if(target){target.scrollIntoView({behavior:'smooth',block:'center'});target.focus({preventScroll:true});}
+}
+
+
+// DAY 23 — local decision helper. No AI model, live supplier feeds, or demand forecasts.
+const d23Key='trenviko-day23-ideas';
+let d23Ideas=load(d23Key,[]);
+if(!Array.isArray(d23Ideas))d23Ideas=[];
+function d23Evaluate(idea){
+ const price=Number(idea.price),cost=Number(idea.cost),shipping=Number(idea.shipping),fees=Number(idea.fees);
+ const profit=Math.round((price-cost-shipping-fees)*100)/100;
+ const margin=price>0?profit/price*100:0;
+ const concerns=[];
+ if(profit<=0)concerns.push('Estimated loss per order');
+ else if(margin<20)concerns.push('Thin estimated margin');
+ if(idea.risk==='high')concerns.push('Higher returns or product-safety uncertainty');
+ if(idea.shippingSpeed==='unknown')concerns.push('Delivery time needs verification');
+ if(!idea.supplier)concerns.push('Supplier not yet identified');
+ const points=(profit>0?25:0)+(margin>=35?25:margin>=20?12:0)+(idea.risk==='low'?20:idea.risk==='medium'?10:0)+(idea.shippingSpeed==='known'?15:0)+(idea.supplier?15:0);
+ return {profit,margin,concerns,points};
+}
+function showDay23Lab(){
+ currentPage='day23';
+ app.innerHTML=`<section class="section"><div class="eyebrow">DAY 23 · PRODUCT DECISION LAB</div><h1>Find a product worth testing.</h1>
+ <p class="description">Compare product ideas using your own estimates. This is a rule-based research assistant, not live AI or proof of demand. Scores reflect only the information you enter.</p>
+ <div class="d23-layout"><div class="panel"><h2>Evaluate an idea</h2><form id="d23-form" onsubmit="d23Save(event)"><div class="form-grid">
+ <label class="wide">Product name<input class="field" name="name" required maxlength="100" placeholder="e.g. Training grip socks"></label>
+ <label class="wide">Supplier name or website (optional)<input class="field" name="supplier" maxlength="200" placeholder="Supplier to verify"></label>
+ <label>Selling price (CAD)<input class="field" name="price" type="number" min="0.01" max="100000" step="0.01" value="24.99" required></label>
+ <label>Supplier cost (CAD)<input class="field" name="cost" type="number" min="0" max="100000" step="0.01" value="8" required></label>
+ <label>Shipping cost (CAD)<input class="field" name="shipping" type="number" min="0" max="100000" step="0.01" value="4" required></label>
+ <label>Other fees per order (CAD)<input class="field" name="fees" type="number" min="0" max="100000" step="0.01" value="2" required></label>
+ <label>Returns/safety risk<select class="field" name="risk"><option value="high">High / unverified</option><option value="medium">Medium</option><option value="low">Low (verified)</option></select></label>
+ <label>Delivery time<select class="field" name="shippingSpeed"><option value="unknown">Not verified</option><option value="known">Verified with supplier</option></select></label>
+ </div><p class="d23-note">Include realistic fees. The estimate excludes advertising, refunds, taxes, and other overhead unless you add them to fees.</p><button class="btn" type="submit">Evaluate & save idea</button></form></div>
+ <div class="panel"><h2>What makes a product promising?</h2><p>Look for a clear customer problem, reliable supplier, accurate photos, reasonable shipping, and enough margin after every cost.</p>
+ <div class="notice"><strong>Research steps</strong><p>1. Find a real supplier and check product details.</p><p>2. Compare actual retail prices.</p><p>3. Check delivery times, returns, and safety requirements.</p><p>4. Estimate marketing costs before spending money.</p></div>
+ <p class="d23-note">A high score is not a sales prediction. Don't publish unverified claims or product photos without permission.</p><button class="btn secondary" onclick="showResearch()">Open existing profit research</button></div></div>
+ <div class="section-title"><h2>Saved product ideas</h2><button class="btn secondary" onclick="d23Export()">Export ideas (JSON)</button></div><div id="d23-list" class="d23-results"></div></section>`;
+ d23Render();navigate();
+}
+function d23Save(e){
+ e.preventDefault();const f=new FormData(e.target);
+ const idea={id:String(Date.now())+'-'+Math.random().toString(36).slice(2,7),name:String(f.get('name')||'').trim(),supplier:String(f.get('supplier')||'').trim(),risk:String(f.get('risk')),shippingSpeed:String(f.get('shippingSpeed'))};
+ for(const k of ['price','cost','shipping','fees'])idea[k]=Number(f.get(k));
+ if(!idea.name||idea.price<=0||!['price','cost','shipping','fees'].every(k=>validNumber(idea[k]))){notify('Enter valid prices and costs');return;}
+ d23Ideas.unshift(idea);d23Ideas=d23Ideas.slice(0,100);save(d23Key,d23Ideas);d23Render();e.target.reset();notify('Product idea saved');
+}
+function d23Render(){const el=document.getElementById('d23-list');if(!el)return;
+ el.innerHTML=d23Ideas.length?d23Ideas.map(idea=>{const r=d23Evaluate(idea);return `<article class="d23-result"><div class="eyebrow">Research estimate · ${r.points}/100 checklist score</div><h3>${escapeHTML(idea.name)}</h3><p>Estimated contribution per order: <strong>${money(r.profit)}</strong> · Margin: <strong>${r.margin.toFixed(1)}%</strong></p><p>${r.concerns.length?r.concerns.map(escapeHTML).join(' · '):'No immediate flags from the entered information; verify actual demand and costs.'}</p><p class="d23-note">Supplier: ${escapeHTML(idea.supplier||'Not entered')}</p><button class="small-btn" onclick='d23Remove(${JSON.stringify(idea.id)})'>Remove</button></article>`}).join(''):'<div class="empty-state">No ideas saved yet. Add your first product above.</div>';
+}
+function d23Remove(id){d23Ideas=d23Ideas.filter(x=>x.id!==id);save(d23Key,d23Ideas);d23Render();}
+function d23Export(){const blob=new Blob([JSON.stringify({type:'TRENVIKO-Day23-Ideas',ideas:d23Ideas},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='TRENVIKO_Product_Ideas.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+
+// =======================================
+// START
+// =======================================
+
+updateCounts();
+showHome();
+
+
+// DAY 24 — guided copy studio, no external AI connection or invented product claims.
+const d24Key='trenviko-day24-drafts';
+let d24Drafts=load(d24Key,[]);if(!Array.isArray(d24Drafts))d24Drafts=[];
+function showDay24Studio(){
+ currentPage='day24';
+ app.innerHTML=`<section class="section"><div class="eyebrow">DAY 24 · PRODUCT COPY STUDIO</div><h1>Make your products sound worth exploring.</h1><p class="description">Create editable titles, descriptions, and social post drafts from facts you provide. This is a guided writing tool, not a connected AI model. Verify every claim before publishing.</p>
+ <div class="d24-layout"><div class="panel"><h2>Product details</h2>
+ <label>Choose a store product<select id="d24-product" class="field" onchange="d24Pick()"><option value="">Custom product</option>${products.map(p=>`<option value="${escapeHTML(p.id)}">${escapeHTML(p.name)}</option>`).join('')}</select></label>
+ <label>Product name<input class="field" id="d24-name" maxlength="100" placeholder="e.g. Athletic grip socks"></label>
+ <label>Verified features<textarea class="field" id="d24-features" rows="3" maxlength="500" placeholder="Only features confirmed by the supplier, e.g. cushioned sole, machine washable"></textarea></label>
+ <label>Who is it for?<input class="field" id="d24-audience" maxlength="120" placeholder="e.g. people who play indoor sports"></label>
+ <label>Writing style<select class="field" id="d24-tone"><option value="clean">Clean & premium</option><option value="energetic">Bold & sporty</option><option value="friendly">Friendly & simple</option></select></label>
+ <label>Generate<select class="field" id="d24-type"><option value="listing">Product title + description</option><option value="social">Social media caption</option><option value="hooks">Three marketing hooks</option></select></label>
+ <button class="btn" onclick="d24Generate()">Create draft</button><p class="small-note">Do not enter invented reviews, discounts, delivery promises, or product performance claims.</p></div>
+ <div class="panel"><h2>Your editable draft</h2><textarea id="d24-output" class="field d24-output" aria-label="Editable marketing draft" placeholder="Your generated draft will appear here. You can edit it before saving."></textarea><div class="d24-buttons"><button class="btn" onclick="d24Copy()">Copy text</button><button class="btn secondary" onclick="d24Save()">Save draft</button></div><div class="notice">These are writing templates based on your input. A live AI model would need a secure server-side integration. Never put an AI API key into this HTML file.</div></div></div>
+ <div class="section-title"><h2>Saved drafts</h2></div><div id="d24-saved"></div></section>`;
+ d24Render();navigate();
+}
+function d24Pick(){const id=document.getElementById('d24-product').value;const p=id?findProduct(id):null;document.getElementById('d24-name').value=p?p.name:'';document.getElementById('d24-features').value='';}
+function d24Generate(){
+ const get=id=>document.getElementById(id).value.trim();
+ const name=get('d24-name'),features=get('d24-features'),audience=get('d24-audience'),tone=get('d24-tone'),type=get('d24-type');
+ if(!name){notify('Enter a product name first');return;}
+ const facts=features?features.split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean).slice(0,8):[];
+ const who=audience||'everyday use';
+ const intro=tone==='energetic'?`Meet ${name}. Ready for your next move?`:tone==='friendly'?`Say hello to ${name}.`:`Introducing ${name}.`;
+ let result='';
+ if(type==='listing')result=`PRODUCT TITLE\n${name}\n\nSHORT DESCRIPTION\n${intro} A product concept to explore for ${who}.\n\nPRODUCT DETAILS\n${facts.length?facts.map(x=>'• '+x).join('\n'):'• Add verified features here before publishing.'}\n\nCALL TO ACTION\nExplore ${name} at TRENVIKO.\n\nEDITOR NOTE: Check specifications, availability and product images before publishing.`;
+ else if(type==='social')result=`${tone==='energetic'?'Your next find starts here. ⚡':tone==='friendly'?'Found something interesting? ✨':'Discover something different.'}\n\n${name} — a product concept for ${who}.${facts.length?'\n\nDetails: '+facts.join(' · '):''}\n\nExplore the collection at TRENVIKO.\n\n#TRENVIKO #ProductDiscovery\n\nEDITOR NOTE: Confirm all product details before posting.`;
+ else result=`THREE MARKETING HOOKS\n\n1. Discover ${name} — a new find for ${who}.\n\n2. Looking for something different? Take a closer look at ${name}.\n\n3. Your next everyday find could be ${name}.\n\n${facts.length?'Verified details to highlight: '+facts.join(' · '):'Add verified product features to make these hooks more specific.'}\n\nEDITOR NOTE: Avoid unsupported performance claims.`;
+ document.getElementById('d24-output').value=result;
+}
+async function d24Copy(){const value=document.getElementById('d24-output').value;if(!value.trim()){notify('Create a draft first');return;}try{await navigator.clipboard.writeText(value);notify('Copied draft');}catch{document.getElementById('d24-output').select();notify('Select and copy the highlighted text');}}
+function d24Save(){const content=document.getElementById('d24-output').value.trim();if(!content){notify('Nothing to save');return;}d24Drafts.unshift({id:String(Date.now())+'-'+Math.random().toString(36).slice(2,7),content,created:new Date().toLocaleDateString()});d24Drafts=d24Drafts.slice(0,60);save(d24Key,d24Drafts);d24Render();notify('Draft saved locally');}
+function d24Render(){const el=document.getElementById('d24-saved');if(!el)return;el.innerHTML=d24Drafts.length?d24Drafts.map(d=>`<article class="d24-draft"><span class="small-note">Saved ${escapeHTML(d.created)}</span><p>${escapeHTML(d.content)}</p><button class="small-btn" onclick='d24Edit(${JSON.stringify(d.id)})'>Edit draft</button> <button class="small-btn" onclick='d24Delete(${JSON.stringify(d.id)})'>Delete</button></article>`).join(''):'<p class="small-note">No drafts saved yet.</p>';}
+function d24Edit(id){const d=d24Drafts.find(x=>x.id===id);if(d){document.getElementById('d24-output').value=d.content;document.getElementById('d24-output').scrollIntoView({behavior:'smooth'});}}
+function d24Delete(id){d24Drafts=d24Drafts.filter(x=>x.id!==id);save(d24Key,d24Drafts);d24Render();}
+
+
+// DAY 25 — supplier verification, unit economics, launch tasks and content calendar.
+// All records are local and user-entered. No live suppliers, AI, checkout or fulfillment.
+const d25SupplierKey='trenviko-day25-suppliers',d25TaskKey='trenviko-day25-tasks',d25ContentKey='trenviko-day25-content';
+let d25Suppliers=load(d25SupplierKey,[]),d25Tasks=load(d25TaskKey,null),d25Content=load(d25ContentKey,[]);
+if(!Array.isArray(d25Suppliers))d25Suppliers=[];
+if(!Array.isArray(d25Content))d25Content=[];
+const d25DefaultTasks=[
+ ['Find a real supplier for one product','Research'],['Verify supplier contact and business details','Research'],['Request a product sample with an adult','Product'],['Check quality, labeling and product safety','Product'],['Confirm delivery costs and realistic shipping times','Fulfillment'],['Verify return/refund policy with supplier','Fulfillment'],['Calculate payment, platform and advertising costs','Finance'],['Get parent/guardian help with legal and payment accounts','Launch'],['Set up real policies and contact information','Launch'],['Test mobile experience and all product links','Launch'],['Connect a real compliant checkout before taking orders','Launch'],['Place and verify a test order before advertising','Launch']
+];
+if(!Array.isArray(d25Tasks))d25Tasks=d25DefaultTasks.map((t,i)=>({id:i,text:t[0],group:t[1],done:false}));
+let d25Tab='suppliers';
+function d25Input(id){return document.getElementById(id)?.value?.trim()||'';}
+function d25Number(id){return Number(d25Input(id));}
+function d25UID(){return String(Date.now())+'-'+Math.random().toString(36).slice(2,8);}
+function showDay25Hub(tab='suppliers'){
+ currentPage='day25';d25Tab=tab;
+ app.innerHTML=`<section class="section"><div class="eyebrow">DAY 25 · BUSINESS TOOLKIT</div><h1>From product idea to launch plan.</h1><p class="description">Supplier research, realistic profit estimates, a launch checklist and a content planner — all in one place. This toolkit is offline and does not connect to suppliers or generate real sales.</p><div class="d25-tabs"><button onclick="d25Switch('suppliers')" id="d25-tab-suppliers">Suppliers</button><button onclick="d25Switch('profit')" id="d25-tab-profit">Profit simulator</button><button onclick="d25Switch('launch')" id="d25-tab-launch">Launch checklist</button><button onclick="d25Switch('marketing')" id="d25-tab-marketing">Marketing planner</button></div><div id="d25-body"></div></section>`;
+ d25Switch(tab);navigate();
+}
+function d25Switch(tab){d25Tab=tab;for(const b of document.querySelectorAll('.d25-tabs button'))b.classList.toggle('active',b.id==='d25-tab-'+tab);const el=document.getElementById('d25-body');if(!el)return;
+ if(tab==='suppliers')el.innerHTML=`<div class="d25-grid"><div class="panel"><h2>Save a supplier candidate</h2><form id="d25-supplier-form" onsubmit="d25AddSupplier(event)"><label>Product<input required maxlength="100" name="product" class="field" placeholder="e.g. Grip socks"></label><label>Supplier name<input required maxlength="120" name="name" class="field" placeholder="Company to investigate"></label><label>Supplier website (optional)<input name="url" class="field" type="url" placeholder="https://..."></label><label>Quoted product cost (CAD)<input name="cost" class="field" type="number" min="0" step="0.01" value="0" required></label><label>Quoted shipping (CAD)<input name="shipping" class="field" type="number" min="0" step="0.01" value="0" required></label><label>Quoted delivery days (optional)<input name="days" class="field" type="number" min="1" max="365" step="1" placeholder="Not yet confirmed"></label><label>Verification status<select name="status" class="field"><option value="unverified">Not verified</option><option value="contacted">Contacted</option><option value="sample">Sample ordered</option><option value="checked">Sample inspected</option></select></label><label>Research notes<textarea class="field" name="notes" maxlength="1000" rows="3" placeholder="Shipping, refunds, sample quality, red flags..."></textarea></label><button class="btn" type="submit">Save supplier</button></form></div><div class="panel"><h2>How to choose suppliers</h2><p>Verify the company, inspect a sample, confirm the exact item, request written shipping/returns terms, and calculate landed costs. Don't trust a listing just because it has good photos.</p><p class="notice">Supplier entries are your own notes. TRENVIKO does not verify legitimacy, safety, availability or delivery claims.</p><button class="btn secondary" onclick="d25Export()">Export all Day 25 data</button></div></div><h2>Saved suppliers</h2><div id="d25-supplier-list"></div>`;
+ else if(tab==='profit')el.innerHTML=`<div class="d25-grid"><div class="panel"><h2>True cost per order</h2><p class="small-note">Enter estimates in CAD. Include every cost you can identify.</p><label>Selling price<input class="field" id="d25-price" type="number" value="29.99" min="0" step="0.01" oninput="d25Calc()"></label><label>Product cost<input class="field" id="d25-cost" type="number" value="9" min="0" step="0.01" oninput="d25Calc()"></label><label>Shipping and packaging<input class="field" id="d25-ship" type="number" value="5" min="0" step="0.01" oninput="d25Calc()"></label><label>Payment/platform fees<input class="field" id="d25-fees" type="number" value="1.5" min="0" step="0.01" oninput="d25Calc()"></label><label>Advertising cost per order<input class="field" id="d25-ads" type="number" value="7" min="0" step="0.01" oninput="d25Calc()"></label><label>Expected returns/refunds allowance per order<input class="field" id="d25-returns" type="number" value="1" min="0" step="0.01" oninput="d25Calc()"></label></div><div class="panel"><h2>Your estimated results</h2><div id="d25-profit-result"></div><p class="small-note">These figures exclude taxes, fixed overhead and unexpected costs unless you account for them. Profit is never guaranteed.</p></div></div>`;
+ else if(tab==='launch')el.innerHTML=`<h2>Launch readiness</h2><p>Check tasks only when actually completed.</p><div id="d25-task-list"></div><button class="btn secondary" onclick="d25ResetTasks()">Reset checklist</button>`;
+ else if(tab==='marketing')el.innerHTML=`<div class="d25-grid"><div class="panel"><h2>Plan your next post</h2><form onsubmit="d25AddPost(event)"><label>Product<input class="field" name="product" maxlength="100" required placeholder="Which product?"></label><label>Platform<select class="field" name="platform"><option>TikTok</option><option>Instagram</option><option>YouTube Shorts</option><option>Pinterest</option></select></label><label>Post date<input class="field" name="date" type="date" required></label><label>Video/post idea<textarea class="field" name="idea" rows="3" maxlength="500" required placeholder="e.g. Demonstrate the product in everyday use"></textarea></label><label>Status<select class="field" name="status"><option>Idea</option><option>Filming</option><option>Ready</option><option>Posted</option></select></label><button class="btn" type="submit">Save content idea</button></form></div><div class="panel"><h2>Content that earns attention</h2><p>Show a real problem, demonstrate a real solution, use your own or licensed footage, and give people a clear next step.</p><p class="notice">Do not invent customer reviews, supplier results, delivery guarantees, or before/after outcomes. Paid ads and business accounts may require adult supervision.</p><button class="btn secondary" onclick="showDay24Studio()">Open Product Copy Studio</button></div></div><h2>Content calendar</h2><div id="d25-content-list"></div>`;
+ if(tab==='suppliers')d25RenderSuppliers();if(tab==='profit')d25Calc();if(tab==='launch')d25RenderTasks();if(tab==='marketing')d25RenderContent();
+}
+function d25AddSupplier(e){e.preventDefault();const f=new FormData(e.target);const obj={id:d25UID()};for(const k of ['product','name','url','status','notes'])obj[k]=String(f.get(k)||'').trim();for(const k of ['cost','shipping'])obj[k]=Number(f.get(k));obj.days=String(f.get('days')||'').trim();if(!obj.product||!obj.name||!['cost','shipping'].every(k=>validNumber(obj[k]))){notify('Check supplier fields');return;}if(obj.url&&!safeURL(obj.url)){notify('Enter a valid http(s) website');return;}d25Suppliers.unshift(obj);d25Suppliers=d25Suppliers.slice(0,100);save(d25SupplierKey,d25Suppliers);e.target.reset();d25RenderSuppliers();notify('Supplier candidate saved');}
+function d25RenderSuppliers(){const el=document.getElementById('d25-supplier-list');if(!el)return;el.innerHTML=d25Suppliers.length?d25Suppliers.map(s=>`<article class="d25-record"><div class="eyebrow">${escapeHTML(s.status)}</div><h3>${escapeHTML(s.product)} — ${escapeHTML(s.name)}</h3><p>Product: ${money(s.cost)} · Shipping: ${money(s.shipping)} · Delivery: ${s.days?escapeHTML(s.days)+' days (user-entered)':'Unconfirmed'}</p><p>${escapeHTML(s.notes||'No notes yet')}</p>${safeURL(s.url)?`<p><a href="${escapeHTML(safeURL(s.url))}" target="_blank" rel="noopener noreferrer">Supplier website ↗</a></p>`:''}<button class="small-btn" onclick='d25DeleteSupplier(${JSON.stringify(s.id)})'>Remove</button></article>`).join(''):'<div class="empty-state">No supplier candidates yet.</div>';}
+function d25DeleteSupplier(id){d25Suppliers=d25Suppliers.filter(s=>s.id!==id);save(d25SupplierKey,d25Suppliers);d25RenderSuppliers();}
+function d25Calc(){const ids=['price','cost','ship','fees','ads','returns'];const vals=ids.map(x=>d25Number('d25-'+x));const el=document.getElementById('d25-profit-result');if(!el)return;if(vals.some(x=>!Number.isFinite(x)||x<0)||vals[0]===0){el.innerHTML='<p class="notice">Enter a positive price and valid nonnegative costs.</p>';return;}const [price,...costs]=vals;const total=costs.reduce((a,b)=>a+b,0),profit=price-total,margin=profit/price*100,breakEvenAd=price-(costs[0]+costs[1]+costs[2]+costs[4]);el.innerHTML=`<div class="d25-kpis"><div class="panel"><span>Cost/order</span><strong>${money(total)}</strong></div><div class="panel"><span>Profit/order</span><strong>${money(profit)}</strong></div><div class="panel"><span>Margin</span><strong>${margin.toFixed(1)}%</strong></div></div><div class="notice"><p>Break-even advertising cost per order: <strong>${money(breakEvenAd)}</strong></p><p>${profit<=0?'Your current estimates show a loss or break-even.':margin<20?'Your estimated margin is thin; unexpected costs could erase it.':'This estimate is positive, but actual demand and costs remain unverified.'}</p></div>`;}
+function d25RenderTasks(){const el=document.getElementById('d25-task-list');if(!el)return;const done=d25Tasks.filter(t=>t.done).length;el.innerHTML=`<p><strong>${done}/${d25Tasks.length}</strong> completed</p><div class="d25-progress"><div style="width:${d25Tasks.length?done/d25Tasks.length*100:0}%"></div></div>${d25Tasks.map(t=>`<label class="launch-check"><input type="checkbox" ${t.done?'checked':''} onchange="d25ToggleTask(${t.id},this.checked)"><div><strong>${escapeHTML(t.text)}</strong><span>${escapeHTML(t.group)}</span></div></label>`).join('')}`;}
+function d25ToggleTask(id,done){const t=d25Tasks.find(t=>t.id===id);if(t)t.done=done;save(d25TaskKey,d25Tasks);d25RenderTasks();}
+function d25ResetTasks(){if(!confirm('Reset all Day 25 checklist items?'))return;d25Tasks=d25Tasks.map(t=>({...t,done:false}));save(d25TaskKey,d25Tasks);d25RenderTasks();}
+function d25AddPost(e){e.preventDefault();const f=new FormData(e.target);const o={id:d25UID()};for(const k of ['product','platform','date','idea','status'])o[k]=String(f.get(k)||'').trim();if(!o.product||!o.date||!o.idea)return;d25Content.unshift(o);d25Content=d25Content.slice(0,100);save(d25ContentKey,d25Content);e.target.reset();d25RenderContent();notify('Content idea saved');}
+function d25RenderContent(){const el=document.getElementById('d25-content-list');if(!el)return;el.innerHTML=d25Content.length?[...d25Content].sort((a,b)=>a.date.localeCompare(b.date)).map(o=>`<article class="d25-record"><div class="eyebrow">${escapeHTML(o.platform)} · ${escapeHTML(o.date)} · ${escapeHTML(o.status)}</div><h3>${escapeHTML(o.product)}</h3><p>${escapeHTML(o.idea)}</p><button class="small-btn" onclick='d25RemovePost(${JSON.stringify(o.id)})'>Remove</button></article>`).join(''):'<div class="empty-state">No posts planned yet.</div>';}
+function d25RemovePost(id){d25Content=d25Content.filter(x=>x.id!==id);save(d25ContentKey,d25Content);d25RenderContent();}
+function d25Export(){const blob=new Blob([JSON.stringify({type:'TRENVIKO-Day25-Toolkit',suppliers:d25Suppliers,tasks:d25Tasks,content:d25Content},null,2)],{type:'application/json'});const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='TRENVIKO_Day25_Business_Backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);}
+
+
+// DAY 26 — offline Growth HQ. No real AI, analytics, supplier connection, or payments.
+const d26Key='trenviko-day26-growth';
+let d26Data=load(d26Key,{tests:[],notes:[],goal:100});
+if(!d26Data||typeof d26Data!=='object')d26Data={tests:[],notes:[],goal:100};
+if(!Array.isArray(d26Data.tests))d26Data.tests=[];
+if(!Array.isArray(d26Data.notes))d26Data.notes=[];
+let d26Tab='overview';
+function d26Val(id){return document.getElementById(id)?.value?.trim()||'';}
+function d26Num(id){return Number(d26Val(id));}
+function d26Save(){save(d26Key,d26Data);}
+function showDay26HQ(tab='overview'){
+ currentPage='day26';d26Tab=tab;
+ app.innerHTML=`<section class="section"><div class="eyebrow">DAY 26 / OWNER WORKSPACE</div><h1>Growth HQ <span style="color:var(--green)">✦</span></h1><p class="description">Plan smarter launches, test products, and build better marketing. All figures and ideas are estimates or your own entries, saved only in this browser.</p>
+ <div class="d26-tabs">${[['overview','Dashboard'],['funnel','Sales simulator'],['tests','Product tests'],['creative','Creative brief'],['plan','Launch roadmap']].map(([id,label])=>`<button id="d26-tab-${id}" onclick="d26Switch('${id}')">${label}</button>`).join('')}</div><div id="d26-body"></div></section>`;
+ d26Switch(tab);navigate();
+}
+function d26Switch(tab){
+ d26Tab=tab;document.querySelectorAll('.d26-tabs button').forEach(b=>b.classList.toggle('active',b.id==='d26-tab-'+tab));
+ const el=document.getElementById('d26-body');if(!el)return;
+ if(tab==='overview'){
+ const complete=d25Tasks.filter(t=>t.done).length;
+ el.innerHTML=`<div class="d26-grid"><div class="d26-metric"><span>Products in your demo store</span><strong>${products.length}</strong></div><div class="d26-metric"><span>Supplier candidates saved</span><strong>${d25Suppliers.length}</strong></div><div class="d26-metric"><span>Launch checklist progress</span><strong>${complete}/${d25Tasks.length}</strong></div><div class="d26-metric"><span>Product test ideas</span><strong>${d26Data.tests.length}</strong></div><div class="d26-metric"><span>Marketing posts planned</span><strong>${d25Content.length}</strong></div><div class="d26-metric"><span>Copy drafts saved</span><strong>${d24Drafts.length}</strong></div></div>
+ <div class="d26-columns"><div class="panel"><h2>What to do next</h2><div class="d26-steps"><div class="d26-step"><b>01</b><div>Choose one promising product — not twelve.</div></div><div class="d26-step"><b>02</b><div>Confirm supplier pricing, shipping and returns.</div></div><div class="d26-step"><b>03</b><div>Get a sample and make original product content.</div></div><div class="d26-step"><b>04</b><div>With a parent/guardian, arrange compliant payments and fulfillment.</div></div></div></div><div class="panel"><h2>Open your tools</h2><p>Keep the storefront simple while managing the business here.</p><p><button class="btn" onclick="showDay23Lab()">Product Idea Lab</button></p><p><button class="btn secondary" onclick="showDay25Hub('suppliers')">Supplier research</button></p><p><button class="btn secondary" onclick="showDay24Studio()">Product Copy Studio</button></p><p><button class="btn secondary" onclick="showDay25Hub('launch')">Launch checklist</button></p></div></div>`;
+ }else if(tab==='funnel'){
+ el.innerHTML=`<div class="d26-columns"><div class="panel"><h2>Sales scenario calculator</h2><p class="small-note">This is a what-if model, NOT a traffic forecast.</p><label>Monthly visitors<input id="d26-visitors" class="field" type="number" min="0" max="10000000" value="1000" oninput="d26Calc()"></label><label>Conversion rate (%)<input id="d26-rate" class="field" type="number" min="0" max="100" step="0.1" value="1" oninput="d26Calc()"></label><label>Average order value (CAD)<input id="d26-order" class="field" type="number" min="0" step="0.01" value="30" oninput="d26Calc()"></label><label>Estimated profit per order before ads (CAD)<input id="d26-margin" class="field" type="number" step="0.01" value="10" oninput="d26Calc()"></label><label>Monthly advertising cost (CAD)<input id="d26-ads" class="field" type="number" min="0" step="0.01" value="0" oninput="d26Calc()"></label></div><div class="panel"><h2>Scenario results</h2><div id="d26-calculation"></div><p class="small-note">Not a guarantee. Excludes taxes, overhead, refunds and other costs unless included in your per-order estimate.</p></div></div>`;d26Calc();
+ }else if(tab==='tests'){
+ el.innerHTML=`<div class="d26-columns"><div class="panel"><h2>Track a product test</h2><form onsubmit="d26AddTest(event)"><label>Product name<input class="field" name="name" maxlength="100" required></label><label>Hypothesis<textarea class="field" name="idea" maxlength="400" rows="3" required placeholder="Why might customers want this?"></textarea></label><label>How will you test it?<select class="field" name="method"><option>Supplier sample</option><option>Organic content</option><option>Customer interviews</option><option>Landing page feedback</option></select></label><label>Status<select class="field" name="status"><option>Idea</option><option>Researching</option><option>Testing</option><option>Learned</option></select></label><button class="btn" type="submit">Save product test</button></form></div><div class="panel"><h2>What makes a useful test?</h2><p>Write down what you expect, what you actually observe, and whether you should continue. Avoid spending money until the basics are verified.</p><p class="notice">Never pretend an untested product is a bestseller or invent customer results.</p></div></div><h2>Saved tests</h2><div id="d26-test-list"></div>`;d26RenderTests();
+ }else if(tab==='creative'){
+ el.innerHTML=`<div class="d26-columns"><div class="panel"><h2>Video concept builder</h2><label>Product<input class="field" id="d26-product" maxlength="100" placeholder="e.g. Grip socks"></label><label>Audience<input class="field" id="d26-audience" maxlength="120" placeholder="e.g. indoor athletes"></label><label>Problem it addresses<textarea class="field" id="d26-problem" maxlength="300" rows="2" placeholder="Only use an honest, demonstrable problem"></textarea></label><label>Verified feature<input class="field" id="d26-feature" maxlength="200" placeholder="Supplier-confirmed feature"></label><label>Video style<select class="field" id="d26-style"><option value="demo">Product demonstration</option><option value="routine">Day-in-the-life</option><option value="compare">Side-by-side comparison</option></select></label><button class="btn" onclick="d26MakeCreative()">Build creative brief</button></div><div class="panel"><h2>Your video plan</h2><div id="d26-creative-result" class="d26-output">Enter the product details to generate a structured filming plan.</div><button class="btn secondary" onclick="d26CopyCreative()">Copy brief</button><p class="small-note">Template-based planning, not live AI. Use original footage or licensed media and verify all claims.</p></div></div>`;
+ }else{
+ el.innerHTML=`<div class="d26-columns"><div class="panel"><h2>Launch in the right order</h2><div class="d26-steps"><div class="d26-step"><b>1</b><div><strong>Research</strong><p>Choose a product and validate supplier identity, costs and delivery terms.</p></div></div><div class="d26-step"><b>2</b><div><strong>Test</strong><p>Inspect a sample, verify safety, make real photos and content.</p></div></div><div class="d26-step"><b>3</b><div><strong>Prepare</strong><p>Set up customer support, policies, compliant payment processing and fulfillment with an adult.</p></div></div><div class="d26-step"><b>4</b><div><strong>Launch carefully</strong><p>Test checkout and delivery before trying to attract buyers.</p></div></div><div class="d26-step"><b>5</b><div><strong>Improve</strong><p>Review real traffic and orders once connected; never confuse local demo counts with customers.</p></div></div></div></div><div class="panel"><h2>What is still missing?</h2><p>This standalone HTML cannot safely process payments, place supplier orders, or call an AI service with a secret key. Those require a proper backend or trusted ecommerce platform.</p><p>Real customer reviews, shipping promises, and sale prices must be accurate and verifiable.</p><button class="btn" onclick="showDay25Hub('launch')">Open full launch checklist</button></div></div>`;
+ }
+}
+function d26Calc(){const el=document.getElementById('d26-calculation');if(!el)return;const vals=['visitors','rate','order','margin','ads'].map(x=>d26Num('d26-'+x));if(vals.some(x=>!Number.isFinite(x))||vals[0]<0||vals[1]<0||vals[1]>100||vals[2]<0||vals[4]<0){el.textContent='Enter valid values.';return;}const [visitors,rate,order,margin,ads]=vals,orders=visitors*rate/100,revenue=orders*order,profit=orders*margin-ads;el.innerHTML=`<div class="d26-grid" style="grid-template-columns:1fr 1fr"><div class="d26-metric"><span>Expected orders</span><strong>${orders.toFixed(1)}</strong></div><div class="d26-metric"><span>Gross sales</span><strong>${money(revenue)}</strong></div><div class="d26-metric"><span>Profit estimate</span><strong>${money(profit)}</strong></div><div class="d26-metric"><span>Revenue / visitor</span><strong>${money(visitors?revenue/visitors:0)}</strong></div></div><p class="notice">Changing assumptions changes these results. Actual visitors, conversion, and profit are unknown.</p>`;}
+function d26AddTest(e){e.preventDefault();const f=new FormData(e.target),name=String(f.get('name')||'').trim(),idea=String(f.get('idea')||'').trim();if(!name||!idea)return;d26Data.tests.unshift({id:String(Date.now())+'-'+Math.random().toString(36).slice(2,8),name,idea,method:String(f.get('method')),status:String(f.get('status'))});d26Data.tests=d26Data.tests.slice(0,100);d26Save();e.target.reset();d26RenderTests();notify('Product test saved');}
+function d26RenderTests(){const el=document.getElementById('d26-test-list');if(!el)return;el.innerHTML=d26Data.tests.length?d26Data.tests.map(t=>`<article class="d26-record"><div class="eyebrow">${escapeHTML(t.status)} · ${escapeHTML(t.method)}</div><h3>${escapeHTML(t.name)}</h3><p>${escapeHTML(t.idea)}</p><button class="small-btn" onclick='d26RemoveTest(${JSON.stringify(t.id)})'>Delete</button></article>`).join(''):'<p class="empty-state">No product tests saved yet.</p>';}
+function d26RemoveTest(id){d26Data.tests=d26Data.tests.filter(t=>t.id!==id);d26Save();d26RenderTests();}
+function d26MakeCreative(){const name=d26Val('d26-product'),audience=d26Val('d26-audience'),problem=d26Val('d26-problem'),feature=d26Val('d26-feature'),style=d26Val('d26-style');if(!name){notify('Enter a product first');return;}const shots=style==='routine'?['Show the setting and everyday routine','Introduce the product naturally','Demonstrate a verified use','Close with a clear product view']:style==='compare'?['Show both products fairly','Demonstrate the same task with each','Show only observable differences','Summarize who each may suit']:['Start with the product in action','Show the problem or context','Demonstrate a real feature','Show the product close-up'];document.getElementById('d26-creative-result').textContent=`TRENVIKO VIDEO BRIEF\nProduct: ${name}\nAudience: ${audience||'Define your audience'}\nProblem: ${problem||'Add a real problem to demonstrate'}\nVerified feature: ${feature||'Confirm features before filming'}\n\nSHOT LIST\n${shots.map((x,i)=>`${i+1}. ${x}`).join('\n')}\n\nCAPTION IDEA\nDiscover ${name} at TRENVIKO. Explore the details.\n\nCHECK BEFORE POSTING\nUse real footage, verify claims, and do not invent reviews, scarcity, or results.`.replaceAll('\\n','\n');}
+async function d26CopyCreative(){const t=document.getElementById('d26-creative-result')?.textContent||'';try{await navigator.clipboard.writeText(t);notify('Brief copied');}catch{notify('Select the brief and copy manually');}}
+
+
+// DAY 28: Owner-only planning tools. No live supplier, AI, or payment integration.
+const D28_SUPPLIERS="trenviko-d28-suppliers";
+const D28_CHECKS="trenviko-d28-checks";
+let d28Tab="overview";
+function d28Read(key,fallback){const v=load(key,fallback);return v;}
+function d28Suppliers(){const v=d28Read(D28_SUPPLIERS,[]);return Array.isArray(v)?v.filter(x=>x&&typeof x.name==="string").slice(0,200):[];}
+const d28Steps=[
+["Choose one product","Start with one focused, testable product rather than a huge catalog."],
+["Verify supplier identity","Confirm business details and independently verify contact information."],
+["Order a sample","Check quality, packaging, delivery speed and product accuracy."],
+["Confirm product claims","Check specifications, safety and legal requirements for the product."],
+["Calculate landed costs","Include unit price, shipping, duties, taxes, fees and returns."],
+["Set a real returns policy","Publish a policy you can actually honour."],
+["Prepare shipping estimates","Use verified supplier timelines; avoid invented delivery promises."],
+["Prepare privacy and contact pages","Provide real business contact and privacy information."],
+["Get adult account support","A parent or guardian should handle accounts/contracts requiring an adult."],
+["Connect a real checkout","Use an established payment provider with appropriate account approval."],
+["Test the full order flow","Test payments, confirmation, fulfilment, refund and support."],
+["Launch a small experiment","Use a controlled budget and measure real results."]
+];
+function d28Checks(){const v=d28Read(D28_CHECKS,{});return v&&typeof v==="object"&&!Array.isArray(v)?v:{};}
+function d28Field(id,label,type="text",value="",extra=""){
+ return `<label>${escapeHTML(label)}<input class="field" id="${id}" type="${type}" value="${escapeHTML(value)}" ${extra}></label>`;
+}
+function showDay28HQ(tab="overview"){
+ d28Tab=tab;currentPage="day28";
+ const records=d28Suppliers(),checks=d28Checks(),done=d28Steps.filter((_,i)=>checks[i]).length;
+ app.innerHTML=`<section class="section">
+ <div class="d28-hero"><div class="eyebrow">DAY 28 / OWNER WORKSPACE</div><h1>Launch Operations Center</h1><p class="description">Compare suppliers, understand actual costs and prepare for a responsible first product launch. All entries stay in this browser.</p></div>
+ <div class="d28-statgrid"><div class="d28-stat"><span>Supplier candidates</span><strong>${records.length}</strong></div><div class="d28-stat"><span>Launch tasks complete</span><strong>${done}/${d28Steps.length}</strong></div><div class="d28-stat"><span>Products in store</span><strong>${products.length}</strong></div></div>
+ <div class="d28-tabs">${[["overview","Overview"],["suppliers","Supplier comparisons"],["profit","True-cost calculator"],["launch","Launch checklist"]].map(([k,v])=>`<button class="${d28Tab===k?"active":""}" onclick="showDay28HQ('${k}')">${v}</button>`).join("")}</div>
+ <div id="d28-content">${d28Tab==="suppliers"?d28SupplierView(records):d28Tab==="profit"?d28ProfitView():d28Tab==="launch"?d28LaunchView(checks):d28Overview(records,done)}</div>
+ </section>`;navigate();
+}
+function d28Overview(records,done){
+ return `<div class="d28-grid"><div class="panel"><h2>Your next best move</h2><p>Choose one product, compare at least two independently verified suppliers, order a sample and calculate your costs before spending on ads.</p><div class="d28-actions"><button class="btn" onclick="showDay28HQ('suppliers')">Compare suppliers</button><button class="btn secondary" onclick="showDay28HQ('profit')">Calculate profit</button></div></div><div class="panel"><h2>Readiness</h2><div class="d28-score">${Math.round(done/d28Steps.length*100)}%</div><p>Checklist completion is a planning indicator, not proof the store is ready to accept payments.</p><button class="btn secondary" onclick="showDay28HQ('launch')">View launch tasks</button></div></div>
+ <div class="notice">This is a demo planning dashboard. It does not search suppliers, verify claims, process payments, import products or fulfil orders. Figures are estimates based on your inputs.</div>
+ <div class="d28-actions"><button class="btn secondary" onclick="d28Export()">Export Day 28 data</button></div>`;
+}
+function d28SupplierView(records){
+ return `<div class="d28-grid"><div class="panel"><h2>Add a supplier candidate</h2>
+ ${d28Field("d28-name","Supplier name")}
+ ${d28Field("d28-product","Product")}
+ ${d28Field("d28-url","Supplier website (optional)","url")}
+ ${d28Field("d28-unit","Unit cost (CAD)","number","", 'min="0" step="0.01"')}
+ ${d28Field("d28-ship","Shipping per unit (CAD)","number","", 'min="0" step="0.01"')}
+ ${d28Field("d28-days","Estimated delivery days","number","", 'min="0" step="1"')}
+ <label>Verification status<select class="field" id="d28-status"><option value="Unverified">Unverified</option><option value="Contacted">Contacted</option><option value="Sample ordered">Sample ordered</option><option value="Sample inspected">Sample inspected</option></select></label>
+ <button class="btn" onclick="d28AddSupplier()">Save supplier</button>
+ <p class="small-note">A status you select is not independent verification.</p></div>
+ <div class="panel"><h2>Supplier comparison</h2><p>Lower prices alone do not mean better suppliers. Check product quality, returns, delivery and reliability.</p>${records.length?records.map((x,i)=>`<div class="d28-record"><h3>${escapeHTML(x.name)}</h3><p>${escapeHTML(x.product)} · ${escapeHTML(x.status)}</p><p>Unit: ${money(x.unit)} · Shipping: ${money(x.shipping)} · Landed before duties/fees: <strong>${money(x.unit+x.shipping)}</strong></p><p>Delivery estimate: ${x.days} day(s)</p>${safeURL(x.url)?`<a href="${escapeHTML(safeURL(x.url))}" target="_blank" rel="noopener noreferrer" style="color:var(--green)">Supplier website</a>`:""}<div class="d28-actions"><button class="small-btn" onclick="d28RemoveSupplier(${i})">Remove</button></div></div>`).join(""):"<p>No supplier candidates saved yet.</p>"}</div></div>`;
+}
+function d28AddSupplier(){
+ const get=id=>document.getElementById(id)?.value.trim()||"";
+ const name=get("d28-name"),product=get("d28-product"),url=get("d28-url");
+ const unit=Number(get("d28-unit")),shipping=Number(get("d28-ship")),days=Number(get("d28-days"));
+ if(!name||!product||![unit,shipping,days].every(n=>Number.isFinite(n)&&n>=0&&n<=100000)||!get("d28-unit")||!get("d28-ship")||!get("d28-days")){notify("Enter supplier, product and valid costs/days.");return;}
+ if(url&&!safeURL(url)){notify("Enter a valid http/https website or leave blank.");return;}
+ const records=d28Suppliers();records.push({name:name.slice(0,120),product:product.slice(0,120),url,unit,shipping,days,status:get("d28-status")});
+ save(D28_SUPPLIERS,records);showDay28HQ("suppliers");notify("Supplier candidate saved locally");
+}
+function d28RemoveSupplier(i){if(!confirm("Remove this supplier candidate?"))return;const records=d28Suppliers();records.splice(i,1);save(D28_SUPPLIERS,records);showDay28HQ("suppliers");}
+function d28ProfitView(){
+ return `<div class="d28-grid"><div class="panel"><h2>True-cost calculator</h2>
+ ${d28Field("d28-price","Selling price (CAD)","number","29.99",'min="0" step="0.01" oninput="d28Calculate()"')}
+ ${d28Field("d28-cost","Product cost (CAD)","number","8",'min="0" step="0.01" oninput="d28Calculate()"')}
+ ${d28Field("d28-shipping","Supplier shipping (CAD)","number","4",'min="0" step="0.01" oninput="d28Calculate()"')}
+ ${d28Field("d28-duty","Duties / other unit costs (CAD)","number","0",'min="0" step="0.01" oninput="d28Calculate()"')}
+ ${d28Field("d28-feepercent","Payment/platform fee (%)","number","3",'min="0" max="100" step="0.1" oninput="d28Calculate()"')}
+ ${d28Field("d28-feeflat","Flat fee per order (CAD)","number","0.30",'min="0" step="0.01" oninput="d28Calculate()"')}
+ ${d28Field("d28-ads","Advertising cost per sale (CAD)","number","5",'min="0" step="0.01" oninput="d28Calculate()"')}
+ ${d28Field("d28-returns","Expected return/refund allowance per sale (CAD)","number","1",'min="0" step="0.01" oninput="d28Calculate()"')}
+ <button class="btn" onclick="d28Calculate()">Calculate</button></div><div class="panel"><h2>Estimated unit economics</h2><div id="d28-profit-output"><p>Enter costs and select Calculate.</p></div><p class="small-note">Estimates exclude income taxes and any unentered costs. Taxes charged to customers and remitted to authorities are not profit.</p></div></div>`;
+}
+function d28Calculate(){
+ const ids=["price","cost","shipping","duty","feepercent","feeflat","ads","returns"];
+ const v=ids.map(k=>Number(document.getElementById("d28-"+k)?.value));
+ const out=document.getElementById("d28-profit-output");
+ if(!v.every(Number.isFinite)||v.some(x=>x<0)||v[4]>100){out.textContent="Enter valid nonnegative numbers and a fee percentage of 0–100.";return;}
+ const [price,cost,shipping,duty,feePct,feeFlat,ads,returns]=v;
+ const fees=price*feePct/100+feeFlat;
+ const total=cost+shipping+duty+fees+ads+returns;
+ const profit=price-total;
+ const margin=price>0?profit/price*100:0;
+ out.innerHTML=`<div class="d28-stat"><span>Estimated profit per sale</span><strong style="${profit<0?"color:#ff9b9b":""}">${money(profit)}</strong></div><p>Total estimated cost: <strong>${money(total)}</strong></p><p>Estimated margin: <strong>${margin.toFixed(1)}%</strong></p><p>${profit<=0?"This estimate is not profitable. Review your costs or pricing.":"Positive estimate — still verify costs, returns, taxes and demand."}</p>`;
+}
+function d28LaunchView(checks){
+ return `<div class="panel"><h2>Launch readiness checklist</h2><p>Tick only tasks you have actually completed. Progress is saved in this browser.</p>${d28Steps.map(([name,detail],i)=>`<label class="d28-check"><input type="checkbox" ${checks[i]?"checked":""} onchange="d28SetCheck(${i},this.checked)"><span><strong>${escapeHTML(name)}</strong><small>${escapeHTML(detail)}</small></span></label>`).join("")}</div>`;
+}
+function d28SetCheck(i,checked){const c=d28Checks();c[i]=checked;save(D28_CHECKS,c);const done=d28Steps.filter((_,j)=>c[j]).length;document.querySelectorAll(".d28-statgrid .d28-stat strong")[1].textContent=done+"/"+d28Steps.length;}
+function d28Export(){
+ const payload={version:28,exportedAt:new Date().toISOString(),suppliers:d28Suppliers(),checklist:d28Checks()};
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="trenviko-day28-research.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+
+
+// DAY 29: Local-only planning, not live pricing, AI, supplier verification, or checkout.
+const D29_KEY='trenviko-day29-scenarios';let d29Tab='calculator';
+function d29Saved(){const a=load(D29_KEY,[]);return Array.isArray(a)?a.filter(x=>x&&typeof x.name==='string').slice(0,100):[];}
+function d29Input(k,label,value){return `<label>${escapeHTML(label)}<input class="field" id="d29-${k}" type="number" min="0" max="100000" step="0.01" value="${value}" oninput="d29Calculate()"></label>`;}
+function showDay29Mega(tab='calculator'){
+ d29Tab=tab;currentPage='day29';
+ app.innerHTML=`<section class="section"><div class="d29-head"><div class="eyebrow">DAY 29 · BUSINESS MEGA UPGRADE</div><h1>Profit Guard<br>Command Center.</h1><p>Know your numbers before you sell. Model supplier costs, discover break-even prices, compare advertising risks, save product scenarios and build a responsible launch brief.</p></div>
+ <div class="d29-tabs">${[['calculator','Profit calculator'],['saved','Saved products'],['brief','Launch brief']].map(([id,name])=>`<button class="${tab===id?'active':''}" onclick="showDay29Mega('${id}')">${name}</button>`).join('')}</div>
+ <div id="d29-workspace">${tab==='calculator'?d29Calculator():tab==='saved'?d29SavedView():d29BriefView()}</div></section>`;
+ navigate();if(tab==='calculator')d29Calculate();
+}
+function d29Calculator(){return `<div class="d29-layout"><div class="panel"><h2>Price your product</h2>
+ <label>Choose a store product<select class="field" id="d29-product" onchange="d29Pick()"><option value="">Custom product</option>${products.map(p=>`<option value="${escapeHTML(String(p.id))}">${escapeHTML(p.name)}</option>`).join('')}</select></label>
+ <label>Product name<input class="field" id="d29-name" maxlength="120" value="Bluetooth Winter Earmuffs"></label>
+ ${d29Input('price','Selling price (CAD)',29.99)}${d29Input('unit','Supplier unit cost (CAD)',12)}${d29Input('ship','Shipping cost per order (CAD)',4)}${d29Input('fee','Processing fee (%)',3)}${d29Input('flat','Flat processing fee (CAD)',0.3)}${d29Input('ads','Advertising cost per sale (CAD)',5)}${d29Input('returns','Expected returns/refunds allowance (CAD)',1)}${d29Input('other','Other costs per order (CAD)',0)}${d29Input('target','Target profit margin (%)',20)}
+ <div class="d29-actions"><button class="btn" onclick="d29Calculate()">Recalculate</button><button class="btn secondary" onclick="d29Save()">Save scenario</button></div><p class="small-note">Example inputs are not supplier quotes. Replace them with actual figures.</p></div>
+ <div class="panel"><h2>Profit and risk analysis</h2><div id="d29-output" aria-live="polite"></div></div></div>`;}
+function d29Pick(){const id=document.getElementById('d29-product').value;const p=products.find(p=>String(p.id)===id);if(!p)return;document.getElementById('d29-name').value=p.name;document.getElementById('d29-price').value=p.price;d29Calculate();}
+function d29Compute(){const keys=['price','unit','ship','fee','flat','ads','returns','other','target'];const vals=keys.map(k=>{const e=document.getElementById('d29-'+k);return e&&e.value.trim()!==''?Number(e.value):NaN;});if(vals.some(n=>!Number.isFinite(n)||n<0||n>100000)||vals[3]>=100||vals[8]>=100)return null;
+ const [price,unit,ship,fee,flat,ads,returns,other,target]=vals;const base=unit+ship+flat+ads+returns+other;const rate=fee/100;const cost=base+price*rate;const profit=price-cost;const breakeven=base/(1-rate);const targetPrice=target/100+rate<1?base/(1-rate-target/100):null;const maxAds=price*(1-rate)-unit-ship-flat-returns-other;return {price,unit,ship,fee,flat,ads,returns,other,target,cost,profit,breakeven,targetPrice,maxAds,margin:price>0?100*profit/price:0};}
+function d29Calculate(){const out=document.getElementById('d29-output');if(!out)return;const x=d29Compute();if(!x){out.innerHTML='<p class="d29-warning">Please enter valid nonnegative numbers. Percentage fees and target margin must be below 100%.</p>';return;}
+ const negative=x.profit<0;const risk=negative?'Loss on every estimated sale':x.margin<15?'Thin margin — costs could erase profit':'Positive estimated contribution';
+ out.innerHTML=`<div class="d29-metrics"><div class="d29-metric"><span>Profit per sale</span><strong style="color:${negative?'#ff9b9b':'var(--green)'}">${money(x.profit)}</strong></div><div class="d29-metric"><span>Break-even price</span><strong>${money(x.breakeven)}</strong></div><div class="d29-metric"><span>Profit margin</span><strong>${x.margin.toFixed(1)}%</strong></div></div><p class="${negative||x.margin<15?'d29-warning':'notice'}">${risk}</p>
+ <table class="d29-table"><tr><td>Customer selling price</td><td>${money(x.price)}</td></tr><tr><td>Supplier + shipping</td><td>${money(x.unit+x.ship)}</td></tr><tr><td>Fees + ads + returns + other</td><td>${money(x.cost-x.unit-x.ship)}</td></tr><tr><td>Total estimated cost</td><td>${money(x.cost)}</td></tr><tr><td>Max ads per sale before loss</td><td>${money(x.maxAds)}</td></tr><tr><td>Price for ${x.target}% target margin</td><td>${x.targetPrice===null?'Not achievable':money(x.targetPrice)}</td></tr></table>
+ <h3>What if advertising costs change?</h3><table class="d29-table"><tr><th>Ads per sale</th><th>Estimated profit</th></tr>${[0,2,5,10,15].map(a=>`<tr><td>${money(a)}</td><td style="color:${x.profit+x.ads-a<0?'#ff9b9b':'var(--green)'}">${money(x.profit+x.ads-a)}</td></tr>`).join('')}</table>
+ <p class="small-note">Not included unless entered: taxes, duties, subscriptions, chargebacks, customer support and unexpected losses. A positive estimate does not guarantee demand or real profit.</p>`;
+}
+function d29Save(){const x=d29Compute(),name=document.getElementById('d29-name')?.value.trim();if(!x||!name){notify('Enter a product name and valid numbers.');return;}const a=d29Saved();a.unshift({...x,name:name.slice(0,120),savedAt:new Date().toISOString()});save(D29_KEY,a.slice(0,100));notify('Pricing scenario saved locally');}
+function d29SavedView(){const a=d29Saved();return `<div class="panel"><h2>Saved pricing scenarios</h2><p>Compare your estimates. These are not real sales or verified supplier prices.</p>${a.length?a.map((x,i)=>`<div class="d29-record"><h3>${escapeHTML(x.name)}</h3><p>Selling price: ${money(x.price)} · Supplier: ${money(x.unit)} · Ads: ${money(x.ads)}</p><p>Estimated profit: <strong style="color:${x.profit<0?'#ff9b9b':'var(--green)'}">${money(x.profit)}</strong> · Margin: ${Number(x.margin).toFixed(1)}%</p><button class="small-btn" onclick="d29Remove(${i})">Delete</button></div>`).join(''):'<p>No saved scenarios yet. Start in Profit calculator.</p>'}<div class="d29-actions"><button class="btn secondary" onclick="d29Export()">Export scenarios as JSON</button></div></div>`;}
+function d29Remove(i){if(!confirm('Delete this saved scenario?'))return;const a=d29Saved();a.splice(i,1);save(D29_KEY,a);showDay29Mega('saved');}
+function d29Export(){const blob=new Blob([JSON.stringify({version:29,exportedAt:new Date().toISOString(),scenarios:d29Saved()},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='trenviko-day29-pricing.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function d29BriefView(){return `<div class="d29-layout"><div class="panel"><h2>Build a product launch brief</h2><label>Product name<input class="field" id="d29-brief-name" maxlength="120" placeholder="e.g. Grip Socks"></label><label>Customer problem<textarea class="field" id="d29-brief-problem" rows="3" placeholder="What problem does this product solve?"></textarea></label><label>Verified product features<textarea class="field" id="d29-brief-features" rows="3" placeholder="Only features you can confirm"></textarea></label><label>Why choose this product?<textarea class="field" id="d29-brief-reason" rows="3" placeholder="Your honest product advantage"></textarea></label><div class="d29-actions"><button class="btn" onclick="d29GenerateBrief()">Generate brief</button><button class="btn secondary" onclick="d29CopyBrief()">Copy brief</button></div></div><div class="panel"><h2>Your launch outline</h2><div class="d29-brief" id="d29-brief-output">Fill in the form and generate your brief.</div></div></div>`;}
+function d29GenerateBrief(){const get=id=>document.getElementById(id)?.value.trim()||'';const name=get('d29-brief-name');if(!name){notify('Enter a product name.');return;}const problem=get('d29-brief-problem'),features=get('d29-brief-features'),reason=get('d29-brief-reason');document.getElementById('d29-brief-output').textContent=`TRENVIKO — PRODUCT LAUNCH BRIEF\n\nPRODUCT: ${name}\n\nCUSTOMER PROBLEM\n${problem||'Research the customer problem.'}\n\nVERIFIED FEATURES\n${features||'Confirm product specifications with a sample.'}\n\nHONEST VALUE PROPOSITION\n${reason||'Describe the real benefit without exaggeration.'}\n\nBEFORE LAUNCH\n1. Compare suppliers and independently verify business details.\n2. Order and inspect a sample.\n3. Confirm delivery times, returns and product safety.\n4. Calculate realistic landed costs and break-even pricing.\n5. Have a parent/guardian handle accounts and contracts requiring an adult.\n6. Test the full checkout and fulfilment flow before accepting orders.\n\nMARKETING IDEA\nShow the product in a real-life use case. Use your own footage and only verified claims.\n\nNOTE: This brief is a template, not live AI-generated research.`;}
+async function d29CopyBrief(){const t=document.getElementById('d29-brief-output')?.textContent||'';try{await navigator.clipboard.writeText(t);notify('Brief copied');}catch{notify('Select and copy the brief manually');}}
+</script>
+</body>
+</html>
