@@ -3457,6 +3457,7 @@ function d36ShowResponse(response){
  const status=document.getElementById('d36-status');
  if(!status)return;
  const found=d36Array(response);
+ console.log("CJ DEBUG:", response, found);
  d36Items=found.filter(x=>x&&typeof x==='object').slice(0,50);
  const holder=document.getElementById('d36-results');
  if(!d36Items.length){
