@@ -3460,7 +3460,7 @@ function d36ShowResponse(response){
  }
  status.textContent='Found '+d36Items.length+' products. Supplier prices and currency must be verified before listing.';
  holder.innerHTML=d36Items.map((x,i)=>{
-  const name=String(x.productNameEn||x.productName||x.nameEn||x.name||x.title||'Unnamed product').slice(0,120);
+  const name=String(x.'productNameEn' in x||'nameEn' in x||x.productName||x.nameEn||x.name||x.title||'Unnamed product').slice(0,120);
   const rawImage=x.productImage||x.productImageUrl||x.image||x.imageUrl||x.mainImage||x.productImageUrlList?.[0]||'';
   const image=safeURL(String(rawImage));
   const price=String(x.sellPrice??x.productPrice??x.price??x.priceRange??'Not provided').slice(0,80);
