@@ -3427,13 +3427,20 @@ function showDay36Finder(){
  navigate();
 }
 function d36Array(root){
- // CJ APIs may wrap results as products.content.list, data.content.list, etc.
+ // CJ listV2 returns products.content[].productList[].
+ const content=root?.products?.content;
+ if(Array.isArray(content)){
+  const products=content.flatMap(item=>Array.isArray(item?.productList)?item.productList:[]);
+  if(products.length)return products;
+ }
+ // Keep compatibility with earlier importer response formats.
  const visited=new Set();
  function find(node,depth){
   if(depth>7||!node||typeof node!=='object'||visited.has(node))return null;
   visited.add(node);
   if(Array.isArray(node)){
-   if(node.length && node.some(x=>x&&typeof x==='object'&&('pid' in x||'productNameEn' in x||'productImage' in x||'productName' in x||'sellPrice' in x)))return node;
+   if(node.length&&node.some(x=>x&&typeof x==='object'&&('pid' in x||'id' in x||'productNameEn' in x||'nameEn' in x||'productImage' in x||'bigImage' in x||'productName' in x||'sellPrice' in x)))return node;
+   for(const item of node){const found=find(item,depth+1);if(found)return found;}
    return null;
   }
   for(const key of ['list','productList','products','items','content','data','result','records']){
@@ -3460,8 +3467,8 @@ function d36ShowResponse(response){
  }
  status.textContent='Found '+d36Items.length+' products. Supplier prices and currency must be verified before listing.';
  holder.innerHTML=d36Items.map((x,i)=>{
-  const name=String(x.'productNameEn' in x||'nameEn' in x||x.productName||x.nameEn||x.name||x.title||'Unnamed product').slice(0,120);
-  const rawImage=x.productImage||x.productImageUrl||x.image||x.imageUrl||x.mainImage||x.productImageUrlList?.[0]||'';
+  const name=String(x.productNameEn||x.productName||x.nameEn||x.name||x.title||'Unnamed product').slice(0,120);
+  const rawImage=x.productImage||x.bigImage||x.productImageUrl||x.image||x.imageUrl||x.mainImage||x.productImageUrlList?.[0]||'';
   const image=safeURL(String(rawImage));
   const price=String(x.sellPrice??x.productPrice??x.price??x.priceRange??'Not provided').slice(0,80);
   return `<div class="card">${image?`<img class="product-image" src="${escapeHTML(image)}" alt="${escapeHTML(name)}" loading="lazy">`:'<div class="image-placeholder product-image">No image</div>'}<h3>${escapeHTML(name)}</h3><p class="description">Supplier price: ${escapeHTML(price)} (currency and variants unverified)</p><button class="btn" onclick="d36Select(${i})">Review in Product Manager</button></div>`;
@@ -3501,7 +3508,7 @@ function d36Parse(){
 function d36Select(index){
  const x=d36Items[index];if(!x)return;
  const name=String(x.productNameEn||x.productName||x.nameEn||x.name||x.title||'CJ product').slice(0,100);
- const image=safeURL(String(x.productImage||x.productImageUrl||x.image||x.imageUrl||x.mainImage||''));
+ const image=safeURL(String(x.productImage||x.bigImage||x.productImageUrl||x.image||x.imageUrl||x.mainImage||''));
  showManager();
  document.getElementById('m-name').value=name;
  document.getElementById('m-category').value='Trending';
