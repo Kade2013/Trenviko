@@ -3421,6 +3421,7 @@ function showDay36Finder(){
  <input id="d36-keyword" class="field" type="search" maxlength="90" value="cable organizer" style="display:block;width:100%;margin:9px 0 16px" required>
  <button class="btn" type="submit" id="d36-search-btn">🔎 Search real CJ products</button> <button class="btn secondary" type="button" onclick="showManager()">Product Manager</button>
  </form><p id="d36-status" class="small-note" role="status" aria-live="polite">Ready to search.</p></div>
+ <div class="panel" style="max-width:850px"><h3>🤖 AutoPilot — Day 40 shortlist</h3><p class="small-note">Scores CJ search results for listing readiness. This is NOT proof of bestseller status. Prices, variants, shipping, demand, and supplier reliability still require verification.</p><label style="display:flex;gap:10px;align-items:center"><input type="checkbox" id="d40-filter" onchange="d40Render()"> Show only shortlisted products</label><p class="small-note" id="d40-status">Run a CJ search to evaluate products.</p></div>
  <div id="d36-results" class="grid"></div>
  <details class="panel"><summary>Optional: paste CJ response JSON instead</summary><textarea class="field" style="display:block;width:100%;margin:12px 0" id="d36-json" rows="5" placeholder='Paste full JSON response'></textarea><button class="btn secondary" onclick="d36Parse()">Show pasted products</button></details>
  </section>`;
@@ -3453,27 +3454,46 @@ function d36Array(root){
  }
  return find(root,0)||[];
 }
-function d36ShowResponse(response){
- const status=document.getElementById('d36-status');
- if(!status)return;
- const found=d36Array(response);
-
- d36Items=found.filter(x=>x&&typeof x==='object').slice(0,50);
+// Day 40: conservative readiness shortlist, NOT a verified bestseller score.
+function d40Evaluate(x){
+ const name=String(x.productNameEn||x.productName||x.nameEn||x.name||x.title||'').trim();
+ const image=safeURL(String(x.productImage||x.bigImage||x.productImageUrl||x.image||x.imageUrl||x.mainImage||x.productImageUrlList?.[0]||''));
+ const raw=String(x.sellPrice??x.productPrice??x.price??'');
+ const prices=(raw.match(/\d+(?:\.\d+)?/g)||[]).map(Number);
+ const hasPrice=prices.length>0&&prices.every(n=>Number.isFinite(n)&&n>0);
+ const banned=/weapon|knife|gun|ammo|vape|nicotine|cigarette|cbd|thc|marijuana|adult toy|prescription|steroid|firework|pesticide|counterfeit/i.test(name);
+ const score=(name.length>=12?1:0)+(image?1:0)+(hasPrice?1:0);
+ return {score,shortlist:score===3&&!banned,reason:banned?'Restricted or unsuitable category':score<3?'Missing name, image, or supplier price':'Ready for manual supplier checks'};
+}
+function d40Render(){
  const holder=document.getElementById('d36-results');
- if(!d36Items.length){
-  holder.innerHTML='';
-  const detail=response?.products?.message||response?.message||response?.error||response?.products?.msg||'';
-  status.textContent='No product list found in the supplier response.'+(detail?' Supplier message: '+String(detail).slice(0,180):'');
-  return;
- }
- status.textContent='Found '+d36Items.length+' products. Supplier prices and currency must be verified before listing.';
- holder.innerHTML=d36Items.map((x,i)=>{
+ const status=document.getElementById('d40-status');
+ if(!holder)return;
+ const only=document.getElementById('d40-filter')?.checked;
+ const evaluated=d36Items.map((x,i)=>({x,i,review:d40Evaluate(x)}));
+ const selected=evaluated.filter(e=>!only||e.review.shortlist);
+ if(status)status.textContent=evaluated.filter(e=>e.review.shortlist).length+' of '+evaluated.length+' results shortlisted for manual verification. Not confirmed bestsellers.';
+ holder.innerHTML=selected.length?selected.map(({x,i,review})=>{
   const name=String(x.productNameEn||x.productName||x.nameEn||x.name||x.title||'Unnamed product').slice(0,120);
   const rawImage=x.productImage||x.bigImage||x.productImageUrl||x.image||x.imageUrl||x.mainImage||x.productImageUrlList?.[0]||'';
   const image=safeURL(String(rawImage));
   const price=String(x.sellPrice??x.productPrice??x.price??x.priceRange??'Not provided').slice(0,80);
-  return `<div class="card">${image?`<img class="product-image" src="${escapeHTML(image)}" alt="${escapeHTML(name)}" loading="lazy">`:'<div class="image-placeholder product-image">No image</div>'}<h3>${escapeHTML(name)}</h3><p class="description">Supplier price: ${escapeHTML(price)} (currency and variants unverified)</p><button class="btn" onclick="d36Select(${i})">Review in Product Manager</button></div>`;
- }).join('');
+  return `<div class="card">${image?`<img class="product-image" src="${escapeHTML(image)}" alt="${escapeHTML(name)}" loading="lazy">`:'<div class="image-placeholder product-image">No image</div>'}<h3>${escapeHTML(name)}</h3><p class="small-note">${review.shortlist?'✓ AutoPilot shortlist':'Needs review'} · ${escapeHTML(review.reason)}</p><p class="description">Supplier price: ${escapeHTML(price)} (currency and variants unverified)</p><button class="btn" onclick="d36Select(${i})">Review in Product Manager</button></div>`;
+ }).join(''):'<p class="small-note">No products match this filter.</p>';
+}
+function d36ShowResponse(response){
+ const status=document.getElementById('d36-status');
+ if(!status)return;
+ const found=d36Array(response);
+ d36Items=found.filter(x=>x&&typeof x==='object').slice(0,50);
+ if(!d36Items.length){
+  document.getElementById('d36-results').innerHTML='';
+  const detail=response?.products?.message||response?.message||response?.error||response?.products?.msg||'';
+  status.textContent='No product list found in the supplier response.'+(detail?' Supplier message: '+String(detail).slice(0,180):'');
+  d40Render();return;
+ }
+ status.textContent='Found '+d36Items.length+' products. Supplier prices and currency must be verified before listing.';
+ d40Render();
 }
 async function d36Search(event){
  event.preventDefault();
