@@ -3460,7 +3460,7 @@ function showDay36Finder(){
  <button class="btn" type="submit" id="d36-search-btn">🔎 Search real CJ products</button> <button class="btn secondary" type="button" onclick="showManager()">Product Manager</button>
  </form><p id="d36-status" class="small-note" role="status" aria-live="polite">Ready to search.</p></div>
  <div class="panel" style="max-width:850px"><h3>🤖 AutoPilot — Day 43 product evaluation</h3><p class="small-note">Screens for practical everyday products, holds seasonal/novelty items and flags categories needing extra safety checks. Checks product names, image links and supplier price formats. Demand, shipping, stock, currency and actual profit are NOT verified.</p><label style="display:flex;gap:10px;align-items:center"><input type="checkbox" id="d40-filter" onchange="d40Render()"> Show only shortlisted products (uncheck to review held items)</label><p class="small-note" id="d40-status">Run a CJ search to evaluate products.</p></div>
- <div class="panel" style="max-width:850px"><h3>AutoPilot — multi-category sourcing</h3><p class="small-note">One click searches three starter categories: cable organization, resistance bands and drawer organization. Results are combined, deduplicated and screened; held items are hidden by default. No products are published automatically.</p><button class="btn" id="d42-start" type="button" onclick="d42Scan()">Run AutoPilot scan</button> <button class="btn secondary" id="d42-stop" type="button" onclick="d42Stop()" disabled>Stop scan</button><p id="d42-status" class="small-note" role="status" aria-live="polite">Ready to scan.</p></div>
+ <div class="panel" style="max-width:850px"><h3>AutoPilot — Day 44 product discovery</h3><p class="small-note">Each scan searches three different product types. Rotate through four discovery packs or choose a pack. Candidates are ranked within each search using CJ listing counts when supplied, with a mix of product types shown first. Listing counts are not sales. No automatic publishing.</p><label for="d44-pack">Discovery pack</label> <select class="field" id="d44-pack"><option value="rotate">Rotate automatically (3 searches per scan)</option><option value="0">Tech, fitness and travel</option><option value="1">Home, sports and desk</option><option value="2">Fitness, travel and home</option><option value="3">Sports, tech and home</option></select><p class="small-note"><label><input type="checkbox" id="d44-diverse" checked onchange="d40Render()"> Hide very similar titles or identical images</label> (uncheck to see all)</p><button class="btn" id="d42-start" type="button" onclick="d42Scan()">Run AutoPilot scan</button> <button class="btn secondary" id="d42-stop" type="button" onclick="d42Stop()" disabled>Stop scan</button><p id="d42-status" class="small-note" role="status" aria-live="polite">Ready to scan.</p></div>
  <div id="d36-results" class="grid"></div>
  <details class="panel"><summary>Optional: paste CJ response JSON instead</summary><textarea class="field" style="display:block;width:100%;margin:12px 0" id="d36-json" rows="5" placeholder='Paste full JSON response'></textarea><button class="btn secondary" onclick="d36Parse()">Show pasted products</button></details>
  </section>`;
@@ -3523,20 +3523,23 @@ function d40Render(){
  if(!holder)return;
  const only=document.getElementById('d40-filter')?.checked;
  const evaluated=d36Items.map((x,i)=>({x,i,review:d40Evaluate(x)}));
- const selected=evaluated.filter(e=>!only||e.review.shortlist);
- if(status){const passed=evaluated.filter(e=>e.review.shortlist).length;status.textContent=passed+' of '+evaluated.length+' shortlisted · '+(evaluated.length-passed)+' held for review. Not confirmed bestsellers.';}
+ const eligible=evaluated.filter(e=>!only||e.review.shortlist);
+ const selected=document.getElementById('d44-diverse')?.checked?d44Distinct(eligible):eligible;
+ const hidden=eligible.length-selected.length;
+ if(status){const passed=evaluated.filter(e=>e.review.shortlist).length;status.textContent=passed+' of '+evaluated.length+' shortlisted · '+(evaluated.length-passed)+' held for review · '+hidden+' similar results hidden. Not confirmed bestsellers.';}
  holder.innerHTML=selected.length?selected.map(({x,i,review})=>{
   const name=String(x.productNameEn||x.productName||x.nameEn||x.name||x.title||'Unnamed product').slice(0,120);
   const rawImage=x.productImage||x.bigImage||x.productImageUrl||x.image||x.imageUrl||x.mainImage||x.productImageUrlList?.[0]||'';
   const image=safeURL(String(rawImage));
   const price=String(x.sellPrice??x.productPrice??x.price??x.priceRange??'Not provided').slice(0,80);
-  return `<div class="card">${image?`<img class="product-image" src="${escapeHTML(image)}" alt="${escapeHTML(name)}" loading="lazy">`:'<div class="image-placeholder product-image">No image</div>'}<h3>${escapeHTML(name)}</h3><p class="small-note">${review.shortlist?'✓ AutoPilot shortlist':'Held for review'} · ${escapeHTML(review.reason)}</p><p class="description">Supplier price: ${escapeHTML(price)} (currency and variants unverified)</p><button class="btn" onclick="d36Select(${i})">Review in Product Manager</button></div>`;
+  return `<div class="card">${image?`<img class="product-image" src="${escapeHTML(image)}" alt="${escapeHTML(name)}" loading="lazy">`:'<div class="image-placeholder product-image">No image</div>'}<h3>${escapeHTML(name)}</h3><p class="small-note">${review.shortlist?'✓ AutoPilot shortlist':'Held for review'} · ${escapeHTML(review.reason)}</p><p class="description">Supplier price: ${escapeHTML(price)} (currency and variants unverified)</p><p class="small-note">CJ listing count: ${d44Listed(x)===null?'Not supplied':d44Listed(x).toLocaleString('en-CA')} · Not customer sales</p>${d44Sources.has(d42ProductKey(x))?`<p class="small-note">Discovery search: ${escapeHTML(d44Sources.get(d42ProductKey(x)))}</p>`:''}<button class="btn" onclick="d36Select(${i})">Review in Product Manager</button></div>`;
  }).join(''):'<p class="small-note">No products match this filter.</p>';
 }
 function d36ShowResponse(response){
  const status=document.getElementById('d36-status');
  if(!status)return;
  const found=d36Array(response);
+ d44Sources.clear();
  const filter=document.getElementById('d40-filter');if(filter)filter.checked=false;
  d36Items=found.filter(x=>x&&typeof x==='object').slice(0,50);
  if(!d36Items.length){
@@ -3615,7 +3618,60 @@ function d36Select(index){
 
 
 // DAY 42 — bounded, owner-triggered multi-category sourcing.
-const D42_KEYWORDS=['cable organizer','resistance band','drawer organizer'];
+// DAY 44 — use documented CJ listing counts, not invented sales data.
+const D44_PACKS=[
+ ['foldable laptop stand','massage ball','packing cubes'],
+ ['drawer divider','training cones','desk mat'],
+ ['foam roller','travel pouch','shelf divider'],
+ ['jump rope','phone stand','laundry bag']
+];
+const d44Sources=new Map();
+let d44Next=0;
+try{const n=Number(sessionStorage.getItem('trenviko.discovery.pack.v1'));if(Number.isInteger(n)&&n>=0&&n<D44_PACKS.length)d44Next=n;}catch{}
+function d44Pack(value){
+ const index=value==='rotate'?d44Next:Number(value);
+ return D44_PACKS[Number.isInteger(index)&&index>=0&&index<D44_PACKS.length?index:0].slice();
+}
+function d44Advance(){d44Next=(d44Next+1)%D44_PACKS.length;try{sessionStorage.setItem('trenviko.discovery.pack.v1',String(d44Next));}catch{}}
+function d44Listed(x){
+ const raw=x?.listedNum;
+ if(typeof raw!=='number'&&(typeof raw!=='string'||!/^\d+$/.test(raw.trim())))return null;
+ const n=Number(raw);
+ return Number.isSafeInteger(n)&&n>=0?n:null;
+}
+function d44Compare(a,b){
+ const ra=d40Evaluate(a),rb=d40Evaluate(b);
+ return Number(rb.shortlist)-Number(ra.shortlist)||((d44Listed(b)??-1)-(d44Listed(a)??-1))||rb.score-ra.score;
+}
+function d44Rank(items){
+ const groups=new Map();
+ for(const x of items){const k=d44Sources.get(d42ProductKey(x))||'other';if(!groups.has(k))groups.set(k,[]);groups.get(k).push(x);}
+ for(const group of groups.values())group.sort(d44Compare);
+ const output=[];
+ // Interleave shortlisted items across searches before held items.
+ for(const pass of [true,false]){
+  const queues=Array.from(groups.values(),group=>group.filter(x=>d40Evaluate(x).shortlist===pass));
+  while(queues.some(q=>q.length))for(const q of queues)if(q.length)output.push(q.shift());
+ }
+ return output;
+}
+function d44Words(x){
+ const title=String(x.productNameEn||x.productName||x.nameEn||x.name||x.title||'').toLowerCase();
+ return new Set((title.match(/[a-z0-9]+/g)||[]).filter(w=>w.length>2&&!['for','the','and','with','new','portable','set','pcs','piece'].includes(w)));
+}
+function d44Similar(a,b){
+ const image=x=>String(x.productImage||x.bigImage||x.image||x.imageUrl||'').split(/[?#]/)[0];
+ if(image(a)&&image(a)===image(b))return true;
+ const aw=d44Words(a),bw=d44Words(b);
+ const overlap=[...aw].filter(w=>bw.has(w)).length;
+ const union=new Set([...aw,...bw]).size;
+ return union>=3&&overlap>=3&&overlap/union>=0.68;
+}
+function d44Distinct(entries){
+ const out=[];
+ for(const e of entries)if(!out.some(p=>d44Similar(p.x,e.x)))out.push(e);
+ return out;
+}
 let d42Running=false;
 let d42RunId=0;
 let d42Controller=null;
@@ -3651,14 +3707,17 @@ async function d42Scan(){
  const controller=new AbortController();d42Controller=controller;
  const active=()=>run===d42RunId&&generation===d41Generation&&document.getElementById('d42-status')===note;
  d42Running=true;d42Buttons(true);
+ const packValue=document.getElementById('d44-pack')?.value||'rotate';
+ const keywords=d44Pack(packValue);
  const combined=new Map();let completed=0;
+ d44Sources.clear();
  d36Items=[];document.getElementById('d40-filter').checked=true;d40Render();
  document.getElementById('d36-status').textContent='AutoPilot scan in progress.';
  try{
-  for(const keyword of D42_KEYWORDS){
+  for(const keyword of keywords){
    if(!active())return;
    if(completed){note.textContent='Pausing briefly before the next supplier request…';await new Promise(resolve=>setTimeout(resolve,6000));if(!active())return;}
-   note.textContent='Searching '+(completed+1)+' of '+D42_KEYWORDS.length+': '+keyword+'…';
+   note.textContent='Searching '+(completed+1)+' of '+keywords.length+': '+keyword+'…';
    const res=await fetch(D36_ENDPOINT,{method:'POST',mode:'cors',cache:'no-store',signal:controller.signal,headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({keyword})});
    if(!active())return;
    if(res.status===401){d41Forget();field.value='';d41UpdateLogin();note.textContent='Admin code rejected. Enter your current code. Scan stopped.';return;}
@@ -3668,13 +3727,14 @@ async function d42Scan(){
    if(data?.error)throw Error('Supplier reported an error. No automatic retry.');
    d41Remember(token);field.value='';d41UpdateLogin();
    const found=d36Array(data).filter(x=>x&&typeof x==='object');
-   for(const x of found){const key=d42ProductKey(x);if(!combined.has(key))combined.set(key,x);}
+   for(const x of found){const key=d42ProductKey(x);if(!combined.has(key)){combined.set(key,x);d44Sources.set(key,keyword);}}
    completed++;
-   d36Items=Array.from(combined.values()).sort((a,b)=>Number(d40Evaluate(b).shortlist)-Number(d40Evaluate(a).shortlist)||d40Evaluate(b).score-d40Evaluate(a).score).slice(0,50);
+   d36Items=d44Rank(Array.from(combined.values())).slice(0,50);
    d40Render();document.getElementById('d36-status').textContent='AutoPilot: '+d36Items.length+' unique candidates from '+completed+' completed searches.';
   }
+  if(active()&&packValue==='rotate')d44Advance();
   if(active())note.textContent='Scan complete: '+completed+' categories searched; '+d36Items.length+' unique candidates; '+d36Items.filter(x=>d40Evaluate(x).shortlist).length+' shortlisted. Review before listing.';
- }catch(e){if(active())note.textContent='Scan stopped after '+completed+' of '+D42_KEYWORDS.length+' searches. '+(e instanceof TypeError?'Network or CORS error. No automatic retry.':String(e.message||e))+' Results already received are retained.';}
+ }catch(e){if(active())note.textContent='Scan stopped after '+completed+' of '+keywords.length+' searches. '+(e instanceof TypeError?'Network or CORS error. No automatic retry.':String(e.message||e))+' Results already received are retained.';}
  finally{if(run===d42RunId){d42Running=false;d42Controller=null;d42Buttons(false);}}
 }
 
