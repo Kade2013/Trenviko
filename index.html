@@ -3430,6 +3430,7 @@ function d41UpdateLogin(){
  note.textContent=d41Token?'Admin code remembered for this tab.':'Enter your admin code once to unlock searches.';
 }
 function d41SignOut(){
+ d42Stop();
  d41Forget();
  d36Items=[];
  const field=document.getElementById('d36-token');
@@ -3439,10 +3440,12 @@ function d41SignOut(){
  if(status)status.textContent='Signed out. Enter your admin code to search again.';
  const btn=document.getElementById('d36-search-btn');
  if(btn){btn.disabled=false;btn.textContent='🔎 Search real CJ products';}
+ const scan=document.getElementById('d42-start');if(scan)scan.disabled=false;
  d40Render();
 }
 const D36_ENDPOINT='https://trenviko-ai.satousignant.workers.dev/admin/cj/search';
 function showDay36Finder(){
+ d42Stop();
  currentPage='day36';
  app.innerHTML=`<section class="section"><div class="eyebrow">CJ PRODUCT FINDER · LIVE SEARCH</div><h1>Search real CJdropshipping products</h1>
  <p class="description">Search your supplier directly through your existing Cloudflare Worker. No giant JSON copying required.</p>
@@ -3457,6 +3460,7 @@ function showDay36Finder(){
  <button class="btn" type="submit" id="d36-search-btn">🔎 Search real CJ products</button> <button class="btn secondary" type="button" onclick="showManager()">Product Manager</button>
  </form><p id="d36-status" class="small-note" role="status" aria-live="polite">Ready to search.</p></div>
  <div class="panel" style="max-width:850px"><h3>🤖 AutoPilot — Day 40 shortlist</h3><p class="small-note">Scores CJ search results for listing readiness. This is NOT proof of bestseller status. Prices, variants, shipping, demand, and supplier reliability still require verification.</p><label style="display:flex;gap:10px;align-items:center"><input type="checkbox" id="d40-filter" onchange="d40Render()"> Show only shortlisted products</label><p class="small-note" id="d40-status">Run a CJ search to evaluate products.</p></div>
+ <div class="panel" style="max-width:850px"><h3>AutoPilot — multi-category sourcing</h3><p class="small-note">One click searches three starter categories: desk accessories, fitness accessories and home organization. Results are combined, deduplicated and shortlisted for review. No products are published automatically.</p><button class="btn" id="d42-start" type="button" onclick="d42Scan()">Run AutoPilot scan</button> <button class="btn secondary" id="d42-stop" type="button" onclick="d42Stop()" disabled>Stop scan</button><p id="d42-status" class="small-note" role="status" aria-live="polite">Ready to scan.</p></div>
  <div id="d36-results" class="grid"></div>
  <details class="panel"><summary>Optional: paste CJ response JSON instead</summary><textarea class="field" style="display:block;width:100%;margin:12px 0" id="d36-json" rows="5" placeholder='Paste full JSON response'></textarea><button class="btn secondary" onclick="d36Parse()">Show pasted products</button></details>
  </section>`;
@@ -3533,6 +3537,7 @@ function d36ShowResponse(response){
 }
 async function d36Search(event){
  event.preventDefault();
+ if(d42Running)return;
  const status=document.getElementById('d36-status');
  const btn=document.getElementById('d36-search-btn');
  const field=document.getElementById('d36-token');
@@ -3540,7 +3545,7 @@ async function d36Search(event){
  const keyword=document.getElementById('d36-keyword').value.trim();
  if(!token||!keyword){status.textContent='Enter your token and a keyword.';return;}
  const generation=++d41Generation;
- btn.disabled=true;btn.textContent='Searching…';status.textContent='Contacting CJ through Cloudflare…';
+ btn.disabled=true;btn.textContent='Searching…';document.getElementById('d42-start').disabled=true;status.textContent='Contacting CJ through Cloudflare…';
  try{
   const res=await fetch(D36_ENDPOINT,{
    method:'POST',mode:'cors',cache:'no-store',
@@ -3558,6 +3563,7 @@ async function d36Search(event){
    const activeStatus=document.getElementById('d36-status');
    if(activeStatus)activeStatus.textContent='Admin code rejected. Enter your current code and try again.';
    btn.disabled=false;btn.textContent='🔎 Search real CJ products';
+   const scan=document.getElementById('d42-start');if(scan)scan.disabled=false;
    return;
   }
   if(!res.ok){throw Error('HTTP '+res.status+': '+String(data?.error||data?.message||'Search failed').slice(0,180));}
@@ -3568,9 +3574,10 @@ async function d36Search(event){
  }catch(e){
   if(generation!==d41Generation)return;
   status.textContent=e instanceof TypeError?'Browser blocked the request. Cloudflare Worker may need CORS permission for Authorization and Content-Type from https://kade2013.github.io.':String(e.message||e);
- }finally{if(generation===d41Generation){btn.disabled=false;btn.textContent='🔎 Search real CJ products';}}
+ }finally{if(generation===d41Generation){btn.disabled=false;btn.textContent='🔎 Search real CJ products';const scan=document.getElementById('d42-start');if(scan)scan.disabled=false;}}
 }
 function d36Parse(){
+ if(d42Running)return;
  const status=document.getElementById('d36-status');
  try{
   const raw=document.getElementById('d36-json').value;
@@ -3579,6 +3586,7 @@ function d36Parse(){
  }catch(e){d36Items=[];document.getElementById('d36-results').innerHTML='';status.textContent='Invalid JSON: '+e.message;}
 }
 function d36Select(index){
+ d42Stop();
  const x=d36Items[index];if(!x)return;
  const name=String(x.productNameEn||x.productName||x.nameEn||x.name||x.title||'CJ product').slice(0,100);
  const image=safeURL(String(x.productImage||x.bigImage||x.productImageUrl||x.image||x.imageUrl||x.mainImage||''));
@@ -3590,6 +3598,71 @@ function d36Select(index){
  document.getElementById('m-price').value='';
  document.getElementById('manager-form-panel').scrollIntoView({behavior:'smooth'});
  notify('CJ draft loaded. Set your own selling price and review before saving.');
+}
+
+
+// DAY 42 — bounded, owner-triggered multi-category sourcing.
+const D42_KEYWORDS=['cable organizer','fitness accessories','home organizer'];
+let d42Running=false;
+let d42RunId=0;
+let d42Controller=null;
+function d42Buttons(running){
+ const start=document.getElementById('d42-start'),stop=document.getElementById('d42-stop'),manual=document.getElementById('d36-search-btn');
+ if(start)start.disabled=running;
+ if(stop)stop.disabled=!running;
+ if(manual)manual.disabled=running;
+}
+function d42Stop(){
+ if(!d42Running)return;
+ d42RunId++;d42Running=false;
+ if(d42Controller)d42Controller.abort();
+ d42Controller=null;
+ d42Buttons(false);
+ const note=document.getElementById('d42-status');
+ if(note)note.textContent='Scan stopped. Results already received are retained.';
+}
+function d42ProductKey(x){
+ const id=x.pid??x.productId??x.id;
+ if(id!==undefined&&id!==null&&String(id).trim())return 'id:'+String(id).trim();
+ const name=String(x.productNameEn||x.productName||x.nameEn||x.name||x.title||'').trim().toLowerCase();
+ const image=String(x.productImage||x.bigImage||x.image||x.imageUrl||'');
+ return 'fallback:'+name+'|'+image;
+}
+async function d42Scan(){
+ const note=document.getElementById('d42-status'),field=document.getElementById('d36-token'),manual=document.getElementById('d36-search-btn');
+ if(d42Running||!note||!field||manual?.disabled)return;
+ const token=field.value.trim()||d41Token;
+ if(!token){note.textContent='Enter your private admin code first.';field.focus();return;}
+ const run=++d42RunId;
+ const generation=++d41Generation;
+ const controller=new AbortController();d42Controller=controller;
+ const active=()=>run===d42RunId&&generation===d41Generation&&document.getElementById('d42-status')===note;
+ d42Running=true;d42Buttons(true);
+ const combined=new Map();let completed=0;
+ d36Items=[];d40Render();
+ document.getElementById('d36-status').textContent='AutoPilot scan in progress.';
+ try{
+  for(const keyword of D42_KEYWORDS){
+   if(!active())return;
+   if(completed){note.textContent='Pausing briefly before the next supplier request…';await new Promise(resolve=>setTimeout(resolve,6000));if(!active())return;}
+   note.textContent='Searching '+(completed+1)+' of '+D42_KEYWORDS.length+': '+keyword+'…';
+   const res=await fetch(D36_ENDPOINT,{method:'POST',mode:'cors',cache:'no-store',signal:controller.signal,headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({keyword})});
+   if(!active())return;
+   if(res.status===401){d41Forget();field.value='';d41UpdateLogin();note.textContent='Admin code rejected. Enter your current code. Scan stopped.';return;}
+   if(res.status===429){throw Error('Supplier or Worker rate limit. No automatic retry; try again later.');}
+   if(!res.ok)throw Error('Supplier or Worker returned HTTP '+res.status+'. No automatic retry.');
+   const data=await res.json();if(!active())return;
+   if(data?.error)throw Error('Supplier reported an error. No automatic retry.');
+   d41Remember(token);field.value='';d41UpdateLogin();
+   const found=d36Array(data).filter(x=>x&&typeof x==='object');
+   for(const x of found){const key=d42ProductKey(x);if(!combined.has(key))combined.set(key,x);}
+   completed++;
+   d36Items=Array.from(combined.values()).sort((a,b)=>Number(d40Evaluate(b).shortlist)-Number(d40Evaluate(a).shortlist)||d40Evaluate(b).score-d40Evaluate(a).score).slice(0,50);
+   d40Render();document.getElementById('d36-status').textContent='AutoPilot: '+d36Items.length+' unique candidates from '+completed+' completed searches.';
+  }
+  if(active())note.textContent='Scan complete: '+completed+' categories searched; '+d36Items.length+' unique candidates. Review before listing.';
+ }catch(e){if(active())note.textContent='Scan stopped after '+completed+' of '+D42_KEYWORDS.length+' searches. '+(e instanceof TypeError?'Network or CORS error. No automatic retry.':String(e.message||e))+' Results already received are retained.';}
+ finally{if(run===d42RunId){d42Running=false;d42Controller=null;d42Buttons(false);}}
 }
 
 </script>
