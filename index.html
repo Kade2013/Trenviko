@@ -3406,17 +3406,52 @@ function d33ToManager(){
 }
 
 
-// DAY 37 — LIVE CJ SEARCH (private token held in memory only)
+// DAY 41 — CJ admin code remembered for this tab; never embedded in HTML.
 let d36Items=[];
+const D41_SESSION_KEY='trenviko.cj.admin.session.v1';
+let d41Token='';
+let d41Generation=0;
+try{d41Token=sessionStorage.getItem(D41_SESSION_KEY)||'';}catch{}
+function d41Remember(token){
+ d41Token=token;
+ try{sessionStorage.setItem(D41_SESSION_KEY,token);}catch{}
+}
+function d41Forget(){
+ d41Generation++;
+ d41Token='';
+ try{sessionStorage.removeItem(D41_SESSION_KEY);}catch{}
+}
+function d41UpdateLogin(){
+ const field=document.getElementById('d36-token');
+ const note=document.getElementById('d41-login-note');
+ if(!field||!note)return;
+ field.required=!d41Token;
+ field.placeholder=d41Token?'Code remembered — leave blank':'Enter your private admin token';
+ note.textContent=d41Token?'Admin code remembered for this tab.':'Enter your admin code once to unlock searches.';
+}
+function d41SignOut(){
+ d41Forget();
+ d36Items=[];
+ const field=document.getElementById('d36-token');
+ if(field)field.value='';
+ d41UpdateLogin();
+ const status=document.getElementById('d36-status');
+ if(status)status.textContent='Signed out. Enter your admin code to search again.';
+ const btn=document.getElementById('d36-search-btn');
+ if(btn){btn.disabled=false;btn.textContent='🔎 Search real CJ products';}
+ d40Render();
+}
 const D36_ENDPOINT='https://trenviko-ai.satousignant.workers.dev/admin/cj/search';
 function showDay36Finder(){
  currentPage='day36';
  app.innerHTML=`<section class="section"><div class="eyebrow">CJ PRODUCT FINDER · LIVE SEARCH</div><h1>Search real CJdropshipping products</h1>
  <p class="description">Search your supplier directly through your existing Cloudflare Worker. No giant JSON copying required.</p>
- <div class="notice"><strong>Owner-only tool:</strong> Your admin token is used for this search only. It is not saved in localStorage or in the website file. This panel is visible on your public demo website, but visitors cannot search without the private token. Never share it.</div>
+ <div class="notice"><strong>Owner-only tool:</strong> Your admin token is remembered in this tab after a successful search, including after refreshing. It is not embedded in the website or stored in localStorage. Use only on a trusted device and sign out when finished. Visitors still need the private token to search.</div>
  <div class="panel" style="max-width:850px"><form id="d36-search-form" onsubmit="d36Search(event)">
  <label for="d36-token">Private admin token (not your CJ API key)</label>
  <input id="d36-token" class="field" type="password" autocomplete="off" spellcheck="false" style="display:block;width:100%;margin:9px 0 16px" required placeholder="Enter your private admin token">
+ <p id="d41-login-note" class="small-note" role="status"></p>
+ <button class="btn secondary" type="button" onclick="d41SignOut()">Sign out / forget code</button>
  <label for="d36-keyword">Product keyword</label>
  <input id="d36-keyword" class="field" type="search" maxlength="90" value="cable organizer" style="display:block;width:100%;margin:9px 0 16px" required>
  <button class="btn" type="submit" id="d36-search-btn">🔎 Search real CJ products</button> <button class="btn secondary" type="button" onclick="showManager()">Product Manager</button>
@@ -3425,6 +3460,7 @@ function showDay36Finder(){
  <div id="d36-results" class="grid"></div>
  <details class="panel"><summary>Optional: paste CJ response JSON instead</summary><textarea class="field" style="display:block;width:100%;margin:12px 0" id="d36-json" rows="5" placeholder='Paste full JSON response'></textarea><button class="btn secondary" onclick="d36Parse()">Show pasted products</button></details>
  </section>`;
+ d41UpdateLogin();
  navigate();
 }
 function d36Array(root){
@@ -3499,9 +3535,11 @@ async function d36Search(event){
  event.preventDefault();
  const status=document.getElementById('d36-status');
  const btn=document.getElementById('d36-search-btn');
- const token=document.getElementById('d36-token').value.trim();
+ const field=document.getElementById('d36-token');
+ const token=field.value.trim()||d41Token;
  const keyword=document.getElementById('d36-keyword').value.trim();
  if(!token||!keyword){status.textContent='Enter your token and a keyword.';return;}
+ const generation=++d41Generation;
  btn.disabled=true;btn.textContent='Searching…';status.textContent='Contacting CJ through Cloudflare…';
  try{
   const res=await fetch(D36_ENDPOINT,{
@@ -3512,11 +3550,25 @@ async function d36Search(event){
   const raw=await res.text();
   let data;
   try{data=JSON.parse(raw)}catch{throw Error('Server returned non-JSON (HTTP '+res.status+').');}
+  if(generation!==d41Generation)return;
+  if(res.status===401){
+   d41Forget();
+   field.value='';
+   d41UpdateLogin();
+   const activeStatus=document.getElementById('d36-status');
+   if(activeStatus)activeStatus.textContent='Admin code rejected. Enter your current code and try again.';
+   btn.disabled=false;btn.textContent='🔎 Search real CJ products';
+   return;
+  }
   if(!res.ok){throw Error('HTTP '+res.status+': '+String(data?.error||data?.message||'Search failed').slice(0,180));}
+  d41Remember(token);
+  field.value='';
+  d41UpdateLogin();
   d36ShowResponse(data);
  }catch(e){
+  if(generation!==d41Generation)return;
   status.textContent=e instanceof TypeError?'Browser blocked the request. Cloudflare Worker may need CORS permission for Authorization and Content-Type from https://kade2013.github.io.':String(e.message||e);
- }finally{btn.disabled=false;btn.textContent='🔎 Search real CJ products';}
+ }finally{if(generation===d41Generation){btn.disabled=false;btn.textContent='🔎 Search real CJ products';}}
 }
 function d36Parse(){
  const status=document.getElementById('d36-status');
